@@ -12,11 +12,12 @@
     --bg-dark: #0f172a; --bg-panel: #1e293b; --bg-card: #334155;
     --text-main: #f8fafc; --text-muted: #94a3b8; --border: #334155;
     
-    --c-land: #A855F7;  
-    --c-appr: #F59E0B;  
-    --c-pre:  #3B82F6;  
-    --c-und:  #10B981;  
-    --c-cap:  #F43F5E;  
+    /* Premium Category Colors */
+    --c-land: #A855F7;  /* Purple: Land in Play */
+    --c-appr: #F59E0B;  /* Orange: In Approvals */
+    --c-pre:  #3B82F6;  /* Blue: Pre-Construction */
+    --c-und:  #10B981;  /* Green: Under Construction */
+    --c-cap:  #F43F5E;  /* Red: Capital Repositioning */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -34,10 +35,14 @@
   .sub-logo { font-size: 11px; font-weight: 600; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
   .sub-logo::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #38bdf8; border-radius: 50%; }
 
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  /* Stats Section */
+  .filter-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 18px; margin-bottom: -8px; color: var(--text-muted); transition: color 0.2s; }
+  .filter-status.active-filter { color: #38bdf8; }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   .stat-box { background: var(--bg-panel); padding: 12px; border-radius: 6px; border: 1px solid var(--border); }
   .stat-val { font-size: 20px; font-weight: 800; color: #fff; }
-  .stat-lbl { font-size: 10px; text-transform: uppercase; font-weight: 600; color: var(--text-muted); margin-top: 4px; }
+  .stat-lbl { font-size: 10px; text-transform: uppercase; font-weight: 600; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }
 
   .filters { padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--bg-panel); flex-shrink: 0; }
   
@@ -115,6 +120,13 @@
     
     .sidebar.expanded { height: 85vh; }
     
+    /* Hide interior components when collapsed to prevent bleed/interaction */
+    .sidebar:not(.expanded) .header,
+    .sidebar:not(.expanded) .filters,
+    .sidebar:not(.expanded) .list-container {
+      display: none;
+    }
+
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border);
@@ -123,12 +135,10 @@
     .handle-bar { width: 40px; height: 4px; background: var(--text-muted); border-radius: 2px; margin-bottom: 6px; }
     .handle-lbl { font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Tap Target Increases */
     .cat-btn { padding: 12px 16px; font-size: 13px; }
     .val-btn { padding: 12px 0; font-size: 12px; }
-    .search-box { padding: 14px; font-size: 16px; /* 16px prevents iOS auto-zoom */ }
+    .search-box { padding: 14px; font-size: 16px; }
 
-    /* Popup Readability */
     .leaflet-popup-content { width: 300px !important; max-width: 85vw !important; }
     .pop-title { font-size: 15px; }
     .pop-body { font-size: 13px; }
@@ -147,14 +157,17 @@
     <div class="header">
       <div class="logo">The Florida Signal</div>
       <div class="sub-logo">Terminal Access | Broward County</div>
+      
+      <div class="filter-status" id="filter-status">All Signals</div>
+      
       <div class="stats-grid">
         <div class="stat-box">
           <div class="stat-val" id="stat-count">0</div>
-          <div class="stat-lbl">Active Signals</div>
+          <div class="stat-lbl">Showing (of <span id="stat-total">0</span> Total)</div>
         </div>
         <div class="stat-box">
           <div class="stat-val" id="stat-val">$0</div>
-          <div class="stat-lbl">Tracked Value</div>
+          <div class="stat-lbl">Tracked Value <br>(Declared + Est.)</div>
         </div>
       </div>
     </div>
@@ -281,12 +294,26 @@ const mobileToggleLbl = document.getElementById('mobile-toggle-lbl');
 
 mobileToggle.addEventListener('click', () => {
   sidebar.classList.toggle('expanded');
-  if(sidebar.classList.contains('expanded')) {
-    mobileToggleLbl.innerText = "Close Panel";
+  const isExpanded = sidebar.classList.contains('expanded');
+  
+  if(isExpanded) {
+    mobileToggleLbl.innerText = "Hide Signals";
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    if(map.touchZoom) map.touchZoom.disable();
+    if(map.doubleClickZoom) map.doubleClickZoom.disable();
+    if(map.boxZoom) map.boxZoom.disable();
+    if(map.keyboard) map.keyboard.disable();
   } else {
     updateMobileHandleLabel();
+    map.dragging.enable();
+    map.scrollWheelZoom.enable();
+    if(map.touchZoom) map.touchZoom.enable();
+    if(map.doubleClickZoom) map.doubleClickZoom.enable();
+    if(map.boxZoom) map.boxZoom.enable();
+    if(map.keyboard) map.keyboard.enable();
   }
-  setTimeout(() => map.invalidateSize(), 300);
+  setTimeout(() => map.invalidateSize(), 350);
 });
 
 function updateMobileHandleLabel() {
@@ -322,12 +349,12 @@ function getEffectiveValue(signal) {
 }
 
 function initMap() {
+  document.getElementById('stat-total').innerText = signals.length;
   buildCategoryFilters();
   setupValueFilters();
   
   signals.forEach(s => {
     const color = CAT_COLORS[s.category];
-    // iconSize is large for mobile tapping, marker-core handles the visual
     const icon = L.divIcon({
       className: 'custom-marker',
       html: `<div class="marker-core" style="background-color: ${color}; border-color: ${color};"></div>`,
@@ -423,6 +450,16 @@ function applyFilters() {
   listContainer.innerHTML = '';
   
   const searchTerm = document.getElementById('search-box').value.toLowerCase();
+  
+  const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
+  const filterStatusEl = document.getElementById('filter-status');
+  if (isFiltered) {
+    filterStatusEl.innerText = "Filtered View";
+    filterStatusEl.classList.add("active-filter");
+  } else {
+    filterStatusEl.innerText = "All Signals";
+    filterStatusEl.classList.remove("active-filter");
+  }
 
   Object.values(markers).forEach(item => {
     const s = item.data;
@@ -461,7 +498,13 @@ function applyFilters() {
         if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
           sidebar.classList.remove('expanded');
           updateMobileHandleLabel();
-          setTimeout(() => map.invalidateSize(), 300);
+          map.dragging.enable();
+          map.scrollWheelZoom.enable();
+          if(map.touchZoom) map.touchZoom.enable();
+          if(map.doubleClickZoom) map.doubleClickZoom.enable();
+          if(map.boxZoom) map.boxZoom.enable();
+          if(map.keyboard) map.keyboard.enable();
+          setTimeout(() => map.invalidateSize(), 350);
         }
       };
       
