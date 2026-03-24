@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>THE FLORIDA SIGNAL: Broward County (Tracking 2026)</title>
+<title>THE FLORIDA SIGNAL: BROWARD COUNTY (Tracking 2026)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -15,43 +15,73 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+
 .app{display:flex;flex-direction:column;height:100vh;width:100vw;background:#fff;}
 #map{flex:1;width:100%;height:100%;z-index:1;background:#f1f5f9;}
-.sidebar{width:100%;height:45vh;background:rgba(255,255,255,0.98);backdrop-filter:blur(12px);border-top:1px solid var(--c-s200);position:fixed;bottom:0;left:0;z-index:100;transition:height 0.4s cubic-bezier(0.32,0.72,0,1);box-shadow:0 -10px 25px rgba(0,0,0,0.1);display:flex;flex-direction:column;}
+
+.sidebar {
+  width:100%; height:45vh; background:rgba(255,255,255,0.98); backdrop-filter:blur(12px);
+  border-top:1px solid var(--c-s200); position:fixed; bottom:0; left:0; z-index:100;
+  transition:height 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow:0 -10px 25px rgba(0,0,0,0.1); display:flex; flex-direction:column;
+}
 .sidebar.expanded{height:88vh;}
-@media(min-width:841px){.app{flex-direction:row;}.sidebar{width:420px;height:100vh;position:relative;border-top:none;border-right:1px solid var(--c-s200);box-shadow:none;}.sheet-handle{display:none;}}
-.sheet-handle{padding:14px 0;text-align:center;background:#fff;border-bottom:1px solid var(--c-s200);cursor:pointer;}
-.handle-bar{width:40px;height:5px;background:#cbd5e1;border-radius:999px;margin:0 auto;}
-.sb-header{background:linear-gradient(145deg,#0a0f1e,#162133);color:#fff;padding:20px 16px;border-bottom:3px solid var(--c-accent);}
-.hdr-title{font-size:18px;font-weight:900;margin-bottom:4px;line-height:1.2;text-transform:uppercase;letter-spacing:-0.2px;}
-.hdr-sub{font-size:10px;font-weight:700;color:var(--c-accent);text-transform:uppercase;letter-spacing:1px;opacity:0.9;}
-.sub-btn{display:block;width:100%;margin-top:14px;padding:15px;background:var(--c-accent);color:#0a0f1e;border:none;border-radius:10px;font-weight:900;font-size:13px;text-decoration:none;text-align:center;text-transform:uppercase;transition:all 0.1s;}
-.sub-btn:active{transform:scale(0.97);filter:brightness(1.1);}
-.stats-row{display:flex;gap:8px;margin-top:14px;}
-.stat{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 5px;background:rgba(255,255,255,.07);border-radius:8px;}
-.stat-val{font-size:16px;font-weight:900;color:#fff;}
-.stat-lbl{font-size:9px;text-transform:uppercase;color:var(--c-s500);margin-top:2px;font-weight:700;}
-.filters{padding:14px 16px;border-bottom:1px solid var(--c-s200);background:#fff;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{padding:7px 12px;border-radius:999px;font-size:10px;font-weight:800;color:#fff;cursor:pointer;transition:all 0.2s;border:2px solid transparent;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.05);}
-.chip.off{opacity:0.15;filter:grayscale(1);transform:scale(0.94);box-shadow:none;}
-.count-bar{padding:10px 16px;font-size:12.5px;font-weight:700;display:flex;justify-content:space-between;background:var(--c-s100);border-bottom:1px solid var(--c-s200);color:var(--c-navy);}
-.reset-btn{color:#3b82f6;border:none;background:none;font-weight:900;font-size:10.5px;cursor:pointer;text-transform:uppercase;}
-.sidebar-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#fff;}
-.list-item{padding:16px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-left:5px solid transparent;transition:all 0.2s;}
-.list-item:active{background:#f8fafc;}
-.list-item.active{background:#f0f9ff;border-left-color:var(--c-accent);}
-.li-name{font-size:14px;font-weight:700;color:var(--c-navy);margin-bottom:3px;}
-.li-addr{font-size:11px;color:var(--c-s500);font-weight:500;}
-.ed-badge{font-size:10px;padding:1px 6px;border-radius:999px;background:#e2e8f0;color:#475569;margin-left:8px;}
-.leaflet-popup-content-wrapper{border-radius:14px;padding:0;overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,0.2);}
-.pu-head{padding:14px 18px;color:#fff;}
-.pu-name{font-size:17px;font-weight:900;line-height:1.2;letter-spacing:-0.3px;}
-.pu-date{font-size:10px;text-transform:uppercase;opacity:0.85;margin-top:5px;font-weight:800;letter-spacing:0.8px;}
-.pu-body{padding:16px 18px;font-size:13px;line-height:1.6;color:var(--c-navy);}
-.pu-intel{margin-top:12px;padding-top:12px;border-top:1px solid #eee;font-style:italic;color:#475569;font-weight:500;}
-.leaflet-marker-icon{background:transparent !important;border:none !important;}
-.marker-pin{width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(0,0,0,0.4),0 2px 6px rgba(0,0,0,0.2);display:block;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+
+@media(min-width:841px){
+  .app{flex-direction:row;}
+  .sidebar{width:420px; height:100vh; position:relative; border-top:none; border-right:1px solid var(--c-s200); box-shadow:none;}
+  .sheet-handle{display:none;}
+}
+
+.sheet-handle{padding:14px 0; text-align:center; background:#fff; border-bottom:1px solid var(--c-s200); cursor:pointer;}
+.handle-bar{width:40px; height:5px; background:#cbd5e1; border-radius:999px; margin:0 auto;}
+
+.sb-header{background:linear-gradient(145deg,#0a0f1e,#162133); color:#fff; padding:20px 16px; border-bottom:3px solid var(--c-accent);}
+.hdr-title{font-size:18px; font-weight:900; margin-bottom:4px; line-height:1.2; text-transform:uppercase;}
+.hdr-sub{font-size:10px; font-weight:700; color:var(--c-accent); text-transform:uppercase; letter-spacing:1px;}
+
+.sub-btn {
+  display:block; width:100%; margin-top:14px; padding:15px; background:var(--c-accent);
+  color:#0a0f1e; border:none; border-radius:10px; font-weight:900; font-size:13px;
+  text-decoration:none; text-align:center; text-transform:uppercase; transition: all 0.1s;
+}
+.sub-btn:active { transform: scale(0.97); }
+
+.stats-row{display:flex; gap:8px; margin-top:14px;}
+.stat{flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 5px; background:rgba(255,255,255,.07); border-radius:8px;}
+.stat-val{font-size:16px; font-weight:900;}
+.stat-lbl{font-size:9px; text-transform:uppercase; color: var(--c-s500); margin-top:2px;}
+
+.filters{padding:12px 16px; border-bottom:1px solid var(--c-s200); background:#fff;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  padding:7px 12px; border-radius:999px; font-size:10px; font-weight:800; color:#fff; 
+  cursor:pointer; transition: all 0.2s; border: 2px solid transparent; white-space: nowrap;
+}
+.chip.off{opacity:0.2; filter: grayscale(1); transform: scale(0.95);}
+
+.count-bar{padding:10px 16px; font-size:12.5px; font-weight:700; display:flex; justify-content:space-between; background:var(--c-s100); border-bottom:1px solid var(--c-s200); color:var(--c-navy);}
+.reset-btn{color:#3b82f6; border:none; background:none; font-weight:900; font-size:10.5px; cursor:pointer;}
+
+.sidebar-scroll{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#fff;}
+.list-item{padding:16px; border-bottom:1px solid #f1f5f9; cursor:pointer; border-left:4px solid transparent; transition: all 0.2s;}
+.list-item.active{background:#f0f9ff; border-left-color:var(--c-accent);}
+.li-name{font-size:14px; font-weight:700; color:var(--c-navy); margin-bottom:3px;}
+.li-addr{font-size:11px; color:var(--c-s500);}
+
+.leaflet-popup-content-wrapper{border-radius:14px; padding:0; overflow:hidden; box-shadow:0 15px 35px rgba(0,0,0,0.2);}
+.pu-head{padding:14px 18px; color:#fff;}
+.pu-name{font-size:17px; font-weight:900; line-height:1.2;}
+.pu-date{font-size:10px; text-transform:uppercase; opacity:0.85; margin-top:5px; font-weight:800;}
+.pu-body{padding:16px 18px; font-size:13px; line-height:1.6; color:var(--c-navy);}
+.pu-intel{margin-top:12px; padding-top:12px; border-top:1px solid #eee; font-style:italic; color:#475569; font-weight:500;}
+
+.leaflet-marker-icon{background:transparent !important; border:none !important;}
+.marker-pin{
+  width:20px; height:20px; border-radius:50%; border:3px solid #fff;
+  box-shadow:0 0 10px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.2);
+  display:block; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 </style>
 </head>
 <body>
@@ -61,10 +91,10 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;-webkit-fon
     <div class="sheet-handle" id="sheetHandle"><div class="handle-bar"></div></div>
     <div class="sb-header">
       <div class="hdr-title">The Florida Signal: Broward County</div>
-      <div class="hdr-sub">Real-Time Intelligence Tracking 2026</div>
-      <a href="https://www.thefloridasignal.com" target="_blank" class="sub-btn">Join 4,000+ Real Estate Insiders</a>
+      <div class="hdr-sub">Intelligence Tracking 2026</div>
+      <a href="https://www.thefloridasignal.com" target="_blank" class="sub-btn">Sign up for full weekly reports</a>
       <div class="stats-row">
-        <div class="stat"><span class="stat-val" id="statSignals">0</span><span class="stat-lbl">Signals</span></div>
+        <div class="stat"><span class="stat-val" id="statSignals">0</span><span class="stat-lbl">Points</span></div>
         <div class="stat"><span class="stat-val">$211.8M</span><span class="stat-lbl">Capital tracked</span></div>
       </div>
     </div>
@@ -72,45 +102,45 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;-webkit-fon
       <div class="chips" id="catChips"></div>
       <div class="chips" id="tfChips" style="margin-top:10px;"></div>
     </div>
-    <div class="count-bar"><span id="countText">Loading intelligence signals...</span><button class="reset-btn" id="resetBtn">Reset to Latest</button></div>
+    <div class="count-bar"><span id="countText">Initializing intelligence...</span><button class="reset-btn" id="resetBtn">RESET VIEW</button></div>
     <div class="sidebar-scroll" id="listContainer"></div>
   </aside>
 </div>
 
 <script>
-// ==================== YOUR 47 SIGNALS ====================
-const signals = [
+// ==================== UNIQUE 47 DEDUPLICATED DATASET ====================
+const signals=[
   {id:1,name:"Gore Building Demolition",address:"201 W Broward Blvd, Fort Lauderdale",category:"Lead Signals",intel:"indicates public redevelopment is moving into execution.",value:"$2,000,000",publishDate:"March 23, 2026",ed:"23",lat:26.1215,lng:-80.1472},
   {id:2,name:"1400 Progresso Storage",address:"1400 Progresso Dr, Fort Lauderdale",category:"Lead Signals",intel:"signals vertical momentum for industrial in the urban core.",value:"$6,500,000",publishDate:"March 23, 2026",ed:"23",lat:26.1360,lng:-80.1450},
-  {id:3,name:"Barry's / 401 Las Olas",address:"401 E Las Olas Blvd, Fort Lauderdale",category:"Lead Signals",intel:"confirms high-end tenant build-out and active downtown leasing.",value:"$1,200,000",publishDate:"March 23, 2026",ed:"23",lat:26.1195,lng:-80.1390},
-  {id:4,name:"Hollywood Beach Hotel Site",address:"101 N Ocean Dr, Hollywood",category:"Lead Signals",intel:"serves as a primary signal for beachfront redevelopment via city presentation.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.0112,lng:-80.1158},
+  {id:3,name:"Barry's / 401 Las Olas",address:"401 E Las Olas Blvd, Fort Lauderdale",category:"Lead Signals",intel:"confirms leasing and active downtown build-out activity.",value:"$1,200,000",publishDate:"March 23, 2026",ed:"23",lat:26.1195,lng:-80.1390},
+  {id:4,name:"Hollywood Beach Hotel Site",address:"101 N Ocean Dr, Hollywood",category:"Lead Signals",intel:"serves as a primary signal for beachfront redevelopment.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.0112,lng:-80.1158},
   {id:5,name:"Modera Pompano Site Plan",address:"855 S Federal Hwy, Pompano Beach",category:"Planning Pipeline",intel:"is a lead indicator for new multifamily density in Pompano.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2230,lng:-80.0900},
   {id:6,name:"El Car Wash Pompano",address:"2690 W Sample Rd, Pompano Beach",category:"Planning Pipeline",intel:"indicates commercial expansion on assembled land in Pompano.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2730,lng:-80.1600},
   {id:7,name:"Stranahan House Renovation",address:"335 SE 6 Ave, Fort Lauderdale",category:"Institutional / Public Capital",intel:"marks a key permit milestone in a historic capital campaign.",value:"$290,500",publishDate:"March 23, 2026",ed:"23",lat:26.1180,lng:-80.1400},
   {id:8,name:"Next Health Flagship",address:"1902 N Federal Hwy, Fort Lauderdale",category:"Consumer / Tenant Openings",intel:"triggers a near-term opening event for wellness flagship.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1450,lng:-80.1150},
-  {id:9,name:"110 EAST Downtown Move",address:"110 E Broward Blvd, Fort Lauderdale",category:"Consumer / Tenant Openings",intel:"indicates continuous office absorption and fit-out activity downtown.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1220,lng:-80.1430},
+  {id:9,name:"110 EAST Downtown Move",address:"110 E Broward Blvd, Fort Lauderdale",category:"Consumer / Tenant Openings",intel:"indicates continuous office absorption and fit-out activity.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1220,lng:-80.1430},
   {id:10,name:"RISE Tower Crane",address:"1101 N Federal Hwy, Fort Lauderdale",category:"Lead Signals",intel:"indicates 25-story vertical construction is starting.",value:"$45,000,000",publishDate:"March 16, 2026",ed:"16",lat:26.1385,lng:-80.1215},
-  {id:11,name:"The Adderley - Phase II",address:"501 NW 7th Ave, Fort Lauderdale",category:"Lead Signals",intel:"triggers a $12.5M groundbreaking phase for urban workforce housing.",value:"$12,500,000",publishDate:"March 16, 2026",ed:"16",lat:26.1288,lng:-80.1510},
+  {id:11,name:"The Adderley - Phase II",address:"501 NW 7th Ave, Fort Lauderdale",category:"Lead Signals",intel:"triggers a $12.5M groundbreaking phase for workforce housing.",value:"$12,500,000",publishDate:"March 16, 2026",ed:"16",lat:26.1288,lng:-80.1510},
   {id:12,name:"Pier 66 South Signal",address:"2301 SE 17 St, Fort Lauderdale",category:"Lead Signals",intel:"is the first construction-phase trigger for unbuilt south parcel.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1010,lng:-80.1150},
   {id:13,name:"Le Croissant Plaza 100",address:"100 NE 3 Ave, Fort Lauderdale",category:"Consumer / Tenant Openings",intel:"confirms hospitality expansion into speculative office suites.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1230,lng:-80.1400},
   {id:14,name:"One Financial Plaza Prep",address:"100 SE 3 Ave, Fort Lauderdale",category:"Consumer / Tenant Openings",intel:"is a lead indicator of unannounced leasing via interior demo.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1205,lng:-80.1410},
   {id:15,name:"Compass Isle Assembly",address:"20 Compass Isle, Fort Lauderdale",category:"Lead Signals",intel:"signals a massive $31.9M luxury canal-front land assemblage.",value:"$31,900,000",publishDate:"March 9, 2026",ed:"9",lat:26.1265,lng:-80.1110},
   {id:16,name:"Aria Flagler Village",address:"501 NE 3rd Ave, Fort Lauderdale",category:"Lead Signals",intel:"marks vertical construction permit for residential site.",value:"$20,000,000",publishDate:"March 9, 2026",ed:"9",lat:26.1275,lng:-80.1395},
   {id:17,name:"Calvary Chapel Expansion",address:"2401 W Cypress Creek Rd, Fort Lauderdale",category:"Institutional / Public Capital",intel:"signals vertical growth for an 80k SF educational campus.",value:"$30,000,000",publishDate:"March 9, 2026",ed:"9",lat:26.2080,lng:-80.1700},
-  {id:18,name:"Lohmeyer Resiliency",address:"1765 SE 18 St, Fort Lauderdale",category:"Institutional / Public Capital",intel:"represents critical municipal mechanical and resiliency spend.",value:"$8,400,000",publishDate:"March 9, 2026",ed:"9",lat:26.1000,lng:-80.1250},
+  {id:18,name:"Lohmeyer Resiliency",address:"1765 SE 18 St, Fort Lauderdale",category:"Institutional / Public Capital",intel:"represents critical municipal mechanical resiliency spend.",value:"$8,400,000",publishDate:"March 9, 2026",ed:"9",lat:26.1000,lng:-80.1250},
   {id:19,name:"Sanctuary Proposal",address:"1400 N Federal Hwy, Fort Lauderdale",category:"Planning Pipeline",intel:"indicates a massive 348-unit proposal seeking density at the DRC.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1365,lng:-80.1200},
   {id:20,name:"Shipyard Pompano District",address:"125 NE 5th Ave, Pompano Beach",category:"Planning Pipeline",intel:"signals major mixed-use site plan progress in Pompano.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.2345,lng:-80.1190},
   {id:21,name:"Bridge Point Logistics",address:"2101 W McNab Rd, Pompano Beach",category:"Lead Signals",intel:"industrial shell completion for logistics demand.",value:"$14,200,000",publishDate:"March 9, 2026",ed:"9",lat:26.2110,lng:-80.1550},
   {id:22,name:"Broward Health Medical Site",address:"1611 S Andrews Ave, Fort Lauderdale",category:"Institutional / Public Capital",intel:"confirms active permit-driven site work in medical district.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1050,lng:-80.1440},
   {id:23,name:"Galt Mile Capital Project",address:"3500 Galt Ocean Dr, Fort Lauderdale",category:"Corridor / Area Watch",intel:"signals capital stability spend for high-rise assets.",value:"$1,575,730",publishDate:"March 16, 2026",ed:"16",lat:26.1650,lng:-80.0980},
-  {id:24,name:"SW Infill Coordinated Batch",address:"330 SW 16 St, Fort Lauderdale",category:"Corridor / Area Watch",intel:"confirms coordinated infill movement southwest of core.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1050,lng:-80.1500},
-  {id:25,name:"River Resiliency Study",address:"Riverfront Corridor, Fort Lauderdale",category:"Corridor / Area Watch",intel:"long-term municipal resiliency planning indicator.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1150,lng:-80.1300},
+  {id:24,name:"SW Infill Coordinated",address:"330 SW 16 St, Fort Lauderdale",category:"Corridor / Area Watch",intel:"confirms coordinated infill movement southwest of core.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1050,lng:-80.1500},
+  {id:25,name:"River Resiliency Framework",address:"Riverfront Corridor, Fort Lauderdale",category:"Corridor / Area Watch",intel:"long-term municipal resiliency planning indicator.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1150,lng:-80.1300},
   {id:26,name:"Six31 Residences Flagler",address:"631 NE 2nd Ave, Fort Lauderdale",category:"Planning Pipeline",intel:"triggers residential review in a core growth neighborhood.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1290,lng:-80.1385},
   {id:27,name:"Pompano Marine Center Plan",address:"701 S Federal Hwy, Pompano Beach",category:"Planning Pipeline",intel:"marine district project movement in review.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2250,lng:-80.0910},
-  {id:28,name:"Public Land Hollywood Move",address:"600 Knights Rd, Hollywood",category:"Institutional / Public Capital",intel:"indicates land use shift for potential civic or redevelopment use.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.0200,lng:-80.1700},
-  {id:29,name:"NW 15th Street Mobility",address:"NW 15th St, Pompano Beach",category:"Corridor / Area Watch",intel:"signals streetscape and accessibility upgrades.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2500,lng:-80.1400},
+  {id:28,name:"Public Land Hollywood Move",address:"600 Knights Rd, Hollywood",category:"Institutional / Public Capital",intel:"indicates land use shift for potential civic or redevelopment.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.0200,lng:-80.1700},
+  {id:29,name:"NW 15th Street Pompano",address:"NW 15th St, Pompano Beach",category:"Corridor / Area Watch",intel:"signals streetscape and accessibility upgrades.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2500,lng:-80.1400},
   {id:30,name:"SW 27th Ave Logistics Plan",address:"SW 27th Ave, Pompano Beach",category:"Corridor / Area Watch",intel:"industrial rezoning interest in logistics corridor.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.2250,lng:-80.1650},
-  {id:31,name:"Oakland Park Culinary Main",address:"3400 NE 12th Ave, Oakland Park",category:"Corridor / Area Watch",intel:"infrastructure execution for the city's new Main Street.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1705,lng:-80.1325},
+  {id:31,name:"Oakland Park Main Street",address:"3400 NE 12th Ave, Oakland Park",category:"Corridor / Area Watch",intel:"infrastructure execution for the city's new Main Street.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1705,lng:-80.1325},
   {id:32,name:"Hidden Harbour Marina Infra",address:"2315 NE 15th St, Pompano Beach",category:"Institutional / Public Capital",intel:"significant waterfront infrastructure investment.",value:"$1,850,000",publishDate:"March 9, 2026",ed:"9",lat:26.2515,lng:-80.0910},
   {id:33,name:"Riverbend Marketplace II",address:"2401 W Broward Blvd, Fort Lauderdale",category:"Planning Pipeline",intel:"indicates outparcel commercial movement near I-95.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1210,lng:-80.1750},
   {id:34,name:"FATVillage Infrastructure",address:"N Andrews Ave, Fort Lauderdale",category:"Corridor / Area Watch",intel:"supports corridor growth and public realm conditions.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.1280,lng:-80.1440},
@@ -121,12 +151,12 @@ const signals = [
   {id:39,name:"Atlantic Blvd Transit-Core",address:"2400 E Atlantic Blvd, Pompano Beach",category:"Planning Pipeline",intel:"transit-oriented mixed-use development proposal review.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2320,lng:-80.0950},
   {id:40,name:"Modera Pompano Site",address:"855 S Federal Hwy, Pompano Beach",category:"Planning Pipeline",intel:"entering site plan review phase for high-density units.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2230,lng:-80.0900},
   {id:41,name:"Gore Building Redevelopment",address:"201 W Broward Blvd, Fort Lauderdale",category:"Lead Signals",intel:"execution stage for downtown public core project.",value:"$2,000,000",publishDate:"March 23, 2026",ed:"23",lat:26.1215,lng:-80.1472},
-  {id:42,name:"Broward Health Electrical",address:"1600 S Andrews Ave, Fort Lauderdale",category:"Institutional / Public Capital",intel:"marks electrical permit progress for hospital expansion.",value:"$391,532",publishDate:"March 16, 2026",ed:"16",lat:26.1055,lng:-80.1430},
+  {id:42,name:"Broward Health Phasing",address:"1600 S Andrews Ave, Fort Lauderdale",category:"Institutional / Public Capital",intel:"marks electrical permit progress for hospital expansion.",value:"$391,532",publishDate:"March 16, 2026",ed:"16",lat:26.1055,lng:-80.1430},
   {id:43,name:"Fort Lauderdale Terminal Site",address:"200 NW 1st Ave, Fort Lauderdale",category:"Institutional / Public Capital",intel:"civic infrastructure planning movement identified.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1245,lng:-80.1445},
-  {id:44,name:"Downtown Transit Study",address:"SW 1st Ave, Fort Lauderdale",category:"Corridor / Area Watch",intel:"signals high-density transit corridor study phase.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1185,lng:-80.1440},
-  {id:45,name:"Pompano Beach Marina Plan",address:"2501 N Ocean Blvd, Pompano Beach",category:"Planning Pipeline",intel:"luxury marine facility entering design review.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2625,lng:-80.0885},
-  {id:46,name:"Sample Road Logistics Center",address:"Sample Rd & I-95, Pompano Beach",category:"Lead Signals",intel:"logistics shell permit confirms last-mile demand.",value:"$8,900,000",publishDate:"March 9, 2026",ed:"9",lat:26.2735,lng:-80.1350},
-  {id:47,name:"Sanctuary DRC Expansion",address:"1400 N Federal Hwy, Fort Lauderdale",category:"Planning Pipeline",intel:"primary density indicator for north federal corridor.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1365,lng:-80.1200}
+  {id:44,name:"Downtown Transit corridor",address:"SW 1st Ave, Fort Lauderdale",category:"Corridor / Area Watch",intel:"signals high-density transit corridor study phase.",value:"N/A",publishDate:"March 16, 2026",ed:"16",lat:26.1185,lng:-80.1440},
+  {id:45,name:"Pompano Marina Plan",address:"2501 N Ocean Blvd, Pompano Beach",category:"Planning Pipeline",intel:"luxury marine facility entering design review.",value:"N/A",publishDate:"March 23, 2026",ed:"23",lat:26.2625,lng:-80.0885},
+  {id:46,name:"Sample Road Logistics",address:"Sample Rd & I-95, Pompano Beach",category:"Lead Signals",intel:"logistics shell permit confirms last-mile demand.",value:"$8,900,000",publishDate:"March 9, 2026",ed:"9",lat:26.2735,lng:-80.1350},
+  {id:47,name:"Sanctuary DRC Watch",address:"1400 N Federal Hwy, Fort Lauderdale",category:"Planning Pipeline",intel:"primary density indicator for federal corridor.",value:"N/A",publishDate:"March 9, 2026",ed:"9",lat:26.1365,lng:-80.1200}
 ];
 
 const CAT_COLORS = {"Lead Signals":"#DC2626","Planning Pipeline":"#4F46E5","Institutional / Public Capital":"#059669","Consumer / Tenant Openings":"#7C3AED","Corridor / Area Watch":"#6B7280"};
@@ -144,7 +174,7 @@ function safeClick(el, fn) {
   el.addEventListener('touchend', (e) => { e.preventDefault(); fn(); }, { passive: false });
 }
 
-// Bulletproof marker creation
+// Build Markers
 signals.forEach(s => {
   const color = CAT_COLORS[s.category] || '#3388ff';
   const icon = L.divIcon({
@@ -153,20 +183,15 @@ signals.forEach(s => {
     iconSize: [20, 20],
     iconAnchor: [10, 10]
   });
-  const mk = L.marker([s.lat, s.lng], { icon }).addTo(map);
+
+  const mk = L.marker([s.lat, s.lng], { icon: icon }).addTo(map);
   mk.bindPopup(`
-    <div class="pu-head" style="background:${color}">
-      <div class="pu-name">${s.name}</div>
-      <div class="pu-date">Edition: March ${s.ed}, 2026</div>
-    </div>
-    <div class="pu-body">
-      <b>Address:</b> ${s.address}<br>
-      <b>Status:</b> ${s.value !== "N/A" ? s.value : 'Permit tracking active'}
-      <div class="pu-intel"><b>Signal Intelligence:</b> This ${s.intel}</div>
-    </div>
+    <div class="pu-head" style="background:${color}"><div class="pu-name">${s.name}</div><div class="pu-date">Edition: March ${s.ed}, 2026</div></div>
+    <div class="pu-body"><b>Address:</b> ${s.address}<br><b>Status:</b> ${s.value !== "N/A" ? s.value : 'Permit tracking active'}<div class="pu-intel"><b>Signal Intelligence:</b> This ${s.intel}</div></div>
   `, { maxWidth: 280 });
+  
   mk.on('click', () => highlightList(s.id));
-  markers[s.id] = { layer: mk, ed: s.ed };
+  markers[s.id] = { layer: mk, ed: s.ed, category: s.category };
 });
 
 function buildFilters() {
@@ -175,17 +200,15 @@ function buildFilters() {
   CATS.forEach(c => {
     const d = document.createElement('div');
     d.className = `chip ${aCats.has(c) ? '' : 'off'}`;
-    d.style.background = CAT_COLORS[c];
-    d.innerHTML = c.split(' ')[0];
-    safeClick(d, () => { aCats.has(c) ? aCats.delete(c) : aCats.add(c); d.classList.toggle('off'); applyStyles(); });
+    d.style.background = CAT_COLORS[c]; d.innerHTML = c.split(' ')[0];
+    safeClick(d, () => { aCats.has(c) ? aCats.delete(c) : aCats.add(c); applyStyles(); buildFilters(); });
     cc.appendChild(d);
   });
   TFS.forEach(t => {
     const d = document.createElement('div');
     d.className = `chip ${aTfs.has(t) ? '' : 'off'}`;
-    d.style.background = '#1E293B';
-    d.innerHTML = 'Ed. ' + t;
-    safeClick(d, () => { aTfs.has(t) ? aTfs.delete(t) : aTfs.add(t); d.classList.toggle('off'); applyStyles(); });
+    d.style.background = '#1E293B'; d.innerHTML = 'Ed. ' + t;
+    safeClick(d, () => { aTfs.has(t) ? aTfs.delete(t) : aTfs.add(t); applyStyles(); buildFilters(); });
     tc.appendChild(d);
   });
 }
@@ -194,17 +217,18 @@ function applyStyles() {
   let count = 0;
   signals.forEach(s => {
     const m = markers[s.id];
-    if (!m) return;
     const isVisible = aCats.has(s.category);
     const isBright = aTfs.has(s.ed);
+
     if (isVisible) {
       if (!map.hasLayer(m.layer)) m.layer.addTo(map);
       const el = m.layer.getElement();
       if (el) {
         const pin = el.querySelector('.marker-pin');
         if (pin) {
-          pin.style.opacity = isBright ? "1" : "0.45";
-          pin.style.transform = isBright ? "scale(1.15)" : "scale(0.82)";
+          pin.style.opacity = isBright ? "1.0" : "0.35";
+          pin.style.transform = isBright ? "scale(1.1)" : "scale(0.85)";
+          pin.style.filter = isBright ? "none" : "grayscale(0.4)";
         }
       }
       if (isBright) count++;
@@ -213,28 +237,21 @@ function applyStyles() {
     }
   });
   document.getElementById('statSignals').textContent = count;
+  document.getElementById('countText').innerHTML = count + ' intelligence signals active';
   buildList();
 }
 
 function buildList() {
-  const lc = document.getElementById('listContainer');
-  lc.innerHTML = '';
+  const lc = document.getElementById('listContainer'); lc.innerHTML = '';
   const vis = signals.filter(s => aCats.has(s.category) && aTfs.has(s.ed));
-  document.getElementById('countText').innerHTML = vis.length + ' intelligence signals in view';
   vis.forEach(s => {
     const d = document.createElement('div');
-    d.className = 'list-item'; 
-    d.id = 'li-' + s.id;
+    d.className = 'list-item'; d.id = 'li-' + s.id;
     d.style.borderLeftColor = CAT_COLORS[s.category];
     d.innerHTML = `<div class="li-name">${s.name}</div><div class="li-addr">${s.address}</div>`;
     safeClick(d, () => {
-      map.flyTo([s.lat, s.lng], 15, { animate: true, duration: 1.2 });
-      markers[s.id].layer.openPopup();
-      highlightList(s.id);
-      if (window.innerWidth < 841) {
-        document.getElementById('sidebar').classList.remove('expanded');
-        setTimeout(() => map.invalidateSize(), 450);
-      }
+      map.flyTo([s.lat, s.lng], 15); markers[s.id].layer.openPopup(); highlightList(s.id);
+      if (window.innerWidth < 841) document.getElementById('sidebar').classList.remove('expanded');
     });
     lc.appendChild(d);
   });
@@ -243,10 +260,7 @@ function buildList() {
 function highlightList(id) {
   if (activeId) document.getElementById('li-' + activeId)?.classList.remove('active');
   const el = document.getElementById('li-' + id);
-  if (el) {
-    el.classList.add('active');
-    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+  if (el) { el.classList.add('active'); el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
   activeId = id;
 }
 
@@ -256,13 +270,8 @@ safeClick(document.getElementById('sheetHandle'), () => {
 });
 
 safeClick(document.getElementById('resetBtn'), () => {
-  aCats = new Set(CATS);
-  aTfs = new Set(["23", "16"]);
-  document.querySelectorAll('.chip').forEach(c => {
-    c.classList.remove('off');
-    if (c.innerHTML.includes('Ed. 9')) c.classList.add('off');
-  });
-  applyStyles();
+  aCats = new Set(CATS); aTfs = new Set(["23", "16"]);
+  applyStyles(); buildFilters();
   map.setView([26.14, -80.13], 11);
 });
 
