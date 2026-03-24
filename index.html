@@ -13,61 +13,64 @@
   --c-corridor:#6B7280; --c-accent:#F59E0B; --c-navy:#162133; --c-s100:#F1F5F9;
   --c-s200:#E2E8F0; --c-s500:#64748B;
 }
-* { box-sizing:border-box; margin:0; padding:0; }
-html,body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
-.app { display:flex; flex-direction:column; height:100vh; width:100vw; background:#fff; }
-#map { flex:1; width:100%; height:100%; z-index:1; background:#f1f5f9; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+.app{display:flex;flex-direction:column;height:100vh;width:100vw;background:#fff;}
+#map{flex:1;width:100%;height:100%;z-index:1;background:#f1f5f9;}
 .sidebar {
   width:100%; height:45vh; background:rgba(255,255,255,0.98); backdrop-filter:blur(12px);
   border-top:1px solid var(--c-s200); position:fixed; bottom:0; left:0; z-index:100;
   transition:height 0.4s cubic-bezier(0.32, 0.72, 0, 1);
   box-shadow:0 -10px 25px rgba(0,0,0,0.1); display:flex; flex-direction:column;
 }
-.sidebar.expanded { height:88vh; }
-@media(min-width:841px) {
-  .app { flex-direction:row; }
-  .sidebar { width:420px; height:100vh; position:relative; border-top:none; border-right:1px solid var(--c-s200); box-shadow:none; }
-  .sheet-handle { display:none; }
+.sidebar.expanded{height:88vh;}
+@media(min-width:841px){
+  .app{flex-direction:row;}
+  .sidebar{width:420px; height:100vh; position:relative; border-top:none; border-right:1px solid var(--c-s200); box-shadow:none;}
+  .sheet-handle{display:none;}
 }
-.sheet-handle { padding:14px 0; text-align:center; background:#fff; border-bottom:1px solid var(--c-s200); cursor:pointer; }
-.handle-bar { width:40px; height:5px; background:#cbd5e1; border-radius:999px; margin:0 auto; }
-.sb-header { background:linear-gradient(145deg,#0a0f1e,#162133); color:#fff; padding:20px 16px; border-bottom:3px solid var(--c-accent); }
-.hdr-title { font-size:18px; font-weight:900; margin-bottom:4px; line-height:1.2; text-transform:uppercase; letter-spacing:-0.2px; }
-.hdr-sub { font-size:10px; font-weight:700; color:var(--c-accent); text-transform:uppercase; letter-spacing:1px; opacity:0.9; }
+.sheet-handle{padding:14px 0; text-align:center; background:#fff; border-bottom:1px solid var(--c-s200); cursor:pointer;}
+.handle-bar{width:40px; height:5px; background:#cbd5e1; border-radius:999px; margin:0 auto;}
+.sb-header{background:linear-gradient(145deg,#0a0f1e,#162133); color:#fff; padding:20px 16px; border-bottom:3px solid var(--c-accent);}
+.hdr-title{font-size:18px; font-weight:900; margin-bottom:4px; line-height:1.2; text-transform:uppercase; letter-spacing:-0.2px;}
+.hdr-sub{font-size:10px; font-weight:700; color:var(--c-accent); text-transform:uppercase; letter-spacing:1px; opacity:0.9;}
 .sub-btn {
   display:block; width:100%; margin-top:14px; padding:15px; background:var(--c-accent);
   color:#0a0f1e; border:none; border-radius:10px; font-weight:900; font-size:13px;
   text-decoration:none; text-align:center; text-transform:uppercase; transition:all 0.1s;
 }
 .sub-btn:active { transform:scale(0.97); filter:brightness(1.1); }
-.stats-row { display:flex; gap:8px; margin-top:14px; }
-.stat { flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 5px; background:rgba(255,255,255,.07); border-radius:8px; }
-.stat-val { font-size:16px; font-weight:900; color:#fff; }
-.stat-lbl { font-size:9px; text-transform:uppercase; color:var(--c-s500); margin-top:2px; font-weight:700; }
-.filters { padding:14px 16px; border-bottom:1px solid var(--c-s200); background:#fff; }
-.chips { display:flex; flex-wrap:wrap; gap:6px; }
-.chip {
+.stats-row{display:flex; gap:8px; margin-top:14px;}
+.stat{flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 5px; background:rgba(255,255,255,.07); border-radius:8px;}
+.stat-val{font-size:16px; font-weight:900; color:#fff;}
+.stat-lbl{font-size:9px; text-transform:uppercase; color:var(--c-s500); margin-top:2px; font-weight:700;}
+.filters{padding:14px 16px; border-bottom:1px solid var(--c-s200); background:#fff;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
   padding:7px 12px; border-radius:999px; font-size:10px; font-weight:800; color:#fff;
   cursor:pointer; transition:all 0.2s; border:2px solid transparent;
   white-space:nowrap; box-shadow:0 2px 4px rgba(0,0,0,0.05);
 }
 .chip.off { opacity:0.15; filter:grayscale(1); transform:scale(0.94); box-shadow:none; }
-.count-bar { padding:10px 16px; font-size:12px; font-weight:700; display:flex; justify-content:space-between; background:var(--c-s100); border-bottom:1px solid var(--c-s200); color:var(--c-navy); }
-.reset-btn { color:#3b82f6; border:none; background:none; font-weight:900; font-size:10px; cursor:pointer; text-transform:uppercase; }
-.sidebar-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#fff; }
-.list-item { padding:16px; border-bottom:1px solid #f1f5f9; cursor:pointer; border-left:4px solid transparent; transition:all 0.2s; }
+.count-bar{padding:10px 16px; font-size:12.5px; font-weight:700; display:flex; justify-content:space-between; background:var(--c-s100); border-bottom:1px solid var(--c-s200); color:var(--c-navy);}
+.reset-btn{color:#3b82f6; border:none; background:none; font-weight:900; font-size:10.5px; cursor:pointer; text-transform:uppercase;}
+.sidebar-scroll{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#fff;}
+.list-item{padding:16px; border-bottom:1px solid #f1f5f9; cursor:pointer; border-left:5px solid transparent; transition:all 0.2s;}
 .list-item:active { background:#f8fafc; }
-.list-item.active { background:#f0f9ff; border-left-color:var(--c-accent); }
-.li-name { font-size:14px; font-weight:700; color:var(--c-navy); margin-bottom:2px; }
-.li-addr { font-size:11px; color:var(--c-s500); font-weight:500; }
+.list-item.active{background:#f0f9ff; border-left-color:var(--c-accent);}
+.li-name{font-size:14px; font-weight:700; color:var(--c-navy); margin-bottom:3px;}
+.li-addr{font-size:11px; color:var(--c-s500); font-weight:500;}
+.ed-badge { font-size:10px; padding:1px 6px; border-radius:999px; background:#e2e8f0; color:#475569; margin-left:8px; }
+
 /* Popups */
-.leaflet-popup-content-wrapper { border-radius:14px; padding:0; overflow:hidden; box-shadow:0 15px 35px rgba(0,0,0,0.2); }
-.pu-head { padding:14px 18px; color:#fff; }
-.pu-name { font-size:17px; font-weight:900; line-height:1.2; letter-spacing:-0.3px; }
-.pu-date { font-size:10px; text-transform:uppercase; opacity:0.85; margin-top:5px; font-weight:800; letter-spacing:0.8px; }
-.pu-body { padding:16px 18px; font-size:13px; line-height:1.6; color:var(--c-navy); }
-.pu-intel { margin-top:12px; padding-top:12px; border-top:1px solid #eee; font-style:italic; color:#475569; font-weight:500; }
-/* Bulletproof Colored Dots */
+.leaflet-popup-content-wrapper{border-radius:14px; padding:0; overflow:hidden; box-shadow:0 15px 35px rgba(0,0,0,0.2);}
+.pu-head{padding:14px 18px; color:#fff;}
+.pu-name{font-size:17px; font-weight:900; line-height:1.2; letter-spacing:-0.3px;}
+.pu-date{font-size:10px; text-transform:uppercase; opacity:0.85; margin-top:5px; font-weight:800; letter-spacing:0.8px;}
+.pu-body{padding:16px 18px; font-size:13px; line-height:1.6; color:var(--c-navy);}
+.pu-intel{margin-top:12px; padding-top:12px; border-top:1px solid #eee; font-style:italic; color:#475569; font-weight:500;}
+
+/* Bulletproof Markers */
 .leaflet-marker-icon { background:transparent !important; border:none !important; }
 .marker-pin {
   width:20px; height:20px; border-radius:50%; border:3px solid #fff;
@@ -94,14 +97,14 @@ html,body { height:100%; overflow:hidden; font-family:'Inter',sans-serif; -webki
       <div class="chips" id="catChips"></div>
       <div class="chips" id="tfChips" style="margin-top:10px;"></div>
     </div>
-    <div class="count-bar"><span id="countText">Loading signals...</span><button class="reset-btn" id="resetBtn">Reset Map</button></div>
+    <div class="count-bar"><span id="countText">Loading intelligence signals...</span><button class="reset-btn" id="resetBtn">Reset to Latest</button></div>
     <div class="sidebar-scroll" id="listContainer"></div>
   </aside>
 </div>
 
 <script>
-// Paste your full 47 signals array here (exactly as in your last version)
-const signals = [ /* ... your signals array ... */ ];
+// ==================== YOUR 47 SIGNALS (paste your latest array here) ====================
+const signals = [ /* paste all 47 signals from your previous version */ ];
 
 const CAT_COLORS = {"Lead Signals":"#DC2626","Planning Pipeline":"#4F46E5","Institutional / Public Capital":"#059669","Consumer / Tenant Openings":"#7C3AED","Corridor / Area Watch":"#6B7280"};
 const CATS = Object.keys(CAT_COLORS);
@@ -122,7 +125,7 @@ function safeClick(el, fn) {
 signals.forEach(s => {
   const color = CAT_COLORS[s.category] || '#3388ff';
   const icon = L.divIcon({
-    className: '',   // critical: empty to prevent Leaflet overrides
+    className: '',
     html: `<div class="marker-pin" style="background-color:${color};"></div>`,
     iconSize: [20, 20],
     iconAnchor: [10, 10]
@@ -146,8 +149,121 @@ signals.forEach(s => {
   markers[s.id] = { layer: mk, ed: s.ed };
 });
 
-// Keep your existing buildFilters, applyStyles, buildList, highlightList, sheetHandle, resetBtn functions
-// (copy them exactly from your previous version — they are already solid)
+function buildFilters() {
+  const cc = document.getElementById('catChips'), tc = document.getElementById('tfChips');
+  cc.innerHTML = ''; tc.innerHTML = '';
+
+  CATS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = `chip ${aCats.has(c) ? '' : 'off'}`;
+    d.style.background = CAT_COLORS[c];
+    d.innerHTML = c.split(' ')[0];
+    safeClick(d, () => { aCats.has(c) ? aCats.delete(c) : aCats.add(c); d.classList.toggle('off'); applyStyles(); });
+    cc.appendChild(d);
+  });
+
+  TFS.forEach(t => {
+    const d = document.createElement('div');
+    d.className = `chip ${aTfs.has(t) ? '' : 'off'}`;
+    d.style.background = '#1E293B';
+    d.innerHTML = 'Ed. ' + t;
+    safeClick(d, () => { aTfs.has(t) ? aTfs.delete(t) : aTfs.add(t); d.classList.toggle('off'); applyStyles(); });
+    tc.appendChild(d);
+  });
+}
+
+function applyStyles() {
+  let count = 0;
+  signals.forEach(s => {
+    const m = markers[s.id];
+    if (!m) return;
+    const isVisible = aCats.has(s.category);
+    const isBright = aTfs.has(s.ed);
+
+    if (isVisible) {
+      if (!map.hasLayer(m.layer)) m.layer.addTo(map);
+      const el = m.layer.getElement();
+      if (el) {
+        const pin = el.querySelector('.marker-pin');
+        if (pin) {
+          pin.style.opacity = isBright ? "1" : "0.45";
+          pin.style.transform = isBright ? "scale(1.15)" : "scale(0.82)";
+        }
+      }
+      if (isBright) count++;
+    } else {
+      map.removeLayer(m.layer);
+    }
+  });
+  document.getElementById('statSignals').textContent = count;
+  buildList();
+}
+
+function buildList() {
+  const lc = document.getElementById('listContainer');
+  lc.innerHTML = '';
+
+  // Sort: newest edition first, then by category priority
+  const priority = {"Lead Signals":1, "Planning Pipeline":2, "Institutional / Public Capital":3, "Consumer / Tenant Openings":4, "Corridor / Area Watch":5};
+  const vis = signals
+    .filter(s => aCats.has(s.category) && aTfs.has(s.ed))
+    .sort((a,b) => {
+      if (a.ed !== b.ed) return parseInt(b.ed) - parseInt(a.ed);
+      return priority[a.category] - priority[b.category];
+    });
+
+  document.getElementById('countText').innerHTML = vis.length + ' intelligence signals in view';
+
+  vis.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'list-item'; 
+    d.id = 'li-' + s.id;
+    d.style.borderLeftColor = CAT_COLORS[s.category];
+    d.innerHTML = `
+      <div style="display:flex; align-items:center;">
+        <div class="li-name">${s.name}</div>
+        <div class="ed-badge">Ed. ${s.ed}</div>
+      </div>
+      <div class="li-addr">${s.address}</div>
+    `;
+    safeClick(d, () => {
+      map.flyTo([s.lat, s.lng], 15, { animate: true, duration: 1.2 });
+      markers[s.id].layer.openPopup();
+      highlightList(s.id);
+      if (window.innerWidth < 841) {
+        document.getElementById('sidebar').classList.remove('expanded');
+        setTimeout(() => map.invalidateSize(), 450);
+      }
+    });
+    lc.appendChild(d);
+  });
+}
+
+function highlightList(id) {
+  if (activeId) document.getElementById('li-' + activeId)?.classList.remove('active');
+  const el = document.getElementById('li-' + id);
+  if (el) {
+    el.classList.add('active');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  activeId = id;
+}
+
+safeClick(document.getElementById('sheetHandle'), () => {
+  document.getElementById('sidebar').classList.toggle('expanded');
+  setTimeout(() => map.invalidateSize(), 450);
+});
+
+safeClick(document.getElementById('resetBtn'), () => {
+  aCats = new Set(CATS);
+  aTfs = new Set(["23", "16"]);
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.remove('off');
+    if (c.innerHTML.includes('Ed. 9')) c.classList.add('off');
+  });
+  applyStyles();
+  map.setView([26.14, -80.13], 11);
+});
 
 window.onload = () => {
   setTimeout(() => {
