@@ -80,6 +80,9 @@
   .map-container { flex: 1; position: relative; height: 100%; background: #11151c; z-index: 1; }
   #map { width: 100%; height: 100%; }
 
+  /* Map Tile CSS Brightness Fix */
+  .leaflet-tile-pane { filter: brightness(1.2) contrast(1.05); } 
+
   .map-branding {
     position: absolute;
     top: 20px;
@@ -151,13 +154,16 @@
   .pop-opt-val { color: var(--text-muted); text-align: right; width: 65%; font-weight: 500; }
 
   /* ==========================================
-     MOBILE-FIRST READABILITY & HARDENING
+     MOBILE-FIRST HARDENING
      ========================================== */
   @media(max-width: 800px) {
     /* Safe viewport sizing ensures Safari doesn't clip */
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
+    /* Aggressively brightened CartoDB filter to fight glare on mobile */
+    .leaflet-tile-pane { filter: brightness(1.6) contrast(1.1); } 
+
     /* Branding Badge shifted slightly on mobile */
     .map-branding { top: 16px; left: 16px; padding: 6px 10px; }
     .map-branding img { height: 18px; }
@@ -363,12 +369,12 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
-// Stadia "Alidade Smooth Dark" - Slate-gray for perfect mobile legibility
+// Reverted to reliable CartoDB Dark Matter with robust CSS brightening
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-  maxZoom: 20
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 19
 }).addTo(map);
 
 // ==========================================
@@ -425,7 +431,6 @@ function getEffectiveValue(signal) {
 function initMap() {
   document.getElementById('stat-total').innerText = signals.length;
   
-  // Dynamic Map Cue
   const cue = document.getElementById('map-cue');
   if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
 
