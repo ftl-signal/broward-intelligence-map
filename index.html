@@ -80,9 +80,11 @@
   .map-container { flex: 1; position: relative; height: 100%; background: #1a1e24; z-index: 1; }
   #map { width: 100%; height: 100%; }
 
-  /* Map Tile CSS Brightness Fix:
-     Bumped brightness up further for crisp at-a-glance readability on embeds */
-  .leaflet-tile-pane { filter: brightness(2.8) contrast(0.85) saturate(1.1); } 
+  /* Live Map Tile CSS Brightness: Modestly bumped for better legibility without wash-out */
+  .leaflet-tile-pane { filter: brightness(2.9) contrast(0.9) saturate(1.1); } 
+
+  /* Embedded Map Tile CSS Brightness: Aggressively brightened for homepage preview */
+  .is-embedded .leaflet-tile-pane { filter: brightness(3.5) contrast(0.9) saturate(1.2) !important; }
 
   .map-branding {
     position: absolute;
@@ -115,15 +117,16 @@
     padding-left: 2px;
   }
 
-  /* Interaction Cue (Polished for maximum readability) */
+  /* Interaction Cue (Softened border/glow so it doesn't overpower the map) */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.95); 
+    background: rgba(15, 23, 42, 0.90); 
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(56, 189, 248, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.4); /* Softened from 0.8 */
     color: #ffffff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
     letter-spacing: 0.5px; z-index: 1000; pointer-events: none; transition: opacity 0.4s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5); white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Softened shadow */
+    white-space: nowrap;
     text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   }
   .map-cue.fade-out { opacity: 0; }
@@ -164,8 +167,8 @@
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Maximum legible brightness for mobile embeds */
-    .leaflet-tile-pane { filter: brightness(3.0) contrast(0.85) saturate(1.1); } 
+    /* Slightly brighter mobile live map */
+    .leaflet-tile-pane { filter: brightness(3.1) contrast(0.9) saturate(1.1); } 
 
     /* Branding Badge */
     .map-branding { top: 12px; left: 12px; padding: 8px 12px; }
@@ -203,7 +206,7 @@
       overscroll-behavior: contain; 
     }
 
-    /* Elegant Interactive Handle (Polished Readability) */
+    /* Elegant Interactive Handle */
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -211,6 +214,7 @@
     }
     .sidebar.expanded .mobile-handle { border-bottom: none; } 
     
+    /* Slightly brighter handle CTA */
     .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; margin-bottom: 6px; }
     .handle-lbl { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
 
@@ -294,7 +298,15 @@
 
 <script>
 // ==========================================
-// 1. DATA ARCHITECTURE
+// 1. EMBED DETECTION (For homepage previews)
+// ==========================================
+// Checks if the map is loaded in an iframe. If so, adds a class to crank brightness.
+if (window.self !== window.top) {
+  document.body.classList.add('is-embedded');
+}
+
+// ==========================================
+// 2. DATA ARCHITECTURE
 // ==========================================
 const signals = [
   { id: "sig_01", project_name: "Gore Building Redevelopment", address: "201 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1215, longitude: -80.1472, category: "Pre-Construction", stage: "Advancing", signal_type: "Demolition Permit", declared_value: 2000000, estimated_value: null, value_label: "$2.0M", permit_number: "2026-BD-1092", scale: "1.4 Acres / Civic Core", timeline: "Site Clearing Q2 2026", key_players: "City of Fort Lauderdale", summary: "Site clearing stage for major downtown public core project.", operator_takeaway: "Downtown municipal redevelopment fully funded; site mobilizing." },
@@ -344,7 +356,7 @@ const signals = [
 ];
 
 // ==========================================
-// 2. CONFIGURATION & STATE
+// 3. CONFIGURATION & STATE
 // ==========================================
 
 const CAT_COLORS = {
@@ -382,7 +394,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
 
 // ==========================================
-// 3. CORE LOGIC & SEARCH
+// 4. CORE LOGIC & SEARCH
 // ==========================================
 
 const sidebar = document.getElementById('sidebar');
