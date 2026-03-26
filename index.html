@@ -81,8 +81,8 @@
   #map { width: 100%; height: 100%; }
 
   /* Map Tile CSS Brightness Fix:
-     Aggressively lightens the black map to a highly-readable slate gray. */
-  .leaflet-tile-pane { filter: brightness(2.2) contrast(0.85) saturate(1.2); } 
+     Brightened slightly to ensure roads/labels pop while staying premium dark */
+  .leaflet-tile-pane { filter: brightness(2.4) contrast(0.85) saturate(1.1); } 
 
   .map-branding {
     position: absolute;
@@ -93,22 +93,21 @@
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 8px 12px;
+    padding: 6px 10px; /* Tightened padding */
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    pointer-events: none;
+    pointer-events: none; /* Acts as a transparent watermark */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
   .map-branding img {
-    height: 22px; /* Sized for the transparent PNG aspect ratio */
+    height: 18px; /* Slightly smaller, more unobtrusive */
     width: auto;
-    margin-bottom: 4px;
-    /* mix-blend-mode removed since it's a true transparent PNG */
+    margin-bottom: 2px;
   }
   .map-branding .brand-tagline {
-    font-size: 8.5px;
+    font-size: 8px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -163,11 +162,11 @@
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
     /* Even brighter on mobile to ensure usability in sunlight */
-    .leaflet-tile-pane { filter: brightness(2.5) contrast(0.85) saturate(1.2); } 
+    .leaflet-tile-pane { filter: brightness(2.6) contrast(0.85) saturate(1.1); } 
 
-    /* Branding Badge shifted slightly on mobile */
-    .map-branding { top: 16px; left: 16px; padding: 6px 10px; }
-    .map-branding img { height: 20px; }
+    /* Branding Badge shifted and compacted on mobile */
+    .map-branding { top: 12px; left: 12px; padding: 5px 8px; }
+    .map-branding img { height: 15px; }
 
     /* Interaction cue pushed down to clear the logo on narrow phones */
     .map-cue { top: 76px; font-size: 12px; padding: 8px 16px; }
@@ -279,7 +278,7 @@
   
   <div class="map-container">
     <div class="map-branding">
-      <img src="trans.png" alt="The Florida Signal">
+      <img src="logo-compact.png" alt="The Florida Signal">
       <div class="brand-tagline">Live Intelligence Map</div>
     </div>
     
@@ -370,7 +369,7 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
-// Using robust CartoDB Dark Matter with strong CSS brightening
+// Reliable CartoDB Dark Matter with robust CSS brightening
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
