@@ -80,7 +80,7 @@
   .map-container { flex: 1; position: relative; height: 100%; background: #1a1e24; z-index: 1; }
   #map { width: 100%; height: 100%; }
 
-  /* Live Map Tile CSS Brightness: Modestly bumped for better legibility without wash-out */
+  /* Live Map Tile CSS Brightness */
   .leaflet-tile-pane { filter: brightness(2.9) contrast(0.9) saturate(1.1); } 
 
   /* Embedded Map Tile CSS Brightness: Aggressively brightened for homepage preview */
@@ -116,20 +116,6 @@
     letter-spacing: 0.5px;
     padding-left: 2px;
   }
-
-  /* Interaction Cue (Softened border/glow so it doesn't overpower the map) */
-  .map-cue {
-    position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.90); 
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(56, 189, 248, 0.4); /* Softened from 0.8 */
-    color: #ffffff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
-    letter-spacing: 0.5px; z-index: 1000; pointer-events: none; transition: opacity 0.4s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Softened shadow */
-    white-space: nowrap;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  }
-  .map-cue.fade-out { opacity: 0; }
 
   /* Map Markers */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
@@ -175,9 +161,6 @@
     .map-branding img { height: 32px; } 
     .map-branding .brand-tagline { font-size: 9px; }
 
-    /* Interaction cue perfectly balanced below logo footprint */
-    .map-cue { top: 86px; font-size: 12px; padding: 8px 16px; }
-
     /* Premium Glassmorphism Bottom Sheet */
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
@@ -206,7 +189,7 @@
       overscroll-behavior: contain; 
     }
 
-    /* Elegant Interactive Handle */
+    /* Elegant Interactive Handle (Polished Readability) */
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -289,8 +272,6 @@
       <img src="logo-compact.png" alt="The Florida Signal">
       <div class="brand-tagline">Live Intelligence Map</div>
     </div>
-    
-    <div class="map-cue" id="map-cue">Tap to explore signals</div>
     
     <div id="map"></div>
   </div>
@@ -447,15 +428,6 @@ function getEffectiveValue(signal) {
 function initMap() {
   document.getElementById('stat-total').innerText = signals.length;
   
-  // Dynamic Map Cue
-  const cue = document.getElementById('map-cue');
-  if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
-
-  const hideCue = () => { if (cue) cue.classList.add('fade-out'); };
-  map.once('dragstart', hideCue);
-  map.once('click', hideCue);
-  map.once('zoomstart', hideCue);
-
   buildCategoryFilters();
   setupValueFilters();
   
@@ -501,7 +473,6 @@ function initMap() {
 
     mk.on('click', () => {
       map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
-      hideCue();
     });
     markers[s.id] = { data: s, layer: mk };
   });
