@@ -12,6 +12,7 @@
     --bg-dark: #0f172a; --bg-panel: #1e293b; --bg-card: #334155;
     --text-main: #f8fafc; --text-muted: #94a3b8; --border: #334155;
     
+    /* Premium Category Colors */
     --c-land: #A855F7;  
     --c-appr: #F59E0B;  
     --c-pre:  #3B82F6;  
@@ -74,13 +75,13 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #cbd5e1; }
 
-  /* Map & Desktop Tile Theme */
+  /* Map Area */
   #map { flex: 1; height: 100%; background: #0b0f19; z-index: 1; }
-  .leaflet-tile-pane { filter: brightness(1.1) contrast(1.1); } 
 
-  .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; }
+  /* Transparent marker wrapper creates a massive touch target, inner core stays visually small */
+  .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-  .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
+  .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
 
   /* Popups */
   .leaflet-popup-content-wrapper { background: var(--bg-panel); color: var(--text-main); border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.6); padding: 0; overflow: hidden; }
@@ -91,7 +92,7 @@
   .pop-title { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 8px; }
   .pop-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px;}
   
-  .pop-body { padding: 16px; font-size: 12px; }
+  .pop-body { padding: 16px; font-size: 12px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .pop-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .pop-lbl { color: var(--text-muted); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; width: 35%;}
   .pop-val { font-weight: 700; text-align: right; width: 65%; color: #f8fafc; }
@@ -109,12 +110,12 @@
      MOBILE-FIRST HARDENING
      ========================================== */
   @media(max-width: 800px) {
-    /* Use dvh to counter iOS Safari address bar jumps */
+    /* DVH prevents Safari address bar jump clipping */
     .layout { display: block; height: 100dvh; }
     #map { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; }
     
-    /* Target mobile map specifically to fight screen glare while keeping dark theme */
-    .leaflet-tile-pane { filter: brightness(1.5) contrast(1.15); } 
+    /* Restrained mobile brightness: Cuts muddy glare without destroying the dark theme */
+    .leaflet-tile-pane { filter: brightness(1.25) contrast(1.1); } 
 
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
@@ -125,15 +126,19 @@
       z-index: 2000;
     }
     
-    .sidebar.expanded { height: 85dvh; }
+    /* Comfortable sheet height leaves map visible context above it */
+    .sidebar.expanded { height: 75dvh; }
     
     .sidebar:not(.expanded) .header,
     .sidebar:not(.expanded) .sidebar-scroll {
       display: none;
     }
 
-    /* Force padding at bottom to respect iPhone home indicator */
-    .sidebar-scroll { padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); }
+    /* Overscroll contain prevents rubber-banding the whole page. Safe area pads iPhone home bar */
+    .sidebar-scroll { 
+      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); 
+      overscroll-behavior: contain; 
+    }
 
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -143,17 +148,21 @@
     .handle-bar { width: 40px; height: 4px; background: var(--text-muted); border-radius: 2px; margin-bottom: 6px; }
     .handle-lbl { font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Increase tap targets securely */
     .cat-btn { padding: 12px 16px; font-size: 13px; }
     .val-btn { padding: 12px 0; font-size: 12px; }
-    /* 16px font prevents iOS Safari from automatically zooming in on inputs */
+    /* 16px font prevents iOS Safari auto-zoom on form inputs */
     .search-box { padding: 14px; font-size: 16px; }
 
-    /* Mobile Popup Safeties */
     .leaflet-popup-content { width: 320px !important; max-width: 85vw !important; }
-    .pop-body { max-height: 60dvh; overflow-y: auto; } /* Prevents top clipping */
+    .pop-body { max-height: 55dvh; } /* Clamps tall popups */
     .pop-title { font-size: 15px; }
     .pop-body { font-size: 13px; }
+  }
+
+  /* Landscape Safeguards for Mobile */
+  @media (max-width: 800px) and (orientation: landscape) {
+    .sidebar.expanded { height: 85dvh; }
+    .pop-body { max-height: 45dvh; }
   }
 </style>
 </head>
@@ -208,7 +217,7 @@
 
 <script>
 // ==========================================
-// 1. DATA ARCHITECTURE
+// 1. DATA ARCHITECTURE (AUDITED)
 // ==========================================
 const signals = [
   { id: "sig_01", project_name: "Gore Building Redevelopment", address: "201 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1215, longitude: -80.1472, category: "Pre-Construction", stage: "Advancing", signal_type: "Demolition Permit", declared_value: 2000000, estimated_value: null, value_label: "$2.0M", permit_number: "2026-BD-1092", scale: "1.4 Acres / Civic Core", timeline: "Site Clearing Q2 2026", key_players: "City of Fort Lauderdale", summary: "Site clearing stage for major downtown public core project.", operator_takeaway: "Downtown municipal redevelopment fully funded; site mobilizing." },
@@ -275,7 +284,7 @@ let activeCategories = new Set(CATEGORIES);
 let minValFilter = 0; // 0 = All
 let markers = {}; 
 
-// Jitter mechanism
+// Jitter mechanism for overlapping coords
 const coordMap = new Set();
 signals.forEach(s => {
   let coordKey = `${s.latitude},${s.longitude}`;
@@ -287,9 +296,11 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
+// Initialize Leaflet
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
+// Premium Dark Base Map
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(map);
@@ -298,6 +309,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 // 3. CORE LOGIC & SEARCH
 // ==========================================
 
+// Mobile Toggle Logic
 const sidebar = document.getElementById('sidebar');
 const mobileToggle = document.getElementById('mobile-toggle');
 const mobileToggleLbl = document.getElementById('mobile-toggle-lbl');
@@ -323,7 +335,7 @@ mobileToggle.addEventListener('click', () => {
     if(map.boxZoom) map.boxZoom.enable();
     if(map.keyboard) map.keyboard.enable();
   }
-  // Hardened invalidation timing to cover the 0.3s CSS transition safely
+  // Safely trigger layout redraw strictly after 320ms transition finishes
   setTimeout(() => map.invalidateSize(), 320);
 });
 
@@ -354,11 +366,13 @@ function initMap() {
   
   signals.forEach(s => {
     const color = CAT_COLORS[s.category];
+    
+    // Globally increased Hit-Area (44x44) adheres perfectly to mobile touch guidelines
     const icon = L.divIcon({
       className: 'custom-marker',
       html: `<div class="marker-core" style="background-color: ${color}; border-color: ${color};"></div>`,
-      iconSize: [36, 36], 
-      iconAnchor: [18, 18]
+      iconSize: [44, 44], 
+      iconAnchor: [22, 22]
     });
 
     const mk = L.marker([s.latitude, s.longitude], { icon: icon }).addTo(map);
@@ -494,6 +508,7 @@ function applyFilters() {
         map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
         mk.openPopup();
         
+        // Auto collapse sidebar on mobile to safely reveal map popup
         if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
           sidebar.classList.remove('expanded');
           updateMobileHandleLabel();
@@ -534,7 +549,6 @@ function applyFilters() {
   updateMobileHandleLabel();
 }
 
-// Initial draw stabilization
 setTimeout(() => {
   map.invalidateSize();
   initMap();
