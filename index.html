@@ -80,16 +80,39 @@
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(2.9) contrast(0.9) saturate(1.1); } 
 
-  /* Map Branding Badge - Nudged to the right for better balance */
+  /* Map Branding Badge (Polished & Vibrant) */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
     background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 14px; border-radius: 8px;
+    border: 1px solid rgba(56, 189, 248, 0.15); /* Subtle cyan tint to border */
+    padding: 10px 14px; border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3); pointer-events: none; 
-    display: flex; flex-direction: column; align-items: center; text-align: center;
+    display: flex; flex-direction: column; align-items: flex-start;
   }
-  .map-branding img { height: 40px; width: auto; margin-bottom: 6px; }
-  .map-branding .brand-tagline { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .map-branding img { height: 38px; width: auto; margin-bottom: 6px; }
+  
+  .map-branding .brand-tagline { 
+    font-size: 11px; 
+    font-weight: 800; 
+    color: #38bdf8; /* Vibrant cyan */
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4); /* Premium glow */
+  }
+  
+  /* Glowing Live Dot */
+  .map-branding .brand-tagline::before {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #38bdf8;
+  }
 
   /* Interaction Cue (Live Map Only) */
   .map-cue {
@@ -134,8 +157,9 @@
     .leaflet-tile-pane { filter: brightness(3.1) contrast(0.9) saturate(1.1); } 
 
     .map-branding { top: 12px; left: 16px; padding: 8px 12px; }
-    .map-branding img { height: 32px; } 
-    .map-branding .brand-tagline { font-size: 9px; }
+    .map-branding img { height: 28px; margin-bottom: 4px;} 
+    .map-branding .brand-tagline { font-size: 9px; gap: 4px; letter-spacing: 0.5px; }
+    .map-branding .brand-tagline::before { width: 4px; height: 4px; }
 
     .map-cue { top: 80px; font-size: 12px; padding: 8px 16px; }
 
@@ -174,8 +198,7 @@
      EMBED / PREVIEW OVERRIDE CLASSES
      ========================================== */
   
-  /* Force-hide sidebar and map controls if embedded. 
-     Notice .map-branding is intentionally excluded so it STAYS VISIBLE. */
+  /* Force-hide sidebar and map controls if embedded. */
   body.is-preview .sidebar,
   body.is-preview .map-cue,
   body.is-preview .leaflet-control-container { 
@@ -264,7 +287,7 @@
     
     <div class="map-branding">
       <img src="logo-compact.png" alt="The Florida Signal">
-      <div class="brand-tagline">Live Intelligence Map</div>
+      <div class="brand-tagline">Live Signals</div>
     </div>
     
     <div class="map-cue" id="map-cue">Tap to explore signals</div>
