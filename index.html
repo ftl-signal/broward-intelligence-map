@@ -85,21 +85,21 @@
   /* Map Branding Badge - Deeper, editorial, and premium */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.95);
+    background: rgba(11, 15, 25, 0.95); /* Richer, darker navy-black */
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.08); 
-    border-top: 1px solid rgba(255, 255, 255, 0.15); 
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Premium top-edge highlight */
     padding: 8px 14px; border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(56, 189, 248, 0.1); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(56, 189, 248, 0.1); /* Subtle inner cyan glow */
     pointer-events: none; 
-    display: flex; flex-direction: column; align-items: flex-start; 
+    display: flex; flex-direction: column; align-items: flex-start; /* Sharper left alignment */
   }
-  .map-branding img { height: 36px; width: auto; margin-bottom: 2px; }
+  .map-branding img { height: 36px; width: auto; margin-bottom: 2px; } /* Tightened spacing */
   
   .map-branding .brand-tagline { 
     font-size: 10px; 
     font-weight: 800; 
-    color: #f8fafc; 
+    color: #f8fafc; /* Crisp near-white */
     text-transform: uppercase; 
     letter-spacing: 0.5px; 
     padding-left: 2px;
@@ -146,7 +146,6 @@
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Slightly brighter on mobile live map to defeat glare */
     .leaflet-tile-pane { filter: brightness(2.0) contrast(1.1) saturate(1.2); } 
 
     .map-branding { top: 12px; left: 16px; padding: 6px 10px; }
@@ -190,9 +189,10 @@
      EMBED / PREVIEW OVERRIDE CLASSES
      ========================================== */
   
-  /* Force-hide sidebar and map controls if embedded. */
+  /* Force-hide sidebar, map controls, map cue, and branding bug if embedded. */
   body.is-preview .sidebar,
   body.is-preview .map-cue,
+  body.is-preview .map-branding,
   body.is-preview .leaflet-control-container { 
     display: none !important; 
   }
@@ -332,7 +332,7 @@
 const isEmbedded = (window.self !== window.top) || (new URLSearchParams(window.location.search).get('preview') === 'true');
 
 if (isEmbedded) {
-  // Triggers CSS to force-hide the sidebar and cue pill, BUT KEEPS the logo badge
+  // Triggers CSS to force-hide the sidebar, cue pill, AND logo badge
   document.body.classList.add('is-preview');
   
   // Show the full-screen click overlay
@@ -622,98 +622,4 @@ function applyFilters() {
   
   const searchTerm = document.getElementById('search-box').value.toLowerCase();
   
-  const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
-  const filterStatusEl = document.getElementById('filter-status');
-  if (isFiltered) {
-    filterStatusEl.innerText = "Filtered View";
-    filterStatusEl.classList.add("active-filter");
-  } else {
-    filterStatusEl.innerText = "All Signals";
-    filterStatusEl.classList.remove("active-filter");
-  }
-
-  Object.values(markers).forEach(item => {
-    const s = item.data;
-    const mk = item.layer;
-    
-    const val = getEffectiveValue(s) || 0;
-    const catMatch = activeCategories.has(s.category);
-    const valMatch = val >= minValFilter;
-    
-    const searchString = `${s.project_name} ${s.address} ${s.city} ${s.key_players || ''}`.toLowerCase();
-    const searchMatch = searchString.includes(searchTerm);
-
-    if (catMatch && valMatch && searchMatch) {
-      if (!map.hasLayer(mk)) mk.addTo(map);
-      activeCount++;
-      totalValue += val;
-
-      const d = document.createElement('div');
-      d.className = 'list-item';
-      d.style.borderLeftColor = CAT_COLORS[s.category];
-      
-      const isUndisclosed = s.value_label === 'Undisclosed' || s.value_label.includes('Est');
-      
-      d.innerHTML = `
-        <div class="li-name">${s.project_name}</div>
-        <div class="li-meta">
-          <span>${s.category} | ${s.stage}</span>
-          <span class="li-val" style="color: ${isUndisclosed ? 'var(--text-muted)' : '#cbd5e1'}">${s.value_label}</span>
-        </div>
-      `;
-      
-      // Only bind click to sidebar items if it's the live map
-      if (!isEmbedded) {
-        d.onclick = () => {
-          map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
-          mk.openPopup();
-          
-          if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
-            sidebar.classList.remove('expanded');
-            updateMobileHandleLabel();
-            map.dragging.enable();
-            map.scrollWheelZoom.enable();
-            if(map.touchZoom) map.touchZoom.enable();
-            if(map.doubleClickZoom) map.doubleClickZoom.enable();
-            if(map.boxZoom) map.boxZoom.enable();
-            if(map.keyboard) map.keyboard.enable();
-            setTimeout(() => map.invalidateSize(), 320);
-          }
-        };
-      }
-      
-      d.onmouseenter = () => {
-        const iconEl = mk.getElement();
-        if(iconEl) {
-          const core = iconEl.querySelector('.marker-core');
-          if(core) core.classList.add('hover-active');
-        }
-      };
-      
-      d.onmouseleave = () => {
-        const iconEl = mk.getElement();
-        if(iconEl) {
-          const core = iconEl.querySelector('.marker-core');
-          if(core) core.classList.remove('hover-active');
-        }
-      };
-      
-      listContainer.appendChild(d);
-    } else {
-      if (map.hasLayer(mk)) map.removeLayer(mk);
-    }
-  });
-
-  document.getElementById('stat-count').innerText = activeCount;
-  document.getElementById('stat-val').innerText = formatMoney(totalValue);
-  updateMobileHandleLabel();
-}
-
-setTimeout(() => {
-  map.invalidateSize();
-  initMap();
-}, 200);
-
-</script>
-</body>
-</html>
+  const isFiltered = activeCategories
