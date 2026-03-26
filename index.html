@@ -23,8 +23,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
   body, html { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg-dark); color: var(--text-main); }
 
-  /* Desktop layout fallback */
-  .layout { display: flex; height: 100vh; width: 100vw; }
+  .layout { display: flex; height: 100vh; width: 100vw; position: relative; }
 
   .mobile-handle { display: none; }
 
@@ -38,7 +37,6 @@
   .filter-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 14px; margin-bottom: -8px; color: var(--text-muted); transition: color 0.2s; }
   .filter-status.active-filter { color: #38bdf8; }
 
-  /* Refined, lighter stats boxes */
   .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
   .stat-box { background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
   .stat-val { font-size: 18px; font-weight: 700; color: #fff; }
@@ -80,42 +78,62 @@
   .map-container { flex: 1; position: relative; height: 100%; background: #1a1e24; z-index: 1; }
   #map { width: 100%; height: 100%; }
 
-  /* Live Map Tile CSS Brightness */
+  /* Default Live Map Tile CSS */
   .leaflet-tile-pane { filter: brightness(2.9) contrast(0.9) saturate(1.1); } 
 
-  /* Embedded Map Tile CSS Brightness: Aggressively brightened for homepage preview */
+  /* Standard Embedded (but live) Map Tile CSS */
   .is-embedded .leaflet-tile-pane { filter: brightness(3.5) contrast(0.9) saturate(1.2) !important; }
 
   .map-branding {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 14px; 
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    pointer-events: none; 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    position: absolute; top: 20px; left: 20px; z-index: 1000;
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 14px; border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); pointer-events: none; 
+    display: flex; flex-direction: column; align-items: flex-start;
   }
-  .map-branding img {
-    height: 40px; 
-    width: auto;
-    margin-bottom: 4px;
+  .map-branding img { height: 40px; width: auto; margin-bottom: 4px; }
+  .map-branding .brand-tagline { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding-left: 2px; }
+
+  /* Live Map Interaction Cue */
+  .map-cue {
+    position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.90); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(56, 189, 248, 0.4); color: #ffffff; padding: 10px 20px; border-radius: 30px; 
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; z-index: 1000; pointer-events: none; 
+    transition: opacity 0.4s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.3); white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   }
-  .map-branding .brand-tagline {
-    font-size: 10px; 
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding-left: 2px;
+  .map-cue.fade-out { opacity: 0; }
+
+  /* ==========================================
+     PREVIEW MODE (HOMEPAGE CTA)
+     ========================================== */
+  .preview-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000;
+    display: flex; justify-content: center; align-items: center; text-decoration: none;
+    background: rgba(15, 23, 42, 0.15); cursor: pointer;
   }
+
+  .cta-button {
+    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(56, 189, 248, 0.6); color: #ffffff; padding: 16px 32px;
+    border-radius: 40px; font-size: 14px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    animation: pulse-glow 2.5s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4), 0 8px 25px rgba(0,0,0,0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0), 0 8px 25px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0), 0 8px 25px rgba(0,0,0,0.5); }
+  }
+
+  /* When ?preview=true is active, hide everything except map and CTA */
+  body.is-preview .sidebar,
+  body.is-preview .map-branding,
+  body.is-preview .map-cue,
+  body.is-preview .leaflet-control-zoom { display: none !important; }
+  
+  body.is-preview .leaflet-tile-pane { filter: brightness(3.5) contrast(0.9) saturate(1.2) !important; }
 
   /* Map Markers */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
@@ -126,94 +144,62 @@
   .leaflet-popup-content-wrapper { background: var(--bg-panel); color: var(--text-main); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.6); padding: 0; overflow: hidden; }
   .leaflet-popup-tip { background: var(--bg-panel); }
   .leaflet-popup-content { margin: 0; width: 300px !important; }
-  
   .pop-header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .pop-title { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 8px; }
   .pop-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px;}
-  
   .pop-body { padding: 16px; font-size: 12px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .pop-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .pop-lbl { color: var(--text-muted); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; width: 35%;}
   .pop-val { font-weight: 700; text-align: right; width: 65%; color: #f8fafc; }
   .pop-val.highlight { color: #10B981; }
-  
   .pop-summary { margin-top: 12px; color: #cbd5e1; line-height: 1.5; font-size: 12px; }
   .pop-takeaway { margin-top: 12px; padding: 10px; background: rgba(0,0,0,0.2); border-left: 2px solid #38bdf8; border-radius: 0 4px 4px 0; color: #38bdf8; font-weight: 600; line-height: 1.4; font-size: 11.5px; }
-
   .pop-optional { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
   .pop-opt-row { display: flex; justify-content: space-between; align-items: flex-start; font-size: 10px; margin-bottom: 4px; }
   .pop-opt-lbl { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; width: 35%; }
   .pop-opt-val { color: var(--text-muted); text-align: right; width: 65%; font-weight: 500; }
 
   /* ==========================================
-     MOBILE-FIRST HARDENING & READABILITY
+     MOBILE-FIRST UX SAFETIES
      ========================================== */
   @media(max-width: 800px) {
-    /* Safe viewport sizing ensures Safari doesn't clip */
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Slightly brighter mobile live map */
     .leaflet-tile-pane { filter: brightness(3.1) contrast(0.9) saturate(1.1); } 
 
-    /* Branding Badge */
     .map-branding { top: 12px; left: 12px; padding: 8px 12px; }
     .map-branding img { height: 32px; } 
     .map-branding .brand-tagline { font-size: 9px; }
 
-    /* Premium Glassmorphism Bottom Sheet */
+    .map-cue { top: 86px; font-size: 12px; padding: 8px 16px; }
+
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
-      background: rgba(15, 23, 42, 0.96); 
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(255,255,255,0.1); border-right: none;
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -8px 30px rgba(0,0,0,0.4);
-      transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow: hidden; 
-      z-index: 2000;
+      background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.1); border-right: none; border-radius: 16px 16px 0 0;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.4); transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden; z-index: 2000;
     }
-    
-    /* Comfortable sheet height */
     .sidebar.expanded { height: 75dvh; }
-    
-    .sidebar:not(.expanded) .header,
-    .sidebar:not(.expanded) .sidebar-scroll {
-      display: none;
-    }
+    .sidebar:not(.expanded) .header, .sidebar:not(.expanded) .sidebar-scroll { display: none; }
+    .sidebar-scroll { padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); overscroll-behavior: contain; }
 
-    /* Overscroll contain prevents rubber-banding */
-    .sidebar-scroll { 
-      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); 
-      overscroll-behavior: contain; 
-    }
-
-    /* Elegant Interactive Handle (Polished Readability) */
-    .mobile-handle {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
-      cursor: pointer; flex-shrink: 0; width: 100%;
-    }
+    .mobile-handle { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; flex-shrink: 0; width: 100%; }
     .sidebar.expanded .mobile-handle { border-bottom: none; } 
-    
-    /* Slightly brighter handle CTA */
     .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; margin-bottom: 6px; }
     .handle-lbl { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
 
     .cat-btn { padding: 12px 16px; font-size: 13px; }
     .val-btn { padding: 12px 0; font-size: 12px; }
-    /* 16px font prevents iOS auto-zoom */
     .search-box { padding: 14px; font-size: 16px; }
 
-    /* Mobile Popup Safeties */
     .leaflet-popup-content { width: 320px !important; max-width: 85vw !important; }
     .pop-body { max-height: 55dvh; } 
     .pop-title { font-size: 15px; }
     .pop-body { font-size: 13px; }
   }
 
-  /* Landscape Safeguards */
   @media (max-width: 800px) and (orientation: landscape) {
     .sidebar.expanded { height: 85dvh; }
     .pop-body { max-height: 45dvh; }
@@ -223,6 +209,11 @@
 <body>
 
 <div class="layout">
+
+  <a href="#" id="preview-overlay" class="preview-overlay" target="_top" style="display: none;">
+    <div class="cta-button">Explore Live Signals</div>
+  </a>
+
   <aside class="sidebar" id="sidebar">
     <div class="mobile-handle" id="mobile-toggle">
       <div class="handle-bar"></div>
@@ -273,16 +264,31 @@
       <div class="brand-tagline">Live Intelligence Map</div>
     </div>
     
+    <div class="map-cue" id="map-cue">Tap to explore signals</div>
+    
     <div id="map"></div>
   </div>
 </div>
 
 <script>
 // ==========================================
-// 1. EMBED DETECTION (For homepage previews)
+// 1. URL DETECTION (Preview vs Live)
 // ==========================================
-// Checks if the map is loaded in an iframe. If so, adds a class to crank brightness.
-if (window.self !== window.top) {
+const urlParams = new URLSearchParams(window.location.search);
+const isPreview = urlParams.get('preview') === 'true';
+
+if (isPreview) {
+  // Add class to hide UI and boost brightness
+  document.body.classList.add('is-preview');
+  
+  // Show full-screen click overlay
+  const overlay = document.getElementById('preview-overlay');
+  overlay.style.display = 'flex';
+  
+  // Dynamically set overlay URL to the live version (removes ?preview=true)
+  overlay.href = window.location.href.split('?')[0];
+} else if (window.self !== window.top) {
+  // If embedded somewhere else but NOT preview mode, just boost brightness slightly
   document.body.classList.add('is-embedded');
 }
 
@@ -366,9 +372,22 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
-// Using robust CartoDB Dark Matter
-const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
-L.control.zoom({ position: 'topright' }).addTo(map);
+// Configure map interactions based on mode (Preview mode disables scrolling/panning)
+const mapOptions = {
+  zoomControl: false, 
+  attributionControl: false,
+  dragging: !isPreview,
+  scrollWheelZoom: !isPreview,
+  doubleClickZoom: !isPreview,
+  boxZoom: !isPreview,
+  touchZoom: !isPreview,
+  keyboard: !isPreview
+};
+
+const map = L.map('map', mapOptions).setView([26.15, -80.14], 11);
+if (!isPreview) {
+  L.control.zoom({ position: 'topright' }).addTo(map);
+}
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
@@ -396,12 +415,14 @@ mobileToggle.addEventListener('click', () => {
     if(map.keyboard) map.keyboard.disable();
   } else {
     updateMobileHandleLabel();
-    map.dragging.enable();
-    map.scrollWheelZoom.enable();
-    if(map.touchZoom) map.touchZoom.enable();
-    if(map.doubleClickZoom) map.doubleClickZoom.enable();
-    if(map.boxZoom) map.boxZoom.enable();
-    if(map.keyboard) map.keyboard.enable();
+    if(!isPreview) {
+      map.dragging.enable();
+      map.scrollWheelZoom.enable();
+      if(map.touchZoom) map.touchZoom.enable();
+      if(map.doubleClickZoom) map.doubleClickZoom.enable();
+      if(map.boxZoom) map.boxZoom.enable();
+      if(map.keyboard) map.keyboard.enable();
+    }
   }
   setTimeout(() => map.invalidateSize(), 320);
 });
@@ -428,6 +449,17 @@ function getEffectiveValue(signal) {
 function initMap() {
   document.getElementById('stat-total').innerText = signals.length;
   
+  // Dynamic Map Cue
+  const cue = document.getElementById('map-cue');
+  if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
+
+  const hideCue = () => { if (cue) cue.classList.add('fade-out'); };
+  if (!isPreview) {
+    map.once('dragstart', hideCue);
+    map.once('click', hideCue);
+    map.once('zoomstart', hideCue);
+  }
+
   buildCategoryFilters();
   setupValueFilters();
   
@@ -443,37 +475,42 @@ function initMap() {
 
     const mk = L.marker([s.latitude, s.longitude], { icon: icon }).addTo(map);
     
-    let optionalFields = '';
-    if (s.key_players || s.scale || s.timeline || s.permit_number) {
-      optionalFields = `<div class="pop-optional">`;
-      if (s.key_players) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Players</span><span class="pop-opt-val">${s.key_players}</span></div>`;
-      if (s.scale) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Scale</span><span class="pop-opt-val">${s.scale}</span></div>`;
-      if (s.timeline) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Timeline</span><span class="pop-opt-val">${s.timeline}</span></div>`;
-      if (s.permit_number) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Permit #</span><span class="pop-opt-val">${s.permit_number}</span></div>`;
-      optionalFields += `</div>`;
+    // Only bind popups and click events if we are in the live map
+    if (!isPreview) {
+      let optionalFields = '';
+      if (s.key_players || s.scale || s.timeline || s.permit_number) {
+        optionalFields = `<div class="pop-optional">`;
+        if (s.key_players) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Players</span><span class="pop-opt-val">${s.key_players}</span></div>`;
+        if (s.scale) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Scale</span><span class="pop-opt-val">${s.scale}</span></div>`;
+        if (s.timeline) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Timeline</span><span class="pop-opt-val">${s.timeline}</span></div>`;
+        if (s.permit_number) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Permit #</span><span class="pop-opt-val">${s.permit_number}</span></div>`;
+        optionalFields += `</div>`;
+      }
+      
+      mk.bindPopup(`
+        <div class="pop-header" style="border-top: 4px solid ${color}">
+          <div class="pop-title">${s.project_name}</div>
+          <div class="pop-badge" style="background-color: ${color}33; color: ${color}; border: 1px solid ${color}66;">
+            ${s.category} | ${s.stage}
+          </div>
+        </div>
+        <div class="pop-body">
+          <div class="pop-row"><span class="pop-lbl">Address</span><span class="pop-val">${s.address}, ${s.city}</span></div>
+          <div class="pop-row"><span class="pop-lbl">Value</span><span class="pop-val highlight">${s.value_label}</span></div>
+          
+          <div class="pop-summary">${s.summary}</div>
+          <div class="pop-takeaway">Signal: ${s.operator_takeaway}</div>
+          
+          ${optionalFields}
+        </div>
+      `);
+
+      mk.on('click', () => {
+        map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
+        hideCue();
+      });
     }
     
-    mk.bindPopup(`
-      <div class="pop-header" style="border-top: 4px solid ${color}">
-        <div class="pop-title">${s.project_name}</div>
-        <div class="pop-badge" style="background-color: ${color}33; color: ${color}; border: 1px solid ${color}66;">
-          ${s.category} | ${s.stage}
-        </div>
-      </div>
-      <div class="pop-body">
-        <div class="pop-row"><span class="pop-lbl">Address</span><span class="pop-val">${s.address}, ${s.city}</span></div>
-        <div class="pop-row"><span class="pop-lbl">Value</span><span class="pop-val highlight">${s.value_label}</span></div>
-        
-        <div class="pop-summary">${s.summary}</div>
-        <div class="pop-takeaway">Signal: ${s.operator_takeaway}</div>
-        
-        ${optionalFields}
-      </div>
-    `);
-
-    mk.on('click', () => {
-      map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
-    });
     markers[s.id] = { data: s, layer: mk };
   });
 
