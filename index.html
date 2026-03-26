@@ -75,10 +75,22 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #cbd5e1; }
 
-  /* Map Area */
-  #map { flex: 1; height: 100%; background: #0b0f19; z-index: 1; }
+  /* Map Container & Cue */
+  .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
+  #map { width: 100%; height: 100%; }
 
-  /* Transparent marker wrapper creates a massive touch target, inner core stays visually small */
+  .map-cue {
+    position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.6);
+    color: #38bdf8; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.5px; z-index: 1000; pointer-events: none; transition: opacity 0.4s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5); white-space: nowrap;
+  }
+  .map-cue.fade-out { opacity: 0; }
+
+  /* Desktop Brightness */
+  .leaflet-tile-pane { filter: brightness(1.3) contrast(1.1); } 
+
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
@@ -112,10 +124,10 @@
   @media(max-width: 800px) {
     /* DVH prevents Safari address bar jump clipping */
     .layout { display: block; height: 100dvh; }
-    #map { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; }
+    .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Restrained mobile brightness: Cuts muddy glare without destroying the dark theme */
-    .leaflet-tile-pane { filter: brightness(1.25) contrast(1.1); } 
+    /* Aggressive mobile brightness boost to defeat screen glare and mud */
+    .leaflet-tile-pane { filter: brightness(1.6) contrast(1.1); } 
 
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
@@ -172,7 +184,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="mobile-handle" id="mobile-toggle">
       <div class="handle-bar"></div>
-      <span class="handle-lbl" id="mobile-toggle-lbl">Signals</span>
+      <span class="handle-lbl" id="mobile-toggle-lbl">Tap to view signals</span>
     </div>
 
     <div class="header">
@@ -212,12 +224,16 @@
       <div class="list-container" id="signal-list"></div>
     </div>
   </aside>
-  <div id="map"></div>
+  
+  <div class="map-container">
+    <div class="map-cue" id="map-cue">Tap to explore signals</div>
+    <div id="map"></div>
+  </div>
 </div>
 
 <script>
 // ==========================================
-// 1. DATA ARCHITECTURE (AUDITED)
+// 1. DATA ARCHITECTURE
 // ==========================================
 const signals = [
   { id: "sig_01", project_name: "Gore Building Redevelopment", address: "201 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1215, longitude: -80.1472, category: "Pre-Construction", stage: "Advancing", signal_type: "Demolition Permit", declared_value: 2000000, estimated_value: null, value_label: "$2.0M", permit_number: "2026-BD-1092", scale: "1.4 Acres / Civic Core", timeline: "Site Clearing Q2 2026", key_players: "City of Fort Lauderdale", summary: "Site clearing stage for major downtown public core project.", operator_takeaway: "Downtown municipal redevelopment fully funded; site mobilizing." },
@@ -296,11 +312,9 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
-// Initialize Leaflet
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-// Premium Dark Base Map
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   maxZoom: 19
 }).addTo(map);
@@ -309,7 +323,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 // 3. CORE LOGIC & SEARCH
 // ==========================================
 
-// Mobile Toggle Logic
 const sidebar = document.getElementById('sidebar');
 const mobileToggle = document.getElementById('mobile-toggle');
 const mobileToggleLbl = document.getElementById('mobile-toggle-lbl');
@@ -319,7 +332,7 @@ mobileToggle.addEventListener('click', () => {
   const isExpanded = sidebar.classList.contains('expanded');
   
   if(isExpanded) {
-    mobileToggleLbl.innerText = "Hide Signals";
+    mobileToggleLbl.innerText = "Tap to close panel";
     map.dragging.disable();
     map.scrollWheelZoom.disable();
     if(map.touchZoom) map.touchZoom.disable();
@@ -342,7 +355,7 @@ mobileToggle.addEventListener('click', () => {
 function updateMobileHandleLabel() {
   if(!sidebar.classList.contains('expanded')) {
     const visibleCount = document.getElementById('stat-count').innerText;
-    mobileToggleLbl.innerText = `View ${visibleCount} Signals`;
+    mobileToggleLbl.innerText = `Tap to view ${visibleCount} signals`;
   }
 }
 
@@ -361,13 +374,23 @@ function getEffectiveValue(signal) {
 
 function initMap() {
   document.getElementById('stat-total').innerText = signals.length;
+  
+  // Set Dynamic Cue Text
+  const cue = document.getElementById('map-cue');
+  if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
+
+  // Hide Cue on Map Interaction
+  const hideCue = () => { if (cue) cue.classList.add('fade-out'); };
+  map.once('dragstart', hideCue);
+  map.once('click', hideCue);
+  map.once('zoomstart', hideCue);
+
   buildCategoryFilters();
   setupValueFilters();
   
   signals.forEach(s => {
     const color = CAT_COLORS[s.category];
     
-    // Globally increased Hit-Area (44x44) adheres perfectly to mobile touch guidelines
     const icon = L.divIcon({
       className: 'custom-marker',
       html: `<div class="marker-core" style="background-color: ${color}; border-color: ${color};"></div>`,
@@ -405,7 +428,10 @@ function initMap() {
       </div>
     `);
 
-    mk.on('click', () => map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 }));
+    mk.on('click', () => {
+      map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
+      hideCue();
+    });
     markers[s.id] = { data: s, layer: mk };
   });
 
@@ -508,7 +534,7 @@ function applyFilters() {
         map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
         mk.openPopup();
         
-        // Auto collapse sidebar on mobile to safely reveal map popup
+        // Auto collapse sidebar on mobile
         if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
           sidebar.classList.remove('expanded');
           updateMobileHandleLabel();
