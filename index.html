@@ -76,10 +76,43 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #cbd5e1; }
 
-  /* Map Container & Cue */
-  .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
+  /* Map Container & Branding Badge */
+  .map-container { flex: 1; position: relative; height: 100%; background: #11151c; z-index: 1; }
   #map { width: 100%; height: 100%; }
 
+  .map-branding {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    pointer-events: none; /* Acts as a transparent watermark */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .map-branding img {
+    height: 20px;
+    width: auto;
+    margin-bottom: 4px;
+    mix-blend-mode: lighten; /* Melts the JPG background seamlessly */
+  }
+  .map-branding .brand-tagline {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-left: 2px;
+  }
+
+  /* Interaction Cue */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
     background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.6);
@@ -89,9 +122,7 @@
   }
   .map-cue.fade-out { opacity: 0; }
 
-  /* Desktop Map Brightness */
-  .leaflet-tile-pane { filter: brightness(1.4) contrast(0.95); } 
-
+  /* Map Markers */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
@@ -123,17 +154,21 @@
      MOBILE-FIRST READABILITY & HARDENING
      ========================================== */
   @media(max-width: 800px) {
-    /* Safe viewport sizing */
+    /* Safe viewport sizing ensures Safari doesn't clip */
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Slate-Gray Brightness: Defeats glare, avoids mud, stays premium */
-    .leaflet-tile-pane { filter: brightness(1.9) contrast(0.9) saturate(0.8); } 
+    /* Branding Badge shifted slightly on mobile */
+    .map-branding { top: 16px; left: 16px; padding: 6px 10px; }
+    .map-branding img { height: 18px; }
+
+    /* Interaction cue pushed down to clear the logo on narrow phones */
+    .map-cue { top: 76px; font-size: 12px; padding: 8px 16px; }
 
     /* Premium Glassmorphism Bottom Sheet */
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
-      background: rgba(15, 23, 42, 0.96); /* Slightly translucent */
+      background: rgba(15, 23, 42, 0.96); 
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid rgba(255,255,255,0.1); border-right: none;
@@ -144,7 +179,7 @@
       z-index: 2000;
     }
     
-    /* Comfortable sheet height leaves map context visible above it */
+    /* Comfortable sheet height leaves 25% map context visible */
     .sidebar.expanded { height: 75dvh; }
     
     .sidebar:not(.expanded) .header,
@@ -152,27 +187,29 @@
       display: none;
     }
 
-    /* Overscroll contain & Safe area pad */
+    /* Overscroll contain prevents rubber-banding. Safe area pads iPhone home bar */
     .sidebar-scroll { 
       padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); 
       overscroll-behavior: contain; 
     }
 
-    /* Elegant Handle */
+    /* Elegant Interactive Handle */
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
       cursor: pointer; flex-shrink: 0; width: 100%;
     }
-    .sidebar.expanded .mobile-handle { border-bottom: none; } /* Clean flow when open */
+    .sidebar.expanded .mobile-handle { border-bottom: none; } 
     
     .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 2px; margin-bottom: 6px; }
-    .handle-lbl { font-size: 13px; font-weight: 600; color: #38bdf8; letter-spacing: 0.3px; } /* Sentence case for elegance */
+    .handle-lbl { font-size: 13px; font-weight: 600; color: #38bdf8; letter-spacing: 0.3px; } 
 
     .cat-btn { padding: 12px 16px; font-size: 13px; }
     .val-btn { padding: 12px 0; font-size: 12px; }
-    .search-box { padding: 14px; font-size: 16px; } /* Prevents iOS auto-zoom */
+    /* 16px font prevents iOS Safari auto-zoom on form inputs */
+    .search-box { padding: 14px; font-size: 16px; }
 
+    /* Mobile Popup Safeties */
     .leaflet-popup-content { width: 320px !important; max-width: 85vw !important; }
     .pop-body { max-height: 55dvh; } 
     .pop-title { font-size: 15px; }
@@ -234,7 +271,13 @@
   </aside>
   
   <div class="map-container">
+    <div class="map-branding">
+      <img src="flsignallogo.jpg" alt="The Florida Signal">
+      <div class="brand-tagline">Live Intelligence Map</div>
+    </div>
+    
     <div class="map-cue" id="map-cue">Tap to explore signals</div>
+    
     <div id="map"></div>
   </div>
 </div>
@@ -308,7 +351,7 @@ let activeCategories = new Set(CATEGORIES);
 let minValFilter = 0; // 0 = All
 let markers = {}; 
 
-// Jitter mechanism for overlapping coords
+// Jitter mechanism
 const coordMap = new Set();
 signals.forEach(s => {
   let coordKey = `${s.latitude},${s.longitude}`;
@@ -320,11 +363,12 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
+// Stadia "Alidade Smooth Dark" - Slate-gray for perfect mobile legibility
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  maxZoom: 19
+L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+  maxZoom: 20
 }).addTo(map);
 
 // ==========================================
@@ -368,7 +412,6 @@ function updateMobileHandleLabel() {
 
 document.getElementById('search-box').addEventListener('input', applyFilters);
 
-// Pure Data-Model Value Engine
 function getEffectiveValue(signal) {
   if (signal.declared_value !== null && signal.declared_value !== undefined) {
     return signal.declared_value;
@@ -382,11 +425,10 @@ function getEffectiveValue(signal) {
 function initMap() {
   document.getElementById('stat-total').innerText = signals.length;
   
-  // Set Dynamic Cue Text
+  // Dynamic Map Cue
   const cue = document.getElementById('map-cue');
   if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
 
-  // Hide Cue on Map Interaction
   const hideCue = () => { if (cue) cue.classList.add('fade-out'); };
   map.once('dragstart', hideCue);
   map.once('click', hideCue);
