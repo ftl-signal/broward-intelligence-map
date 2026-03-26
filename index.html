@@ -81,8 +81,8 @@
   #map { width: 100%; height: 100%; }
 
   /* Map Tile CSS Brightness Fix:
-     Increased contrast alongside brightness creates crisp readability without washing out */
-  .leaflet-tile-pane { filter: brightness(2.6) contrast(0.9) saturate(1.2); } 
+     Bumped brightness up further for crisp at-a-glance readability on embeds */
+  .leaflet-tile-pane { filter: brightness(2.8) contrast(0.85) saturate(1.1); } 
 
   .map-branding {
     position: absolute;
@@ -93,10 +93,10 @@
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 14px;
+    padding: 10px 14px; 
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    pointer-events: none; /* Acts as a transparent watermark */
+    pointer-events: none; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -115,15 +115,16 @@
     padding-left: 2px;
   }
 
-  /* Interaction Cue */
+  /* Interaction Cue (Polished for maximum readability) */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.85); 
+    background: rgba(15, 23, 42, 0.95); 
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    color: #38bdf8; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
+    border: 1px solid rgba(56, 189, 248, 0.8);
+    color: #ffffff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
     letter-spacing: 0.5px; z-index: 1000; pointer-events: none; transition: opacity 0.4s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4); white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   }
   .map-cue.fade-out { opacity: 0; }
 
@@ -163,16 +164,16 @@
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
     
-    /* Pushed brightness higher for mobile sunlight legibility, retaining contrast */
-    .leaflet-tile-pane { filter: brightness(2.8) contrast(0.9) saturate(1.2); } 
+    /* Maximum legible brightness for mobile embeds */
+    .leaflet-tile-pane { filter: brightness(3.0) contrast(0.85) saturate(1.1); } 
 
     /* Branding Badge */
     .map-branding { top: 12px; left: 12px; padding: 8px 12px; }
     .map-branding img { height: 32px; } 
     .map-branding .brand-tagline { font-size: 9px; }
 
-    /* Interaction cue gracefully balanced below the top-left logo footprint */
-    .map-cue { top: 80px; font-size: 12px; padding: 8px 16px; }
+    /* Interaction cue perfectly balanced below logo footprint */
+    .map-cue { top: 86px; font-size: 12px; padding: 8px 16px; }
 
     /* Premium Glassmorphism Bottom Sheet */
     .sidebar { 
@@ -188,7 +189,7 @@
       z-index: 2000;
     }
     
-    /* Comfortable sheet height leaves map context visible */
+    /* Comfortable sheet height */
     .sidebar.expanded { height: 75dvh; }
     
     .sidebar:not(.expanded) .header,
@@ -196,13 +197,13 @@
       display: none;
     }
 
-    /* Overscroll contain prevents rubber-banding. Safe area pads iPhone home bar */
+    /* Overscroll contain prevents rubber-banding */
     .sidebar-scroll { 
       padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); 
       overscroll-behavior: contain; 
     }
 
-    /* Elegant Interactive Handle */
+    /* Elegant Interactive Handle (Polished Readability) */
     .mobile-handle {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: 60px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -210,12 +211,12 @@
     }
     .sidebar.expanded .mobile-handle { border-bottom: none; } 
     
-    .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 2px; margin-bottom: 6px; }
-    .handle-lbl { font-size: 13px; font-weight: 600; color: #38bdf8; letter-spacing: 0.3px; } 
+    .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; margin-bottom: 6px; }
+    .handle-lbl { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
 
     .cat-btn { padding: 12px 16px; font-size: 13px; }
     .val-btn { padding: 12px 0; font-size: 12px; }
-    /* 16px font prevents iOS Safari auto-zoom on form inputs */
+    /* 16px font prevents iOS auto-zoom */
     .search-box { padding: 14px; font-size: 16px; }
 
     /* Mobile Popup Safeties */
@@ -372,7 +373,7 @@ signals.forEach(s => {
   coordMap.add(coordKey);
 });
 
-// Using robust CartoDB Dark Matter with strong CSS brightening
+// Using robust CartoDB Dark Matter
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([26.15, -80.14], 11);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -421,7 +422,6 @@ function updateMobileHandleLabel() {
 
 document.getElementById('search-box').addEventListener('input', applyFilters);
 
-// Pure Data-Model Value Engine
 function getEffectiveValue(signal) {
   if (signal.declared_value !== null && signal.declared_value !== undefined) {
     return signal.declared_value;
