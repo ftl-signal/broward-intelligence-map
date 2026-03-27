@@ -82,24 +82,24 @@
   /* Rich, High-Contrast Map Tiles (Live Map Desktop) */
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-  /* Map Branding Badge - Deeper, editorial, and premium */
+  /* Map Branding Badge */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.95); /* Richer, darker navy-black */
+    background: rgba(11, 15, 25, 0.95);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.08); 
-    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Premium top-edge highlight */
+    border-top: 1px solid rgba(255, 255, 255, 0.15); 
     padding: 8px 14px; border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(56, 189, 248, 0.1); /* Subtle inner cyan glow */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 0 rgba(56, 189, 248, 0.1); 
     pointer-events: none; 
-    display: flex; flex-direction: column; align-items: flex-start; /* Sharper left alignment */
+    display: flex; flex-direction: column; align-items: flex-start; 
   }
-  .map-branding img { height: 36px; width: auto; margin-bottom: 2px; } /* Tightened spacing */
+  .map-branding img { height: 36px; width: auto; margin-bottom: 2px; } 
   
   .map-branding .brand-tagline { 
     font-size: 10px; 
     font-weight: 800; 
-    color: #f8fafc; /* Crisp near-white */
+    color: #f8fafc; 
     text-transform: uppercase; 
     letter-spacing: 0.5px; 
     padding-left: 2px;
@@ -189,15 +189,14 @@
      EMBED / PREVIEW OVERRIDE CLASSES
      ========================================== */
   
-  /* Force-hide sidebar, map controls, map cue, and branding bug if embedded. */
+  /* Force-hide sidebar and map controls if embedded. */
   body.is-preview .sidebar,
   body.is-preview .map-cue,
-  body.is-preview .map-branding,
   body.is-preview .leaflet-control-container { 
     display: none !important; 
   }
 
-  /* Clearer, richer Embed Readability (Eliminates the gray fog) */
+  /* Clearer Embed Readability */
   body.is-preview .leaflet-tile-pane { 
     filter: brightness(2.2) contrast(1.05) saturate(1.2) !important; 
   }
@@ -326,21 +325,39 @@
 
 <script>
 // ==========================================
-// 1. ROBUST EMBED DETECTION
+// 1. ROBUST CRASH-PROOF EMBED DETECTION
 // ==========================================
-// Automatically detects if loaded in an iframe on the homepage
-const isEmbedded = (window.self !== window.top) || (new URLSearchParams(window.location.search).get('preview') === 'true');
+// Safari and Chrome aggressively block cross-origin iframe variables.
+// Checking window.top without a try/catch throws a fatal DOMException,
+// crashing the entire script. This logic safely handles the check.
+let isEmbedded = false;
+
+try {
+    if (window.self !== window.top) {
+        isEmbedded = true;
+    }
+} catch (e) {
+    // If an error is thrown, the browser blocked window.top, meaning 
+    // we are definitively inside a cross-origin iframe (embed).
+    isEmbedded = true; 
+}
+
+// Fallback trigger for manual URL testing
+try {
+    if (window.location.search.includes('preview=true')) {
+        isEmbedded = true;
+    }
+} catch (e) {}
 
 if (isEmbedded) {
-  // Triggers CSS to force-hide the sidebar, cue pill, AND logo badge
-  document.body.classList.add('is-preview');
-  
-  // Show the full-screen click overlay
-  const overlay = document.getElementById('preview-overlay');
-  overlay.style.display = 'flex';
-  
-  // Link the overlay to the actual URL of this page (breaking out of the iframe)
-  overlay.href = window.location.href.split('?')[0];
+    document.body.classList.add('is-preview');
+    const overlay = document.getElementById('preview-overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+        try {
+            overlay.href = window.location.href.split('?')[0];
+        } catch(e) {}
+    }
 }
 
 // ==========================================
@@ -622,4 +639,98 @@ function applyFilters() {
   
   const searchTerm = document.getElementById('search-box').value.toLowerCase();
   
-  const isFiltered = activeCategories
+  const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
+  const filterStatusEl = document.getElementById('filter-status');
+  if (isFiltered) {
+    filterStatusEl.innerText = "Filtered View";
+    filterStatusEl.classList.add("active-filter");
+  } else {
+    filterStatusEl.innerText = "All Signals";
+    filterStatusEl.classList.remove("active-filter");
+  }
+
+  Object.values(markers).forEach(item => {
+    const s = item.data;
+    const mk = item.layer;
+    
+    const val = getEffectiveValue(s) || 0;
+    const catMatch = activeCategories.has(s.category);
+    const valMatch = val >= minValFilter;
+    
+    const searchString = `${s.project_name} ${s.address} ${s.city} ${s.key_players || ''}`.toLowerCase();
+    const searchMatch = searchString.includes(searchTerm);
+
+    if (catMatch && valMatch && searchMatch) {
+      if (!map.hasLayer(mk)) mk.addTo(map);
+      activeCount++;
+      totalValue += val;
+
+      const d = document.createElement('div');
+      d.className = 'list-item';
+      d.style.borderLeftColor = CAT_COLORS[s.category];
+      
+      const isUndisclosed = s.value_label === 'Undisclosed' || s.value_label.includes('Est');
+      
+      d.innerHTML = `
+        <div class="li-name">${s.project_name}</div>
+        <div class="li-meta">
+          <span>${s.category} | ${s.stage}</span>
+          <span class="li-val" style="color: ${isUndisclosed ? 'var(--text-muted)' : '#cbd5e1'}">${s.value_label}</span>
+        </div>
+      `;
+      
+      // Only bind click to sidebar items if it's the live map
+      if (!isEmbedded) {
+        d.onclick = () => {
+          map.flyTo([s.latitude, s.longitude], 15, { duration: 0.8 });
+          mk.openPopup();
+          
+          if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
+            sidebar.classList.remove('expanded');
+            updateMobileHandleLabel();
+            map.dragging.enable();
+            map.scrollWheelZoom.enable();
+            if(map.touchZoom) map.touchZoom.enable();
+            if(map.doubleClickZoom) map.doubleClickZoom.enable();
+            if(map.boxZoom) map.boxZoom.enable();
+            if(map.keyboard) map.keyboard.enable();
+            setTimeout(() => map.invalidateSize(), 320);
+          }
+        };
+      }
+      
+      d.onmouseenter = () => {
+        const iconEl = mk.getElement();
+        if(iconEl) {
+          const core = iconEl.querySelector('.marker-core');
+          if(core) core.classList.add('hover-active');
+        }
+      };
+      
+      d.onmouseleave = () => {
+        const iconEl = mk.getElement();
+        if(iconEl) {
+          const core = iconEl.querySelector('.marker-core');
+          if(core) core.classList.remove('hover-active');
+        }
+      };
+      
+      listContainer.appendChild(d);
+    } else {
+      if (map.hasLayer(mk)) map.removeLayer(mk);
+    }
+  });
+
+  document.getElementById('stat-count').innerText = activeCount;
+  document.getElementById('stat-val').innerText = formatMoney(totalValue);
+  updateMobileHandleLabel();
+}
+
+setTimeout(() => {
+  map.invalidateSize();
+  initMap();
+}, 200);
+
+</script>
+</body>
+</html>
