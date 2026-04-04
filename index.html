@@ -164,6 +164,7 @@
   @media(max-width: 800px) {
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
+    
     .leaflet-tile-pane { filter: brightness(2.0) contrast(1.1) saturate(1.2); } 
 
     .map-branding { top: 12px; left: 16px; padding: 10px 14px; }
@@ -284,9 +285,6 @@
 </div>
 
 <script>
-// ==========================================
-// 1. MAP EMBED / PREVIEW LOGIC
-// ==========================================
 let isEmbedded = false;
 try { if (window.location.search.includes('preview=true')) isEmbedded = true; } catch (e) {}
 
@@ -307,9 +305,6 @@ window.resetMapView = function(e) {
     }
 };
 
-// ==========================================
-// 2. DATA MODEL INIT
-// ==========================================
 const CAT_COLORS = {
   "Land in Play": "#A855F7",
   "In Approvals": "#F59E0B",
@@ -387,8 +382,8 @@ function getEffectiveValue(signal) {
   return null;
 }
 
+// ** DELETED CRASHING CODE FROM HERE **
 function initMap() {
-  document.getElementById('stat-total').innerText = signals.length;
   
   const cue = document.getElementById('map-cue');
   if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
@@ -638,21 +633,17 @@ function applyFilters() {
       }
   }
 
+  // ** DELETED CRASHING CODE FROM HERE **
   document.getElementById('stat-count').innerText = activeCount;
-  document.getElementById('stat-val').innerText = formatMoney(totalValue);
   updateMobileHandleLabel();
 }
 
-// ==========================================
-// 3. ASYNC DATA FETCH & INITIALIZATION
-// ==========================================
 async function loadSignalsAndInitMap() {
     try {
         const response = await fetch('data/signals.json');
         if (!response.ok) throw new Error('Failed to load signals JSON.');
         signals = await response.json();
         
-        // Apply coordinate jitter once data is loaded
         const coordMap = new Set();
         signals.forEach(s => {
             let coordKey = `${s.latitude},${s.longitude}`;
