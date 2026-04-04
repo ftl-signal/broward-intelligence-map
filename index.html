@@ -26,6 +26,7 @@
   .layout { display: flex; height: 100vh; width: 100vw; position: relative; }
   .mobile-handle { display: none; }
 
+  /* Premium Sidebar Styling */
   .sidebar { width: 400px; background: var(--bg-dark); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
   .header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 8px; }
   .logo { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
@@ -70,6 +71,7 @@
   .val-btn { flex: 1; min-width: 60px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 6px 0; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.2s; text-align: center; }
   .val-btn.active { background: var(--brand-blue); color: #0f172a; border-color: var(--brand-blue); }
 
+  /* Refined, softer list view */
   .list-header { padding: 20px 20px 12px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .list-container { flex: 1; padding: 0; }
   .list-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
@@ -78,16 +80,21 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #64748b; }
 
+  /* Map Container */
   .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
+  /* VIBRANT BRANDING BUG */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.4); padding: 14px 20px; border-radius: 12px;
+    background: rgba(11, 15, 25, 0.96);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(56, 189, 248, 0.4); 
+    padding: 14px 20px; border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 1px rgba(56, 189, 248, 0.2); 
-    pointer-events: auto; text-decoration: none;
+    pointer-events: auto; 
+    text-decoration: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -104,6 +111,7 @@
     50% { opacity: 0.8; text-shadow: 0 0 3px rgba(56, 189, 248, 0.3); }
   }
 
+  /* Interaction Cue */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
     background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -113,6 +121,7 @@
   }
   .map-cue.fade-out { opacity: 0; }
 
+  /* MODERN GLOBAL CTA */
   .filters-cta {
     position: absolute; bottom: 32px; right: 32px; z-index: 1000;
     text-decoration: none; display: flex; align-items: center; gap: 8px;
@@ -124,6 +133,7 @@
   }
   .filters-cta:hover { background: var(--brand-blue); color: #000000; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.5); }
 
+  /* Map Markers & Popups */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
@@ -161,6 +171,9 @@
   .pop-sources a { color: var(--text-muted); text-decoration: underline; margin-left: 4px; transition: color 0.2s; }
   .pop-sources a:hover { color: #fff; }
 
+  /* ==========================================
+     MOBILE-FIRST LIVE MAP SAFETIES
+     ========================================== */
   @media(max-width: 800px) {
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
@@ -382,7 +395,6 @@ function getEffectiveValue(signal) {
   return null;
 }
 
-// ** DELETED CRASHING CODE FROM HERE **
 function initMap() {
   
   const cue = document.getElementById('map-cue');
@@ -633,14 +645,13 @@ function applyFilters() {
       }
   }
 
-  // ** DELETED CRASHING CODE FROM HERE **
   document.getElementById('stat-count').innerText = activeCount;
   updateMobileHandleLabel();
 }
 
 async function loadSignalsAndInitMap() {
     try {
-        const response = await fetch('data/signals.json');
+        const response = await fetch('data.signals.json');
         if (!response.ok) throw new Error('Failed to load signals JSON.');
         signals = await response.json();
         
