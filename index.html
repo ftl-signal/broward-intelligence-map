@@ -26,14 +26,12 @@
   .layout { display: flex; height: 100vh; width: 100vw; position: relative; }
   .mobile-handle { display: none; }
 
-  /* Premium Sidebar Styling */
   .sidebar { width: 400px; background: var(--bg-dark); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
   .header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 8px; }
   .logo { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
   .sub-logo { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
   .sub-logo::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--brand-blue); border-radius: 50%; }
 
-  /* Premium Paywall Badge */
   .paywall-badge {
     margin-top: 14px;
     display: inline-flex;
@@ -691,21 +689,10 @@ function formatMoney(num) {
 
 function applyFilters() {
   let activeCount = 0;
-  let totalValue = 0;
   const listContainer = document.getElementById('signal-list');
   listContainer.innerHTML = '';
   
   const searchTerm = document.getElementById('search-box').value.toLowerCase();
-  
-  const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
-  const filterStatusEl = document.getElementById('filter-status');
-  if (isFiltered) {
-    filterStatusEl.innerText = "Filtered View";
-    filterStatusEl.classList.add("active-filter");
-  } else {
-    filterStatusEl.innerText = "All Signals";
-    filterStatusEl.classList.remove("active-filter");
-  }
 
   Object.values(markers).forEach(item => {
     const s = item.data;
@@ -723,7 +710,6 @@ function applyFilters() {
     if (catMatch && valMatch && searchMatch) {
       if (!map.hasLayer(mk)) mk.addTo(map);
       activeCount++;
-      totalValue += val;
 
       const d = document.createElement('div');
       d.className = 'list-item';
@@ -782,7 +768,10 @@ function applyFilters() {
       }
   }
 
-  document.getElementById('stat-count').innerText = activeCount;
+  const statCountEl = document.getElementById('stat-count');
+  if (statCountEl) {
+      statCountEl.innerText = activeCount;
+  }
   updateMobileHandleLabel();
 }
 
