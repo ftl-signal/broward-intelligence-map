@@ -27,75 +27,76 @@
   .mobile-handle { display: none; }
 
   .sidebar { width: 400px; background: var(--bg-dark); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
-  .header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 24px; }
+  .header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 8px; }
   .logo { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
   .sub-logo { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
   .sub-logo::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--brand-blue); border-radius: 50%; }
 
-  .filter-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 14px; margin-bottom: -8px; color: var(--text-muted); transition: color 0.2s; }
-  .filter-status.active-filter { color: var(--brand-blue); }
+  /* Premium Paywall Badge */
+  .paywall-badge {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--brand-blue);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-  .stat-box { background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-  .stat-val { font-size: 18px; font-weight: 700; color: #fff; }
-  .stat-lbl { font-size: 9px; text-transform: uppercase; font-weight: 600; color: var(--text-muted); margin-top: 4px; line-height: 1.3; opacity: 0.8; }
+  .stats-main { margin-top: 24px; padding: 16px; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 8px; border-left: 3px solid var(--brand-blue); }
+  .stat-val-main { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+  .stat-lbl-main { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
   .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
   .filters { padding: 0 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); background: transparent; flex-shrink: 0; }
   
-  .search-box { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 12px; outline: none; margin-bottom: 16px; transition: border-color 0.2s; }
+  .search-box { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 12px; outline: none; margin-bottom: 20px; transition: border-color 0.2s; }
   .search-box:focus { border-color: var(--brand-blue); }
   .search-box::placeholder { color: var(--text-muted); }
 
   .filter-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; display: block; }
-  .cat-filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .cat-filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
   .cat-btn { display: flex; align-items: center; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; text-align: left; }
   .cat-btn:hover { background: rgba(255,255,255,0.05); }
   .cat-btn.active { color: #fff; border-color: currentColor; background: rgba(255,255,255,0.05); }
   .cat-indicator { width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; }
 
-  .val-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+  .val-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
   .val-btn { flex: 1; min-width: 60px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 6px 0; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.2s; text-align: center; }
   .val-btn.active { background: var(--brand-blue); color: #0f172a; border-color: var(--brand-blue); }
 
+  .list-header { padding: 20px 20px 12px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .list-container { flex: 1; padding: 0; }
-  .list-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
-  .list-item:hover { background: rgba(255,255,255,0.02); }
-  .li-name { font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .list-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
+  .list-item:hover { background: rgba(255,255,255,0.02); border-left-color: rgba(255,255,255,0.2); }
+  .li-name { font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; }
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
-  .li-val { font-weight: 700; color: #94a3b8; }
+  .li-val { font-weight: 700; color: #64748b; }
 
-  /* Map Container */
   .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-  /* VIBRANT BRANDING BUG */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.96);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.4); 
-    padding: 14px 20px; border-radius: 12px;
+    background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(56, 189, 248, 0.4); padding: 14px 20px; border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 1px rgba(56, 189, 248, 0.2); 
-    pointer-events: auto; /* ENABLED CLICKS */
-    text-decoration: none;
-    display: flex; flex-direction: column; align-items: center; 
-    justify-content: center;
+    pointer-events: auto; text-decoration: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .map-branding:hover { transform: translateY(-2px); }
   .map-branding img { height: 44px; width: auto; margin-bottom: 6px; } 
   .map-branding .brand-tagline { 
-    font-size: 13px; 
-    font-weight: 800; 
-    color: var(--brand-blue); 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px; 
-    text-shadow: var(--urgent-glow);
-    animation: live-pulse 2s infinite ease-in-out;
-    text-align: center;
-    width: 100%;
+    font-size: 13px; font-weight: 800; color: var(--brand-blue); text-transform: uppercase; 
+    letter-spacing: 1.5px; text-shadow: var(--urgent-glow);
+    animation: live-pulse 2s infinite ease-in-out; text-align: center; width: 100%;
   }
 
   @keyframes live-pulse {
@@ -103,7 +104,6 @@
     50% { opacity: 0.8; text-shadow: 0 0 3px rgba(56, 189, 248, 0.3); }
   }
 
-  /* Interaction Cue */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
     background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -113,27 +113,17 @@
   }
   .map-cue.fade-out { opacity: 0; }
 
-  /* MODERN GLOBAL CTA */
   .filters-cta {
     position: absolute; bottom: 32px; right: 32px; z-index: 1000;
     text-decoration: none; display: flex; align-items: center; gap: 8px;
-    background: rgba(11, 15, 25, 0.96);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--brand-blue); color: var(--text-main);
-    padding: 16px 26px; border-radius: 8px;
-    font-size: 14px; font-weight: 800; letter-spacing: 1px;
-    text-transform: uppercase;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px rgba(56, 189, 248, 0.2);
+    padding: 16px 26px; border-radius: 8px; font-size: 14px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px rgba(56, 189, 248, 0.2);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .filters-cta:hover { 
-    background: var(--brand-blue); 
-    color: #000000; 
-    transform: translateY(-3px); 
-    box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.5); 
-  }
+  .filters-cta:hover { background: var(--brand-blue); color: #000000; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.5); }
 
-  /* Map Markers & Popups */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
@@ -160,12 +150,10 @@
   .pop-opt-lbl { color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; width: 35%; }
   .pop-opt-val { color: var(--text-muted); text-align: right; width: 65%; font-weight: 500; }
 
-  /* Popup Action Buttons & Sourcing */
   .pop-actions { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
   .pop-btn-primary { display: block; background: transparent; border: 1px solid var(--brand-blue); color: var(--brand-blue); padding: 10px 16px; border-radius: 4px; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; text-align: center; margin-bottom: 8px; }
   .pop-btn-primary:hover { background: var(--brand-blue); color: #0f172a; }
   
-  /* Map Reset Button */
   .pop-btn-secondary { display: block; width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-muted); padding: 10px 16px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; text-align: center; cursor: pointer; margin-top: 8px; }
   .pop-btn-secondary:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.4); }
 
@@ -173,13 +161,9 @@
   .pop-sources a { color: var(--text-muted); text-decoration: underline; margin-left: 4px; transition: color 0.2s; }
   .pop-sources a:hover { color: #fff; }
 
-  /* ==========================================
-     MOBILE-FIRST LIVE MAP SAFETIES
-     ========================================== */
   @media(max-width: 800px) {
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
-    
     .leaflet-tile-pane { filter: brightness(2.0) contrast(1.1) saturate(1.2); } 
 
     .map-branding { top: 12px; left: 16px; padding: 10px 14px; }
@@ -210,7 +194,6 @@
     .search-box { padding: 14px; font-size: 16px; }
 
     .leaflet-popup-content { width: 320px !important; max-width: 85vw !important; }
-    /* Limit mobile box height to stop it from hitting top bug */
     .pop-body { max-height: 40dvh; } 
     .pop-title { font-size: 15px; }
     .pop-body { font-size: 13px; }
@@ -221,30 +204,17 @@
     .pop-body { max-height: 45dvh; }
   }
 
-  /* ==========================================
-     EMBED / PREVIEW OVERRIDE CLASSES (HOMEPAGE SAFE)
-     ========================================== */
+  /* HOMEPAGE EMBED CLASSES */
   body.is-preview .sidebar,
   body.is-preview .map-cue,
   body.is-preview .map-branding,
   body.is-preview .filters-cta,
-  body.is-preview .leaflet-control-container { 
-    display: none !important; 
-  }
+  body.is-preview .leaflet-control-container { display: none !important; }
   body.is-preview .leaflet-tile-pane { filter: brightness(2.2) contrast(1.05) saturate(1.2) !important; }
 
-  .preview-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000;
-    display: flex; justify-content: center; align-items: center; text-decoration: none;
-    background: rgba(15, 23, 42, 0.15); cursor: pointer;
-  }
-  .cta-button {
-    background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(56, 189, 248, 0.6); color: #ffffff; padding: 16px 32px;
-    border-radius: 40px; font-size: 14px; font-weight: 800; letter-spacing: 1px;
-    text-transform: uppercase; box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-    animation: pulse-glow 2.5s infinite;
-  }
+  .preview-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3000; display: flex; justify-content: center; align-items: center; text-decoration: none; background: rgba(15, 23, 42, 0.15); cursor: pointer; }
+  .cta-button { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(56, 189, 248, 0.6); color: #ffffff; padding: 16px 32px; border-radius: 40px; font-size: 14px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 8px 25px rgba(0,0,0,0.5); animation: pulse-glow 2.5s infinite; }
+  
   @keyframes pulse-glow {
     0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4), 0 8px 25px rgba(0,0,0,0.5); }
     70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0), 0 8px 25px rgba(0,0,0,0.5); }
@@ -254,10 +224,7 @@
   body.is-preview { display: flex; align-items: center; justify-content: center; background-color: var(--bg-dark); padding: 20px; }
   body.is-preview .layout { max-width: 1100px; width: 100%; height: auto; aspect-ratio: 16 / 9; margin: 0 auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); overflow: hidden; }
   body.is-preview .map-container { position: relative !important; width: 100% !important; height: 100% !important; }
-  @media (max-width: 800px) {
-    body.is-preview { padding: 10px; }
-    body.is-preview .layout { aspect-ratio: 4 / 5; height: auto !important; }
-  }
+  @media (max-width: 800px) { body.is-preview { padding: 10px; } body.is-preview .layout { aspect-ratio: 4 / 5; height: auto !important; } }
 </style>
 </head>
 <body>
@@ -276,10 +243,12 @@
     <div class="header">
       <div class="logo">The Florida Signal</div>
       <div class="sub-logo">Terminal Access | Broward County</div>
-      <div class="filter-status" id="filter-status">All Signals</div>
-      <div class="stats-grid">
-        <div class="stat-box"><div class="stat-val" id="stat-count">0</div><div class="stat-lbl">Showing (of <span id="stat-total">0</span> Total)</div></div>
-        <div class="stat-box"><div class="stat-val" id="stat-val">$0</div><div class="stat-lbl">Tracked Value <br>(Declared + Est.)</div></div>
+      
+      <div class="paywall-badge">🔒 FOUNDING MEMBER EXCLUSIVE — $49/mo</div>
+      
+      <div class="stats-main">
+        <div class="stat-val-main"><span id="stat-count">0</span> ACTIVE SIGNALS</div>
+        <div class="stat-lbl-main">Tracked across Broward County</div>
       </div>
     </div>
 
@@ -296,6 +265,7 @@
           <button class="val-btn" data-val="30000000">$30M+</button>
         </div>
       </div>
+      <div class="list-header">LEAD SIGNALS RIGHT NOW</div>
       <div class="list-container" id="signal-list"></div>
     </div>
   </aside>
@@ -315,10 +285,9 @@
 
 <script>
 // ==========================================
-// 1. GLOBAL UI & MAP RESET LOGIC
+// 1. MAP EMBED / PREVIEW LOGIC
 // ==========================================
 let isEmbedded = false;
-try { if (window.self !== window.top) isEmbedded = true; } catch (e) { isEmbedded = true; }
 try { if (window.location.search.includes('preview=true')) isEmbedded = true; } catch (e) {}
 
 if (isEmbedded) {
@@ -330,7 +299,6 @@ if (isEmbedded) {
     }
 }
 
-// Map Reset exposed to window so the popup button can trigger it
 window.resetMapView = function(e) {
     if(e) e.stopPropagation();
     if(map) {
@@ -340,55 +308,8 @@ window.resetMapView = function(e) {
 };
 
 // ==========================================
-// 2. DATA MODEL
+// 2. DATA MODEL INIT
 // ==========================================
-const signals = [
-  { id: "sig_01", project_name: "Gore Building Redevelopment", address: "201 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1215, longitude: -80.1472, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", signal_type: "Demolition Permit", filed_date: "Mar 20, 2026", declared_value: 2000000, estimated_value: null, value_label: "$2.0M", permit_number: "BLD-GEN-26030461", owner: null, applicant: "Sheffey Devier III", contractor: null, parcel_id: "504210011722", scale: "1.4 Acres / Civic Core", timeline: "Site Clearing Q2 2026", summary: "Demolition efforts for the 92,000 SF county administrative facility have moved into active building department review.", why_it_matters: "Suggests downtown municipal redevelopment is funded and mobilizing. Points to a tangible step in the county’s broader civic redevelopment process.", what_next: "May indicate a named contractor assignment on the building demolition file.", what_we_dont_know: null, key_players: "City of Fort Lauderdale", source_links: { web_story: "https://the-florida-signal.ghost.io/ghost/#/editor/page/69c06529461f7900011c5902" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_02", project_name: "1400 Progresso Storage", address: "1400 Progresso Dr", city: "Fort Lauderdale", latitude: 26.1360, longitude: -80.1450, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", signal_type: "Vertical Master Permit", filed_date: null, declared_value: 6500000, estimated_value: null, value_label: "$6.5M", permit_number: "PL-26-0045", owner: null, applicant: "Bram Allen", contractor: "ARCO Design/Build", parcel_id: null, scale: "147,385 SF / 3.88 Acres", timeline: null, summary: "A 147k SF self-storage development has cleared a six-permit execution hurdle in the Progresso district.", why_it_matters: "May indicate high land-basis construction is justified by strong urban logistics demand. This coordinated permit clearance points to a known self-storage development moving further into execution.", what_next: "First inspection requests under issued electrical and plumbing permits.", what_we_dont_know: null, key_players: "Progresso Partners LLC, Crow Holdings", source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_10", project_name: "RISE Tower", address: "1101 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1385, longitude: -80.1215, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Tower Crane Permit", filed_date: null, declared_value: 45000000, estimated_value: null, value_label: "$45.0M", permit_number: null, owner: null, applicant: null, contractor: "Resia (Developer), Moss (GC)", parcel_id: null, scale: "25 Stories / 320 Units", timeline: null, summary: "25-story vertical construction officially mobilized.", why_it_matters: "Points to heavy structural trades mobilizing immediately for vertical ascent.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_04", project_name: "Hollywood Beach Hotel Site", address: "101 N Ocean Dr", city: "Hollywood", latitude: 26.0112, longitude: -80.1158, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "City Presentation", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "CITY-REV-882", owner: null, applicant: null, contractor: null, parcel_id: null, scale: "4.5 Acres Waterfront", timeline: null, summary: "City presentation for major beachfront hospitality redevelopment.", why_it_matters: "Suggests monitoring this parcel for massive JV or heavy infrastructure plays.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_05", project_name: "Modera Pompano", address: "855 S Federal Hwy", city: "Pompano Beach", latitude: 26.2230, longitude: -80.0900, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Site Plan Review", filed_date: null, declared_value: null, estimated_value: 71250000, value_label: "Est. $71M+", permit_number: "PMP-26-771", owner: null, applicant: null, contractor: null, parcel_id: null, scale: "8-Story / 285 Units", timeline: null, summary: "Site plan review for dense multifamily pipeline in Pompano core.", why_it_matters: "May indicate a GC bidding phase approaching in 6-9 months.", what_next: null, what_we_dont_know: null, key_players: "Mill Creek Residential", source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_03", project_name: "Barry's / 401 Las Olas", address: "401 E Las Olas Blvd", city: "Fort Lauderdale", latitude: 26.1195, longitude: -80.1390, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Interior Fit-Out", filed_date: "Mar 19, 2026", declared_value: 1200000, estimated_value: null, value_label: "$1.2M", permit_number: "ELE-GEN-26030216", owner: null, applicant: null, contractor: "PYD ELECTRIC CORP", parcel_id: null, scale: "5,900 SF", timeline: null, summary: "Fitness brand confirmed for build-out at Bank of America Plaza alongside second active scope.", why_it_matters: "Is consistent with fitness concepts validating sustained downtown residential density. Points to active tenant deployment.", what_next: "Issuance on Barry's structural permit and first trade inspections.", what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_06", project_name: "El Car Wash Assemblage", address: "2690 W Sample Rd", city: "Pompano Beach", latitude: 26.2730, longitude: -80.1600, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Commercial Site Plan", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Commercial retail expansion navigating zoning on assembled land.", why_it_matters: "Suggests retail corridor fundamentals pushing west on Sample Rd.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_07", project_name: "Stranahan House Renovation", address: "335 SE 6 Ave", city: "Fort Lauderdale", latitude: 26.1180, longitude: -80.1400, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Renovation Permit", filed_date: "Mar 16, 2026", declared_value: 290500, estimated_value: null, value_label: "$290K", permit_number: "BLD-GEN-26030335", owner: null, applicant: "Tabitha Poche", contractor: "MILLER CONSTRUCTION COMPANY", parcel_id: "504210090010", scale: null, timeline: null, summary: "A new museum-related structural project file is live.", why_it_matters: "May signal a niche opportunity for specialized historic preservation contractors.", what_next: "Contractor naming and structural permit issuance.", what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_08", project_name: "Next Health Flagship", address: "1902 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1450, longitude: -80.1150, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Interior Final", filed_date: "Mar 17, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "ELE-GEN-26030194", owner: null, applicant: null, contractor: "FUSE ELECTRIC INC", parcel_id: null, scale: null, timeline: null, summary: "Near-term opening for high-traffic wellness tenant.", why_it_matters: "The opening suggests continued demand for higher-end service retail in the corridor.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_09", project_name: "110 EAST Office Fitout", address: "110 E Broward Blvd", city: "Fort Lauderdale", latitude: 26.1220, longitude: -80.1430, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Tenant Improvement", filed_date: "Mar 16, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "BLD-GEN-26030326", owner: null, applicant: "Dara Nunez", contractor: "MAX EFFORT BUILDERS INC", parcel_id: "504210060030", scale: null, timeline: null, summary: "Continuous Class-A office absorption and fit-out activity.", why_it_matters: "Same-floor buildout activity may indicate real leasing momentum in a repositioned downtown office asset.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_11", project_name: "The Adderley Phase II", address: "501 NW 7th Ave", city: "Fort Lauderdale", latitude: 26.1288, longitude: -80.1510, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Foundation Permit", filed_date: null, declared_value: 12500000, estimated_value: null, value_label: "$12.5M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Groundbreaking initiated for urban workforce housing expansion.", why_it_matters: "Suggests public-private affordable models are actively executing in the northwest grid.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_12", project_name: "Pier 66 South Parcel", address: "2301 SE 17 St", city: "Fort Lauderdale", latitude: 26.1010, longitude: -80.1150, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", signal_type: "Early Works Permit", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "ENG-LD-26030002", owner: "P66 Hotel LLC", applicant: null, contractor: null, parcel_id: null, scale: "Easement filed", timeline: null, summary: "First infrastructure permit recorded establishes sewer manhole easement.", why_it_matters: "Suggests Tavistock is moving the south parcel from entitlement planning into infrastructure preparation. It points to a step that follows entitlement preceding groundbreaking.", what_next: "Tavistock/Pier 66 south side DRC case P-R18073 for new filings or hearing dates now that infrastructure permitting has begun.", what_we_dont_know: null, key_players: "Tavistock (Owner)", source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_13", project_name: "Le Croissant Plaza 100", address: "100 NE 3 Ave", city: "Fort Lauderdale", latitude: 26.1230, longitude: -80.1400, category: "Under Construction", status_label: "Advance", signal_strength: "Moderate", signal_type: "Tenant Fit-Out", filed_date: "Mar 18, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "BLD-WIN-25090453.R001", owner: null, applicant: null, contractor: "BESPOKE GLAZING GROUP LLC", parcel_id: null, scale: null, timeline: null, summary: "Le Croissant Bakery named as incoming tenant for Suite 120. spec suites revising for interior buildout.", why_it_matters: "Two existing towers leasing simultaneously in the permit record may indicate demand is running ahead of that delivery.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_14", project_name: "One Financial Plaza Demo", address: "100 SE 3 Ave", city: "Fort Lauderdale", latitude: 26.1205, longitude: -80.1410, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Interior Demolition", filed_date: "Mar 18, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "BLD-COC-26030085", owner: null, applicant: null, contractor: "TRUST PLUMBING CORP", parcel_id: null, scale: null, timeline: null, summary: "13 permits filed including interior demolition. listing scope as TBD and changing contractors.", why_it_matters: "Pre-permitting with 'TBD' scope is consistent with an early tenant signal in the permit record.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_15", project_name: "Compass Isle Assemblage", address: "20 Compass Isle", city: "Fort Lauderdale", latitude: 26.1265, longitude: -80.1110, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Land Acquisition", filed_date: null, declared_value: 31900000, estimated_value: null, value_label: "$31.9M", permit_number: null, owner: "City Shore Construction", applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Five canal-front properties sold for combined $31.9M.", why_it_matters: "May signal prime waterfront secured for ultra-luxury residential pipeline.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_16", project_name: "Aria Flagler Village", address: "501 NE 3rd Ave", city: "Fort Lauderdale", latitude: 26.1275, longitude: -80.1395, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", signal_type: "Vertical Permit Filed", filed_date: null, declared_value: 20000000, estimated_value: null, value_label: "$20.0M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Vertical construction master permit submitted for Flagler site.", why_it_matters: "Points to Flagler pipeline yielding active starts despite macro capital headwinds.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_17", project_name: "Calvary Chapel Expansion", address: "2401 W Cypress Creek Rd", city: "Fort Lauderdale", latitude: 26.2080, longitude: -80.1700, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", signal_type: "Master Build Permit", filed_date: null, declared_value: 30000000, estimated_value: null, value_label: "$30.0M", permit_number: null, owner: null, applicant: "Pacifica Engineering", contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Structural commercial permit filed tied previously approved redevelopment.", why_it_matters: "Suggests institutional capital locked; moving into construction phase.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_18", project_name: "Lohmeyer Resiliency", address: "1765 SE 18 St", city: "Fort Lauderdale", latitude: 26.1000, longitude: -80.1250, category: "Capital Repositioning", status_label: "Advance", signal_strength: "High", signal_type: "Infrastructure Permit", filed_date: null, declared_value: 8400000, estimated_value: null, value_label: "$8.4M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Critical municipal mechanical and wastewater resiliency spend.", why_it_matters: "The filings are consistent with continued execution of previously announced wastewater resiliency projects.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_19", project_name: "Sanctuary Development", address: "1400 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1365, longitude: -80.1200, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", signal_type: "DRC Submission", filed_date: null, declared_value: null, estimated_value: 87000000, value_label: "Est. $87M+", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "348-unit multifamily with ground-floor commercial and new church building.", why_it_matters: "DRC review marks the start of Fort Lauderdale’s formal development approval pipeline.", what_next: "If the proposal moves forward after review, it could proceed toward additional city approvals.", what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_20", project_name: "Shipyard Pompano District", address: "125 NE 5th Ave", city: "Pompano Beach", latitude: 26.2345, longitude: -80.1190, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Site Plan Review", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Major mixed-use district site plan progressing through city review.", why_it_matters: "Points to Pompano inland downtown transformation remaining a top-tier focus.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_21", project_name: "Bridge Point Logistics", address: "2101 W McNab Rd", city: "Pompano Beach", latitude: 26.2110, longitude: -80.1550, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Shell Completion", filed_date: null, declared_value: 14200000, estimated_value: null, value_label: "$14.2M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Industrial shell nearing completion for logistics demand.", why_it_matters: "May indicate demand execution strictly for last-mile industrial.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_22", project_name: "Broward Health Expansion", address: "1611 S Andrews Ave", city: "Fort Lauderdale", latitude: 26.1050, longitude: -80.1440, category: "Pre-Construction", status_label: "Watch", signal_strength: "Moderate", signal_type: "Site Work Permit", filed_date: "Mar 16, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "ROW-SITE-26030004", owner: null, applicant: null, contractor: "ROBINS & MORTON GROUP", parcel_id: null, scale: null, timeline: null, summary: "Permit issued for campus activity mobilizing on South Andrews corridor. Active renovation RFQ live.", why_it_matters: "Combination of issued permits and live RFQ points to continuing capital activity.", what_next: "March 30 RFQ response deadline.", what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_23", project_name: "Galt Mile Capital Upgrades", address: "3500 Galt Ocean Dr", city: "Fort Lauderdale", latitude: 26.1650, longitude: -80.0980, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Structural Permit", filed_date: "Mar 17, 2026", declared_value: 1575730, estimated_value: null, value_label: "$1.5M", permit_number: "BLD-GEN-26030374", owner: null, applicant: "CIRO CUNHA", contractor: null, parcel_id: "494319BJ1490", scale: null, timeline: null, summary: "Structural re-roof permit at Playa del Sol tower.", why_it_matters: "May signal owners investing in capital maintenance to repair older high-rise assets.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_24", project_name: "SW 16th St Infill", address: "330 SW 16 St", city: "Fort Lauderdale", latitude: 26.1050, longitude: -80.1500, category: "In Approvals", status_label: "Advance", signal_strength: "Developing", signal_type: "Batch Permitting", filed_date: "Mar 16, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "LND-TREE-26030099", owner: null, applicant: null, contractor: "SOLIDITY DEVELOPER AND CONTRACTORS GROUP LLC", parcel_id: null, scale: null, timeline: null, summary: "Parallel batch permit strategy across adjacent lots.", why_it_matters: "Suggests missing-middle developers aggressively targeting SW quadrants in a deliberate development strategy.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_25", project_name: "New River Resiliency", address: "Riverfront Corridor", city: "Fort Lauderdale", latitude: 26.1150, longitude: -80.1300, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Framework Study", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Long-term municipal resiliency and seawall planning indicator.", why_it_matters: "May indicate a future mandate for massive public-private shoreline contracts.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_26", project_name: "Six31 Residences", address: "631 NE 2nd Ave", city: "Fort Lauderdale", latitude: 26.1290, longitude: -80.1385, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Design Review", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "10-story residential project in a core growth neighborhood.", why_it_matters: "Points to mid-rise density continuing infilling Flagler Village edges.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_27", project_name: "Pompano Marine Center", address: "701 S Federal Hwy", city: "Pompano Beach", latitude: 26.2250, longitude: -80.0910, category: "In Approvals", status_label: "Advance", signal_strength: "Developing", signal_type: "Zoning Review", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Major Site Plan moves forward within the M-1 Marine Business district.", why_it_matters: "Suggests waterfront commercial nodes modernizing alongside residential booms.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_28", project_name: "Hollywood Civic Land", address: "600 Knights Rd", city: "Hollywood", latitude: 26.0200, longitude: -80.1700, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Land Use Shift", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "$5.25 million property purchase proposed on Hollywood Commission agenda.", why_it_matters: "Notable public land move that may signal future redevelopment or civic-use planning.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_29", project_name: "NW 15th St Mobility", address: "NW 15th St", city: "Pompano Beach", latitude: 26.2500, longitude: -80.1400, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Streetscape Plan", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Major streetscape, mobility, and accessibility upgrades.", why_it_matters: "Is consistent with public realm improvements preceding private development up-cycles.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_30", project_name: "SW 27th Ave Logistics", address: "SW 27th Ave", city: "Pompano Beach", latitude: 26.2250, longitude: -80.1650, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", signal_type: "Rezoning Request", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Industrial rezoning interest in key western logistics corridor.", why_it_matters: "May indicate developers assembling sub-scale parcels for clear-height warehouse demand.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_31", project_name: "Oakland Park Culinary Core", address: "3400 NE 12th Ave", city: "Oakland Park", latitude: 26.1705, longitude: -80.1325, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Public Works", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Infrastructure execution for the city's new Main Street culinary vision.", why_it_matters: "Suggests retail developers should target adjacencies to new streetscape.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_32", project_name: "Hidden Harbour Marina", address: "2315 NE 15th St", city: "Pompano Beach", latitude: 26.2515, longitude: -80.0910, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", signal_type: "Marine Infrastructure", filed_date: null, declared_value: 18500000, estimated_value: null, value_label: "$18.5M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Significant waterfront and seawall infrastructure investment.", why_it_matters: "Points to high-net-worth capital flowing heavily into northern Broward marine assets.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_33", project_name: "Riverbend Marketplace", address: "2401 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1210, longitude: -80.1750, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Outparcel Filing", filed_date: "Mar 16, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "BLD-RENEWAL-26030069", owner: null, applicant: null, contractor: "SDP CONSULTANTS CORP", parcel_id: null, scale: null, timeline: null, summary: "Outparcel commercial movement near high-traffic I-95 interchange.", why_it_matters: "Suggests QSR operators continue absorbing highway-adjacent pads.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_34", project_name: "FATVillage Streetscape", address: "N Andrews Ave", city: "Fort Lauderdale", latitude: 26.1280, longitude: -80.1440, category: "Capital Repositioning", status_label: "Advance", signal_strength: "High", signal_type: "Utility Upgrades", filed_date: "Mar 19, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "ENG-WAT-23030001.R002", owner: null, applicant: "Evgeniya Gradova", contractor: "SOLUTION CONSTRUCTION INC", parcel_id: "494210360010", scale: null, timeline: null, summary: "Deep utility upgrades to support incoming multi-tower corridor.", why_it_matters: "May indicate the City matching private developer pacing with required water/sewer capacity.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_35", project_name: "CRA NE 4th Ave", address: "NE 4th Ave", city: "Fort Lauderdale", latitude: 26.1250, longitude: -80.1380, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", signal_type: "CRA Funding", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Public works funding trigger to prepare for private redevelopment.", why_it_matters: "Watch for CRA incentives driving specific parcel developments.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_36", project_name: "A1A Pompano Upgrades", address: "A1A & Atlantic Blvd", city: "Pompano Beach", latitude: 26.2350, longitude: -80.0880, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", signal_type: "DOT Coordination", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Imminent accessibility and streetscape execution on beachfront.", why_it_matters: "Short-term retail disruption; drastically improves long-term asset values.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_37", project_name: "Jackson Street Land Use", address: "Jackson St & 19th Ave", city: "Hollywood", latitude: 26.0120, longitude: -80.1500, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", signal_type: "Rezoning Watch", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Administrative rezoning watch indicating future land use changes.", why_it_matters: "Early signal for land speculators seeking upzoning arbitrage.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_38", project_name: "Hollywood Beach Framework", address: "A1A & Johnson St", city: "Hollywood", latitude: 26.0150, longitude: -80.1150, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Feasibility Study", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Lead indicator for overarching beachfront redevelopment feasibility.", why_it_matters: "Master planning stage; track for macro-level zoning capacity increases.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_39", project_name: "Atlantic Blvd Transit-Core", address: "2400 E Atlantic Blvd", city: "Pompano Beach", latitude: 26.2320, longitude: -80.0950, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "TOD Proposal", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Transit-oriented mixed-use development advancing in municipal review.", why_it_matters: "Is consistent with Pompano strategy to densify Atlantic Blvd east-west spine.", what_next: null, what_we_dont_know: null, key_players: null, source_links: { web_story: "https://thefloridasignalbrief.ghost.io/" }, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_42", project_name: "Broward Health Electrical", address: "1600 S Andrews Ave", city: "Fort Lauderdale", latitude: 26.1055, longitude: -80.1430, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "MEP Permit", filed_date: "Mar 20, 2026", declared_value: 391532, estimated_value: null, value_label: "$391K", permit_number: "ELE-GEN-26030228", owner: null, applicant: "Geima Ruiz Fernandez", contractor: "QOS LLC", parcel_id: "504215410010", scale: null, timeline: null, summary: "Heavy electrical permit progress for hospital expansion.", why_it_matters: "May indicate specialty MEP contractors have an active procurement pipeline here.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_43", project_name: "Fort Lauderdale Terminal", address: "200 NW 1st Ave", city: "Fort Lauderdale", latitude: 26.1245, longitude: -80.1445, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Civic Planning", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Civic infrastructure and transit planning movement.", why_it_matters: "Long-term civic play; monitor for P3 RFPs.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_44", project_name: "Downtown Transit Study", address: "SW 1st Ave", city: "Fort Lauderdale", latitude: 26.1185, longitude: -80.1440, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "Corridor Study", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "High-density transit corridor study phase activation.", why_it_matters: "Suggests the City is preparing infrastructure to support massive future upzoning.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_45", project_name: "Pompano Marina Redesign", address: "2501 N Ocean Blvd", city: "Pompano Beach", latitude: 26.2625, longitude: -80.0885, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", signal_type: "Design Review", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Luxury marine facility entering municipal design review.", why_it_matters: "Points to marine industrial transitioning to luxury hospitality uses on barrier islands.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
-  { id: "sig_46", project_name: "Sample Road Logistics", address: "Sample Rd & I-95", city: "Pompano Beach", latitude: 26.2735, longitude: -80.1350, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Shell Permit", filed_date: null, declared_value: 8900000, estimated_value: null, value_label: "$8.9M", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Logistics shell permit execution confirms active last-mile demand.", why_it_matters: "Is consistent with active last-mile demand executing at major highway interchanges.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true }
-];
-
 const CAT_COLORS = {
   "Land in Play": "#A855F7",
   "In Approvals": "#F59E0B",
@@ -401,17 +322,7 @@ const CATEGORIES = Object.keys(CAT_COLORS);
 let activeCategories = new Set(CATEGORIES);
 let minValFilter = 0; 
 let markers = {}; 
-
-const coordMap = new Set();
-signals.forEach(s => {
-  let coordKey = `${s.latitude},${s.longitude}`;
-  while (coordMap.has(coordKey)) {
-    s.latitude += (Math.random() - 0.5) * 0.001;
-    s.longitude += (Math.random() - 0.5) * 0.001;
-    coordKey = `${s.latitude},${s.longitude}`;
-  }
-  coordMap.add(coordKey);
-});
+let signals = [];
 
 const mapOptions = {
   zoomControl: false, 
@@ -443,8 +354,7 @@ mobileToggle.addEventListener('click', () => {
   
   if(isExpanded) {
     mobileToggleLbl.innerText = "Tap to close panel";
-    map.dragging.disable();
-    map.scrollWheelZoom.disable();
+    map.dragging.disable(); map.scrollWheelZoom.disable();
     if(map.touchZoom) map.touchZoom.disable();
     if(map.doubleClickZoom) map.doubleClickZoom.disable();
     if(map.boxZoom) map.boxZoom.disable();
@@ -452,8 +362,7 @@ mobileToggle.addEventListener('click', () => {
   } else {
     updateMobileHandleLabel();
     if(!isEmbedded) {
-      map.dragging.enable();
-      map.scrollWheelZoom.enable();
+      map.dragging.enable(); map.scrollWheelZoom.enable();
       if(map.touchZoom) map.touchZoom.enable();
       if(map.doubleClickZoom) map.doubleClickZoom.enable();
       if(map.boxZoom) map.boxZoom.enable();
@@ -483,7 +392,6 @@ function initMap() {
   
   const cue = document.getElementById('map-cue');
   if (cue) cue.innerText = `Tap to explore ${signals.length} active signals`;
-
   const hideCue = () => { if (cue) cue.classList.add('fade-out'); };
   
   if (!isEmbedded) {
@@ -495,11 +403,14 @@ function initMap() {
   buildCategoryFilters();
   setupValueFilters();
   
-  const triggerPinView = (s) => {
+  const triggerPinView = (s, mk) => {
     const isMobile = window.innerWidth <= 800;
     const targetZoom = isMobile ? 12 : 13;
     const latOffset = isMobile ? 0.035 : 0.012; 
-    map.flyTo([s.latitude + latOffset, s.longitude], targetZoom, { duration: 0.8 });
+    map.flyTo([s.latitude + latOffset, s.longitude], targetZoom, { duration: 0.5 });
+    if(mk) {
+        setTimeout(() => { mk.openPopup(); }, 550);
+    }
   };
 
   signals.forEach(s => {
@@ -516,11 +427,11 @@ function initMap() {
     const mk = L.marker([s.latitude, s.longitude], { icon: icon }).addTo(map);
     
     if (!isEmbedded) {
-      let bodyHtml = `<div class="pop-row"><span class="pop-lbl">Address</span><span class="pop-val">${s.address}, ${s.city}</span></div>`;
+      let bodyHtml = '';
+      if(s.address || s.city) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Address</span><span class="pop-val">${s.address || ''}, ${s.city || ''}</span></div>`;
       if (s.permit_number) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Permit #</span><span class="pop-val" style="font-family:var(--mono); font-size:10px">${s.permit_number}</span></div>`;
       if (s.filed_date) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Filed</span><span class="pop-val">${s.filed_date}</span></div>`;
-      
-      bodyHtml += `<div class="pop-row"><span class="pop-lbl">Value</span><span class="pop-val highlight">${s.value_label}</span></div>`;
+      if (s.value_label) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Value</span><span class="pop-val highlight">${s.value_label}</span></div>`;
       
       if (s.owner || s.applicant) {
           let entity = s.owner || s.applicant;
@@ -547,7 +458,6 @@ function initMap() {
 
       let actionLinksHtml = '';
       let sourcesHtml = '';
-      
       if (s.source_links) {
           if (s.source_links.web_story) {
               actionLinksHtml += `<a href="${s.source_links.web_story}" target="_blank" class="pop-btn-primary">Read full brief &rarr;</a>`;
@@ -564,7 +474,6 @@ function initMap() {
       actionLinksHtml += `<button class="pop-btn-secondary" onclick="resetMapView(event)">Reset Map View ↺</button>`;
       let finalActions = `<div class="pop-actions">${sourcesHtml}${actionLinksHtml}</div>`;
 
-      // Set autoPan to false so we fully control positioning with flyTo
       mk.bindPopup(`
         <div class="pop-header" style="border-top: 4px solid ${color}">
           <div class="pop-title">${s.project_name}</div>
@@ -582,11 +491,10 @@ function initMap() {
       `, { autoPan: false });
 
       mk.on('click', () => {
-        triggerPinView(s);
+        triggerPinView(s, mk);
         hideCue();
       });
     }
-    
     markers[s.id] = { data: s, layer: mk };
   });
 
@@ -688,8 +596,7 @@ function applyFilters() {
       
       if (!isEmbedded) {
         d.onclick = () => {
-          window.triggerPinView(s);
-          mk.openPopup();
+          window.triggerPinView(s, mk);
           
           if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
             sidebar.classList.remove('expanded');
@@ -736,7 +643,38 @@ function applyFilters() {
   updateMobileHandleLabel();
 }
 
-setTimeout(() => { map.invalidateSize(); initMap(); }, 200);
+// ==========================================
+// 3. ASYNC DATA FETCH & INITIALIZATION
+// ==========================================
+async function loadSignalsAndInitMap() {
+    try {
+        const response = await fetch('data/signals.json');
+        if (!response.ok) throw new Error('Failed to load signals JSON.');
+        signals = await response.json();
+        
+        // Apply coordinate jitter once data is loaded
+        const coordMap = new Set();
+        signals.forEach(s => {
+            let coordKey = `${s.latitude},${s.longitude}`;
+            while (coordMap.has(coordKey)) {
+                s.latitude += (Math.random() - 0.5) * 0.001;
+                s.longitude += (Math.random() - 0.5) * 0.001;
+                coordKey = `${s.latitude},${s.longitude}`;
+            }
+            coordMap.add(coordKey);
+        });
+
+        initMap();
+    } catch (error) {
+        console.error("Error initializing map data:", error);
+    }
+}
+
+setTimeout(() => { 
+    map.invalidateSize(); 
+    loadSignalsAndInitMap(); 
+}, 200);
+
 </script>
 </body>
 </html>
