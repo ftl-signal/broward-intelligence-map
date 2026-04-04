@@ -80,21 +80,16 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #64748b; }
 
-  /* Map Container */
   .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-  /* VIBRANT BRANDING BUG */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.96);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.4); 
-    padding: 14px 20px; border-radius: 12px;
+    background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(56, 189, 248, 0.4); padding: 14px 20px; border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 1px rgba(56, 189, 248, 0.2); 
-    pointer-events: auto; 
-    text-decoration: none;
+    pointer-events: auto; text-decoration: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -111,7 +106,6 @@
     50% { opacity: 0.8; text-shadow: 0 0 3px rgba(56, 189, 248, 0.3); }
   }
 
-  /* Interaction Cue */
   .map-cue {
     position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
     background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -121,7 +115,6 @@
   }
   .map-cue.fade-out { opacity: 0; }
 
-  /* MODERN GLOBAL CTA */
   .filters-cta {
     position: absolute; bottom: 32px; right: 32px; z-index: 1000;
     text-decoration: none; display: flex; align-items: center; gap: 8px;
@@ -133,7 +126,6 @@
   }
   .filters-cta:hover { background: var(--brand-blue); color: #000000; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.5); }
 
-  /* Map Markers & Popups */
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
   .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
@@ -318,6 +310,106 @@ window.resetMapView = function(e) {
     }
 };
 
+// HARDCODED SIGNALS TO BYPASS GITHUB FILE PATH ISSUES
+const signals = [
+  {
+    "id": "sig_lasolas_01",
+    "project_name": "401 Las Olas 14th Floor Buildout",
+    "address": "401 E Las Olas Blvd",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1195,
+    "longitude": -80.1390,
+    "category": "Under Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "Interior Fit-Out",
+    "filed_date": null,
+    "declared_value": 218730,
+    "estimated_value": null,
+    "value_label": "$218K",
+    "permit_number": "ELE-GEN-26030330",
+    "owner": "LSREF7 401 Propco LLC",
+    "applicant": null,
+    "contractor": "Bosco Electric Inc",
+    "parcel_id": null,
+    "scale": "Suites 1420, 1430, 1440, 1460, 1480",
+    "timeline": null,
+    "summary": "Five electrical permits and related fire permits filed for a coordinated 14th-floor interior-upgrade package.",
+    "why_it_matters": "The filings appear consistent with a coordinated interior package under the owner, pointing to landlord-led positioning or suite preparation.",
+    "what_next": null,
+    "what_we_dont_know": "Named tenant occupancy for the 14th-floor suites is not confirmed.",
+    "key_players": "Gary Paul / Advanced Commercial Interiors",
+    "source_links": null,
+    "last_updated": "2026-04-04",
+    "newsletter_issue": null,
+    "map_live": true
+  },
+  {
+    "id": "sig_vicpark_01",
+    "project_name": "Victoria Park 8-Unit Townhouse Assemblage",
+    "address": "842-844 NE 19 Way",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1260,
+    "longitude": -80.1300,
+    "category": "Pre-Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "New Construction",
+    "filed_date": null,
+    "declared_value": 240000,
+    "estimated_value": null,
+    "value_label": "$240K",
+    "permit_number": "BLD-GEN-26020522",
+    "owner": "Duke at 837 NE 20th Avenue LLC",
+    "applicant": null,
+    "contractor": "Contempo Construction Group LLC",
+    "parcel_id": "504201210050",
+    "scale": "8 Units",
+    "timeline": null,
+    "summary": "Master structural permits and unit-level trade permits filed for an 8-townhouse development.",
+    "why_it_matters": "Unit-level filings suggest the rollout of a broader townhouse program and move deeper into real execution.",
+    "what_next": null,
+    "what_we_dont_know": "Final sellout strategy and for-sale versus for-rent disposition remain unconfirmed.",
+    "key_players": null,
+    "source_links": null,
+    "last_updated": "2026-04-04",
+    "newsletter_issue": null,
+    "map_live": true
+  },
+  {
+    "id": "sig_ne42_01",
+    "project_name": "3080 NE 42 St Waterfront Rebuild",
+    "address": "3080 NE 42 St",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1750,
+    "longitude": -80.1050,
+    "category": "Under Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "New Construction",
+    "filed_date": null,
+    "declared_value": 957000,
+    "estimated_value": null,
+    "value_label": "$957K",
+    "permit_number": "BLD-GEN-26030157",
+    "owner": "Visionary Residence LLC",
+    "applicant": null,
+    "contractor": null,
+    "parcel_id": "494224100910",
+    "scale": "3-story, 5-bed, 6.5-bath",
+    "timeline": null,
+    "summary": "Demolition and marine permits issued, with a master permit filed for a new 3-story luxury single-family residence.",
+    "why_it_matters": "The sequence is consistent with a serious high-end waterfront rebuild moving from site prep into the construction pipeline.",
+    "what_next": null,
+    "what_we_dont_know": "Final total all-in project cost and construction timeline are not confirmed.",
+    "key_players": null,
+    "source_links": null,
+    "last_updated": "2026-04-04",
+    "newsletter_issue": null,
+    "map_live": true
+  }
+];
+
 const CAT_COLORS = {
   "Land in Play": "#A855F7",
   "In Approvals": "#F59E0B",
@@ -330,7 +422,17 @@ const CATEGORIES = Object.keys(CAT_COLORS);
 let activeCategories = new Set(CATEGORIES);
 let minValFilter = 0; 
 let markers = {}; 
-let signals = [];
+
+const coordMap = new Set();
+signals.forEach(s => {
+  let coordKey = `${s.latitude},${s.longitude}`;
+  while (coordMap.has(coordKey)) {
+    s.latitude += (Math.random() - 0.5) * 0.001;
+    s.longitude += (Math.random() - 0.5) * 0.001;
+    coordKey = `${s.latitude},${s.longitude}`;
+  }
+  coordMap.add(coordKey);
+});
 
 const mapOptions = {
   zoomControl: false, 
@@ -649,33 +751,7 @@ function applyFilters() {
   updateMobileHandleLabel();
 }
 
-async function loadSignalsAndInitMap() {
-    try {
-        const response = await fetch('data.signals.json');
-        if (!response.ok) throw new Error('Failed to load signals JSON.');
-        signals = await response.json();
-        
-        const coordMap = new Set();
-        signals.forEach(s => {
-            let coordKey = `${s.latitude},${s.longitude}`;
-            while (coordMap.has(coordKey)) {
-                s.latitude += (Math.random() - 0.5) * 0.001;
-                s.longitude += (Math.random() - 0.5) * 0.001;
-                coordKey = `${s.latitude},${s.longitude}`;
-            }
-            coordMap.add(coordKey);
-        });
-
-        initMap();
-    } catch (error) {
-        console.error("Error initializing map data:", error);
-    }
-}
-
-setTimeout(() => { 
-    map.invalidateSize(); 
-    loadSignalsAndInitMap(); 
-}, 200);
+setTimeout(() => { map.invalidateSize(); initMap(); }, 200);
 
 </script>
 </body>
