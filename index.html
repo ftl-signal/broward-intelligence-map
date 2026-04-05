@@ -26,14 +26,12 @@
   .layout { display: flex; height: 100vh; width: 100vw; position: relative; }
   .mobile-handle { display: none; }
 
-  /* Premium Sidebar Styling */
   .sidebar { width: 400px; background: var(--bg-dark); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
   .header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 8px; }
   .logo { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
   .sub-logo { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
   .sub-logo::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--brand-blue); border-radius: 50%; }
 
-  /* Premium Paywall Badge */
   .paywall-badge {
     margin-top: 14px;
     display: inline-flex;
@@ -49,7 +47,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* Upgraded Top Sidebar Metric */
   .stats-main { margin-top: 24px; padding: 16px; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 8px; border-left: 3px solid var(--brand-blue); }
   .stat-val-main { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
   .stat-lbl-main { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
@@ -73,7 +70,6 @@
   .val-btn { flex: 1; min-width: 60px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 6px 0; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.2s; text-align: center; }
   .val-btn.active { background: var(--brand-blue); color: #0f172a; border-color: var(--brand-blue); }
 
-  /* Refined, softer list view */
   .list-header { padding: 20px 20px 12px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .list-container { flex: 1; padding: 0; }
   .list-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
@@ -82,12 +78,10 @@
   .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
   .li-val { font-weight: 700; color: #64748b; }
 
-  /* Map Container */
   .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-  /* VIBRANT BRANDING BUG */
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
     background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -407,6 +401,7 @@ const signals = [
   { id: "sig_10", project_name: "RISE Tower", address: "1101 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1385, longitude: -80.1215, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Tower Crane Permit", filed_date: null, declared_value: 45000000, estimated_value: null, value_label: "$45.0M", permit_number: null, owner: null, applicant: null, contractor: "Resia (Developer), Moss (GC)", parcel_id: null, scale: "25 Stories / 320 Units", timeline: null, summary: "25-story vertical construction officially mobilized.", why_it_matters: "Points to heavy structural trades mobilizing immediately for vertical ascent.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
   { id: "sig_04", project_name: "Hollywood Beach Hotel Site", address: "101 N Ocean Dr", city: "Hollywood", latitude: 26.0112, longitude: -80.1158, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", signal_type: "City Presentation", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "CITY-REV-882", owner: null, applicant: null, contractor: null, parcel_id: null, scale: "4.5 Acres Waterfront", timeline: null, summary: "City presentation for major beachfront hospitality redevelopment.", why_it_matters: "Suggests monitoring this parcel for massive JV or heavy infrastructure plays.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
   { id: "sig_05", project_name: "Modera Pompano", address: "855 S Federal Hwy", city: "Pompano Beach", latitude: 26.2230, longitude: -80.0900, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Site Plan Review", filed_date: null, declared_value: null, estimated_value: 71250000, value_label: "Est. $71M+", permit_number: "PMP-26-771", owner: null, applicant: null, contractor: null, parcel_id: null, scale: "8-Story / 285 Units", timeline: null, summary: "Site plan review for dense multifamily pipeline in Pompano core.", why_it_matters: "May indicate a GC bidding phase approaching in 6-9 months.", what_next: null, what_we_dont_know: null, key_players: "Mill Creek Residential", source_links: null, last_updated: "2026-03-27", map_live: true },
+  { id: "sig_03", project_name: "Barry's / 401 Las Olas", address: "401 E Las Olas Blvd", city: "Fort Lauderdale", latitude: 26.1195, longitude: -80.1390, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Interior Fit-Out", filed_date: "Mar 19, 2026", declared_value: 1200000, estimated_value: null, value_label: "$1.2M", permit_number: "ELE-GEN-26030216", owner: null, applicant: null, contractor: "PYD ELECTRIC CORP", parcel_id: null, scale: "5,900 SF", timeline: null, summary: "Fitness brand confirmed for build-out at Bank of America Plaza alongside second active scope.", why_it_matters: "Is consistent with fitness concepts validating sustained downtown residential density. Points to active tenant deployment.", what_next: "Issuance on Barry's structural permit and first trade inspections.", what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
   { id: "sig_06", project_name: "El Car Wash Assemblage", address: "2690 W Sample Rd", city: "Pompano Beach", latitude: 26.2730, longitude: -80.1600, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", signal_type: "Commercial Site Plan", filed_date: null, declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: null, owner: null, applicant: null, contractor: null, parcel_id: null, scale: null, timeline: null, summary: "Commercial retail expansion navigating zoning on assembled land.", why_it_matters: "Suggests retail corridor fundamentals pushing west on Sample Rd.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
   { id: "sig_07", project_name: "Stranahan House Renovation", address: "335 SE 6 Ave", city: "Fort Lauderdale", latitude: 26.1180, longitude: -80.1400, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", signal_type: "Renovation Permit", filed_date: "Mar 16, 2026", declared_value: 290500, estimated_value: null, value_label: "$290K", permit_number: "BLD-GEN-26030335", owner: null, applicant: "Tabitha Poche", contractor: "MILLER CONSTRUCTION COMPANY", parcel_id: "504210090010", scale: null, timeline: null, summary: "A new museum-related structural project file is live.", why_it_matters: "May signal a niche opportunity for specialized historic preservation contractors.", what_next: "Contractor naming and structural permit issuance.", what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
   { id: "sig_08", project_name: "Next Health Flagship", address: "1902 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1450, longitude: -80.1150, category: "Under Construction", status_label: "Advance", signal_strength: "High", signal_type: "Interior Final", filed_date: "Mar 17, 2026", declared_value: null, estimated_value: null, value_label: "Undisclosed", permit_number: "ELE-GEN-26030194", owner: null, applicant: null, contractor: "FUSE ELECTRIC INC", parcel_id: null, scale: null, timeline: null, summary: "Near-term opening for high-traffic wellness tenant.", why_it_matters: "The opening suggests continued demand for higher-end service retail in the corridor.", what_next: null, what_we_dont_know: null, key_players: null, source_links: null, last_updated: "2026-03-27", map_live: true },
@@ -688,10 +683,10 @@ function applyFilters() {
   
   const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
   const filterStatusEl = document.getElementById('filter-status');
-  if (isFiltered) {
+  if (isFiltered && filterStatusEl) {
     filterStatusEl.innerText = "Filtered View";
     filterStatusEl.classList.add("active-filter");
-  } else {
+  } else if (filterStatusEl) {
     filterStatusEl.innerText = "All Signals";
     filterStatusEl.classList.remove("active-filter");
   }
