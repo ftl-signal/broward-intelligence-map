@@ -70,17 +70,17 @@
   .map-branding {
     position: absolute; top: 24px; left: 60px; z-index: 3001;
     background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.4); padding: 14px 20px; border-radius: 12px;
+    border: 1px solid rgba(56, 189, 248, 0.4); padding: 10px 14px; border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 1px rgba(56, 189, 248, 0.2); 
     pointer-events: auto; text-decoration: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .map-branding:hover { transform: translateY(-2px); }
-  .map-branding img { width: 140px; height: auto; max-height: 60px; object-fit: contain; margin-bottom: 8px; } 
+  .map-branding img { height: 28px; width: auto; max-width: 140px; object-fit: contain; margin-bottom: 4px; display: block; } 
   .map-branding .brand-tagline { 
-    font-size: 13px; font-weight: 800; color: var(--brand-blue); text-transform: uppercase; 
-    letter-spacing: 1.5px; text-shadow: var(--urgent-glow);
+    font-size: 10px; font-weight: 800; color: var(--brand-blue); text-transform: uppercase; 
+    letter-spacing: 1px; text-shadow: var(--urgent-glow); white-space: nowrap;
     animation: live-pulse 2s infinite ease-in-out; text-align: center; width: 100%;
   }
 
@@ -146,9 +146,9 @@
     
     .leaflet-tile-pane { filter: brightness(2.0) contrast(1.1) saturate(1.2); } 
 
-    .map-branding { top: 12px; left: 16px; padding: 10px 14px; }
-    .map-branding img { width: 110px; height: auto; max-height: 40px; margin-bottom: 4px; } 
-    .map-branding .brand-tagline { font-size: 11px; }
+    .map-branding { top: 12px; left: 16px; padding: 8px 12px; }
+    .map-branding img { height: 20px; margin-bottom: 2px;} 
+    .map-branding .brand-tagline { font-size: 9px; }
 
     .filters-cta { bottom: 85px; right: 16px; padding: 12px 18px; font-size: 11px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
     .map-cue { top: 90px; font-size: 12px; padding: 8px 16px; }
@@ -211,7 +211,7 @@
 
 <div class="layout">
   <a href="#" id="preview-overlay" class="preview-overlay" target="_top" style="display: none;">
-    <div class="cta-button">Explore Live Signals</div>
+    <div class="cta-button">RETURN TO FLORIDA SIGNAL</div>
   </a>
 
   <aside class="sidebar" id="sidebar">
@@ -252,14 +252,14 @@
   </aside>
   
   <div class="map-container">
-    <a href="https://thefloridasignalbrief.ghost.io/" target="_blank" class="map-branding">
+    <a href="https://www.thefloridasignal.com" target="_blank" class="map-branding">
       <img src="logo-compact.png" alt="The Florida Signal" onerror="this.style.display='none'">
-      <div class="brand-tagline">LIVE SIGNALS</div>
+      <div class="brand-tagline">RETURN TO FLORIDA SIGNAL</div>
     </a>
     
     <div class="map-cue" id="map-cue">Tap to explore signals</div>
     
-    <a href="https://thefloridasignalbrief.ghost.io/" target="_blank" class="filters-cta" id="global-cta">Explore Live Signals &rarr;</a>
+    <a href="https://www.thefloridasignal.com" target="_blank" class="filters-cta" id="global-cta">RETURN TO FLORIDA SIGNAL &rarr;</a>
     <div id="map"></div>
   </div>
 </div>
