@@ -544,4 +544,200 @@ function initMap() {
       if (s.summary) bodyHtml += `<div class="pop-summary" style="margin-top:16px;"><strong>What we found:</strong> ${s.summary}</div>`;
       if (s.why_it_matters) bodyHtml += `<div class="pop-takeaway" style="margin-top:12px;"><strong>Why it matters:</strong> ${s.why_it_matters}</div>`;
       if (s.what_next) bodyHtml += `<div class="pop-summary" style="margin-top:12px;"><strong>What's next:</strong> ${s.what_next}</div>`;
-      if (s.what_we_dont_know) bodyHtml += `<div class="pop-summary" style="margin
+      if (s.what_we_dont_know) bodyHtml += `<div class="pop-summary" style="margin-top:12px; color:var(--c-alert)"><strong>Caution:</strong> ${s.what_we_dont_know}</div>`;
+
+      let optionalFields = '';
+      let hasOptionals = s.key_players || s.scale || s.timeline || s.contractor || s.parcel_id;
+      if (hasOptionals) {
+        optionalFields = `<div class="pop-optional">`;
+        if (s.key_players) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Players</span><span class="pop-opt-val">${s.key_players}</span></div>`;
+        if (s.contractor) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Contractor</span><span class="pop-opt-val">${s.contractor}</span></div>`;
+        if (s.scale) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Scale</span><span class="pop-opt-val">${s.scale}</span></div>`;
+        if (s.timeline) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Timeline</span><span class="pop-opt-val">${s.timeline}</span></div>`;
+        if (s.parcel_id) optionalFields += `<div class="pop-opt-row"><span class="pop-opt-lbl">Parcel ID</span><span class="pop-opt-val" style="font-family:var(--mono); font-size:9px">${s.parcel_id}</span></div>`;
+        optionalFields += `</div>`;
+      }
+
+      let finalActions = `<div class="pop-actions"><button class="pop-btn-secondary" onclick="resetMapView(event)">Reset Map View ↺</button></div>`;
+
+      mk.bindPopup(`
+        <div class="pop-header" style="border-top: 4px solid ${color}">
+          <div class="pop-title">${s.project_name}</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <div class="pop-badge" style="background-color: ${color}33; color: ${color}; border: 1px solid ${color}66;">${s.category}</div>
+            <div class="pop-badge" style="background-color: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2);">STATUS: ${s.status_label.toUpperCase()}</div>
+            <div class="pop-badge" style="background-color: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">SIG: ${s.signal_strength.toUpperCase()}</div>
+          </div>
+        </div>
+        <div class="pop-body">
+          ${bodyHtml}
+          ${optionalFields}
+          ${finalActions}
+        </div>
+      `, { autoPan: false });
+
+      mk.on('click', () => {
+        triggerPinView(s, mk);
+      });
+    }
+    markers[s.id] = { data: s, layer: mk };
+  });
+
+  applyFilters();
+  window.triggerPinView = triggerPinView;
+}
+
+function buildCategoryFilters() {
+  const container = document.getElementById('cat-filters');
+  CATEGORIES.forEach(cat => {
+    const color = CAT_COLORS[cat];
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn active';
+    btn.innerHTML = `<div class="cat-indicator" style="background-color: ${color}; box-shadow: 0 0 4px ${color};"></div> ${cat}`;
+    btn.onclick = () => {
+      if (activeCategories.has(cat)) {
+        activeCategories.delete(cat);
+        btn.classList.remove('active');
+        btn.querySelector('.cat-indicator').style.opacity = '0.2';
+      } else {
+        activeCategories.add(cat);
+        btn.classList.add('active');
+        btn.querySelector('.cat-indicator').style.opacity = '1';
+      }
+      applyFilters();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function setupValueFilters() {
+  const btns = document.querySelectorAll('.val-btn');
+  btns.forEach(btn => {
+    btn.onclick = () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      minValFilter = parseInt(btn.getAttribute('data-val'));
+      applyFilters();
+    };
+  });
+}
+
+function formatMoney(num) {
+  if (num === 0) return '$0';
+  if (num >= 1000000000) return '$' + (num / 1000000000).toFixed(1) + 'B';
+  if (num >= 1000000) return '$' + (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return '$' + (num / 1000).toFixed(0) + 'K';
+  return '$' + num;
+}
+
+function applyFilters() {
+  let activeCount = 0;
+  let totalValue = 0;
+  const listContainer = document.getElementById('signal-list');
+  listContainer.innerHTML = '';
+  
+  const searchTerm = document.getElementById('search-box').value.toLowerCase();
+  
+  const isFiltered = activeCategories.size !== CATEGORIES.length || minValFilter > 0 || searchTerm.length > 0;
+  const filterStatusEl = document.getElementById('filter-status');
+  if (isFiltered && filterStatusEl) {
+    filterStatusEl.innerText = "Filtered View";
+    filterStatusEl.classList.add("active-filter");
+  } else if (filterStatusEl) {
+    filterStatusEl.innerText = "All Signals";
+    filterStatusEl.classList.remove("active-filter");
+  }
+
+  Object.values(markers).forEach(item => {
+    const s = item.data;
+    const mk = item.layer;
+    
+    if (s.map_live === false) return; 
+
+    const val = getEffectiveValue(s);
+    const catMatch = activeCategories.has(s.category);
+    const valMatch = val >= minValFilter;
+    
+    const searchString = `${s.project_name} ${s.address} ${s.city} ${s.key_players || ''} ${s.owner || ''} ${s.permit_number || ''}`.toLowerCase();
+    const searchMatch = searchString.includes(searchTerm);
+
+    if (catMatch && valMatch && searchMatch) {
+      if (!map.hasLayer(mk)) mk.addTo(map);
+      activeCount++;
+      totalValue += val;
+
+      const d = document.createElement('div');
+      d.className = 'list-item';
+      d.style.borderLeftColor = CAT_COLORS[s.category] || '#94a3b8';
+      const isUndisclosed = s.value_label === 'Undisclosed' || s.value_label.includes('Est');
+      
+      d.innerHTML = `
+        <div class="li-name">${s.project_name}</div>
+        <div class="li-meta">
+          <span>${s.category}</span>
+          <span class="li-val" style="color: ${isUndisclosed ? 'var(--text-muted)' : '#cbd5e1'}">${s.value_label}</span>
+        </div>
+      `;
+      
+      if (!isEmbedded) {
+        d.onclick = () => {
+          window.triggerPinView(s, mk);
+          
+          if(window.innerWidth <= 800 && sidebar.classList.contains('expanded')) {
+            sidebar.classList.remove('expanded');
+            updateMobileHandleLabel();
+            map.dragging.enable();
+            map.scrollWheelZoom.enable();
+            if(map.touchZoom) map.touchZoom.enable();
+            if(map.doubleClickZoom) map.doubleClickZoom.enable();
+            if(map.boxZoom) map.boxZoom.enable();
+            if(map.keyboard) map.keyboard.enable();
+            
+            const globalCta = document.getElementById('global-cta');
+            if(globalCta) globalCta.style.opacity = '1';
+            
+            setTimeout(() => map.invalidateSize(), 320);
+          }
+        };
+      }
+      
+      d.onmouseenter = () => { const iconEl = mk.getElement(); if(iconEl) { const core = iconEl.querySelector('.marker-core'); if(core) core.classList.add('hover-active'); } };
+      d.onmouseleave = () => { const iconEl = mk.getElement(); if(iconEl) { const core = iconEl.querySelector('.marker-core'); if(core) core.classList.remove('hover-active'); } };
+      
+      listContainer.appendChild(d);
+    } else {
+      if (map.hasLayer(mk)) map.removeLayer(mk);
+    }
+  });
+
+  if(window.innerWidth <= 800) {
+      const globalCta = document.getElementById('global-cta');
+      if (globalCta) {
+          if(sidebar.classList.contains('expanded')) {
+              globalCta.style.opacity = '0';
+              globalCta.style.pointerEvents = 'none';
+          } else {
+              globalCta.style.opacity = '1';
+              globalCta.style.pointerEvents = 'auto';
+          }
+      }
+  }
+
+  const statCountEl = document.getElementById('stat-count');
+  if (statCountEl) {
+      statCountEl.innerText = activeCount;
+  }
+  
+  const statValEl = document.getElementById('stat-val');
+  if (statValEl) {
+      statValEl.innerText = formatMoney(totalValue);
+  }
+
+  updateMobileHandleLabel();
+}
+
+setTimeout(() => { map.invalidateSize(); initMap(); }, 200);
+
+</script>
+</body>
+</html>
