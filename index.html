@@ -45,10 +45,8 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   body, html { height: 100%; width: 100%; overflow: hidden; background: var(--bg-deep); color: var(--text-primary); position: fixed; -webkit-font-smoothing: antialiased; }
-
   /* ── LAYOUT ── */
   .layout { display: flex; height: 100%; width: 100%; position: relative; }
-
   /* ── SIDEBAR — lighter, no heavy shadow ── */
   .mobile-handle { display: none; }
   .sidebar {
@@ -56,7 +54,6 @@
     border-right: 1px solid var(--border-subtle);
     display: flex; flex-direction: column; z-index: 1000;
   }
-
   /* ── HEADER — clean, no gradient ── */
   .header {
     padding: 16px 20px 14px;
@@ -72,7 +69,6 @@
     content: ''; display: inline-block; width: 5px; height: 5px;
     background: var(--accent); border-radius: 50%;
   }
-
   /* ── STATS — clean inline, no box ── */
   .stats-main {
     margin-top: 14px; padding: 0;
@@ -90,7 +86,6 @@
     font-size: 9px; font-weight: 600; color: var(--text-dim);
     text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;
   }
-
   /* ── SCROLL AREA ── */
   .sidebar-scroll {
     flex: 1; overflow-y: auto; display: flex; flex-direction: column;
@@ -100,7 +95,6 @@
   .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
   .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.1); border-radius: 3px; }
   .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.2); }
-
   /* ── FILTERS ── */
   .filters {
     padding: 14px 20px 12px;
@@ -168,7 +162,6 @@
     border-color: var(--accent);
     font-weight: 700;
   }
-
   /* ── LIST ── */
   .list-header {
     padding: 12px 20px 10px;
@@ -201,15 +194,15 @@
     font-size: 10px; color: var(--text-dim); font-weight: 500;
   }
   .li-val { font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-
   /* ── MAP ── */
   .map-container {
     flex: 1; position: relative; height: 100%;
     background: var(--bg-deep); z-index: 1;
   }
   #map { width: 100%; height: 100%; }
-  .leaflet-tile-pane { filter: brightness(2.4) contrast(0.95) saturate(0.5) hue-rotate(5deg); }
-
+  /* OSM Mapnik is already bright & colorful — no brightness filter needed.
+     Keep a hair of saturation boost so water reads extra blue. */
+  .leaflet-tile-pane { filter: saturate(1.1) contrast(1.02); }
   /* Override leaflet controls */
   .leaflet-control-zoom a {
     background: var(--glass) !important;
@@ -224,7 +217,15 @@
     color: #fff !important;
   }
   .leaflet-control-zoom { border: none !important; border-radius: var(--radius-md) !important; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important; }
-
+  /* Attribution — softened so it doesn't clash with bright basemap */
+  .leaflet-control-attribution {
+    background: rgba(255,255,255,0.75) !important;
+    color: #333 !important;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    border-radius: 3px 0 0 0 !important;
+  }
+  .leaflet-control-attribution a { color: #0369a1 !important; }
   /* ── MAP BRANDING — restrained, elegant ── */
   .map-branding {
     position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 3001;
@@ -261,7 +262,6 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.35; }
   }
-
   /* ── BACK CTA ── */
   .filters-cta {
     position: absolute; bottom: 28px; right: 28px; z-index: 1000;
@@ -281,25 +281,23 @@
     border-color: var(--accent);
     transform: translateY(-1px);
   }
-
-  /* ── MARKERS ── */
+  /* ── MARKERS — stronger ring + shadow so they pop on a bright basemap ── */
   .custom-marker {
     display: flex; justify-content: center; align-items: center;
     width: 100%; height: 100%; background: transparent; cursor: pointer;
   }
   .marker-core {
-    width: 10px; height: 10px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.9);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1.5px rgba(17, 26, 43, 0.85), 0 2px 6px rgba(0,0,0,0.45);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .custom-marker:hover .marker-core,
   .marker-core.hover-active {
     transform: scale(1.5);
     border-color: #fff;
-    box-shadow: 0 0 10px rgba(255,255,255,0.25), 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow: 0 0 0 2px rgba(17, 26, 43, 0.9), 0 0 12px rgba(255,255,255,0.35), 0 3px 8px rgba(0,0,0,0.5);
   }
-
   /* ── POPUPS — cleaner ── */
   .leaflet-popup-content-wrapper {
     background: var(--bg-panel);
@@ -394,7 +392,6 @@
     color: var(--text-primary);
     border-color: rgba(148,163,184,0.2);
   }
-
   /* ── LIVE INDICATOR ── */
   .live-badge {
     display: inline-flex; align-items: center; gap: 5px;
@@ -410,12 +407,11 @@
     background: var(--accent);
     animation: live-dot 2.5s ease-in-out infinite;
   }
-
   /* ── MOBILE ── */
   @media(max-width: 800px) {
     .layout { display: block; height: 100dvh; }
     .map-container { height: 100dvh; width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; }
-    .leaflet-tile-pane { filter: brightness(2.6) contrast(0.95) saturate(0.45) hue-rotate(5deg); }
+    .leaflet-tile-pane { filter: saturate(1.15) contrast(1.02); }
     .map-branding { top: 12px; padding: 3px 8px 5px; }
     .map-branding img { height: 48px; }
     .map-branding .brand-tagline { font-size: 7px; letter-spacing: 1.5px; }
@@ -464,13 +460,12 @@
     .sidebar.expanded { height: 85dvh; }
     .pop-body { max-height: 45dvh; }
   }
-
   /* ── HOMEPAGE EMBED ── */
   body.is-preview .sidebar,
   body.is-preview .map-branding,
   body.is-preview .filters-cta,
   body.is-preview .leaflet-control-container { display: none !important; }
-  body.is-preview .leaflet-tile-pane { filter: brightness(2.8) contrast(0.95) saturate(0.4) hue-rotate(5deg) !important; }
+  body.is-preview .leaflet-tile-pane { filter: saturate(1.2) contrast(1.03) !important; }
 </style>
 </head>
 <body>
@@ -697,7 +692,7 @@ signals.forEach(s => {
 });
 const mapOptions = {
   zoomControl: false,
-  attributionControl: false,
+  attributionControl: true,
   dragging: !isEmbedded,
   scrollWheelZoom: !isEmbedded,
   doubleClickZoom: !isEmbedded,
@@ -709,8 +704,11 @@ const map = L.map('map', mapOptions).setView([26.15, -80.14], 11);
 if (!isEmbedded) {
   L.control.zoom({ position: 'topright' }).addTo(map);
 }
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  maxZoom: 19
+// ── Bright, colorful OpenStreetMap Mapnik basemap — vibrant blue water for
+//    South Florida's Intracoastal, canals, and Atlantic ocean.
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 const sidebar = document.getElementById('sidebar');
 const mobileToggle = document.getElementById('mobile-toggle');
