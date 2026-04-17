@@ -27,84 +27,81 @@
   .mobile-handle { display: none; }
 
   .sidebar { width: 400px; background: var(--bg-dark); border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.5); }
-  .header { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 8px; }
-  .logo { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-  .sub-logo { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
-  .sub-logo::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--brand-blue); border-radius: 50%; }
+  .header { padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; margin-bottom: 6px; }
+  
+  .sub-logo { font-size: 10px; font-weight: 500; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+  .sub-logo::before { content: ''; display: inline-block; width: 4px; height: 4px; background: #64748b; border-radius: 50%; opacity: 0.7; }
 
-  .stats-main { margin-top: 24px; padding: 16px; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 8px; border-left: 3px solid var(--brand-blue); }
-  .stat-val-main { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-  .stat-lbl-main { font-size: 11px; font-weight: 600; color: var(--brand-blue); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-  .stat-divider { margin: 12px 0; height: 1px; background: rgba(56, 189, 248, 0.15); }
+  .stats-main { margin-top: 16px; padding: 12px 16px; background: rgba(56, 189, 248, 0.03); border: 1px solid rgba(56, 189, 248, 0.1); border-radius: 6px; border-left: 3px solid var(--brand-blue); }
+  .stat-val-main { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; line-height: 1; }
+  .stat-lbl-main { font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .stat-divider { margin: 10px 0; height: 1px; background: rgba(56, 189, 248, 0.1); }
 
   .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
-  .filters { padding: 0 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); background: transparent; flex-shrink: 0; }
+  .filters { padding: 0 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); background: transparent; flex-shrink: 0; }
   
-  .search-box { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 12px; outline: none; margin-bottom: 20px; transition: border-color 0.2s; }
-  .search-box:focus { border-color: var(--brand-blue); }
-  .search-box::placeholder { color: var(--text-muted); }
+  .search-box { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 12px; outline: none; margin-bottom: 16px; transition: all 0.2s ease; }
+  .search-box:focus { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 8px rgba(56, 189, 248, 0.15); }
+  .search-box::placeholder { color: #64748b; }
 
-  .filter-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; display: block; }
-  .cat-filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-  .cat-btn { display: flex; align-items: center; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; text-align: left; }
-  .cat-btn:hover { background: rgba(255,255,255,0.05); }
-  .cat-btn.active { color: #fff; border-color: currentColor; background: rgba(255,255,255,0.05); }
+  .filter-lbl { font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 0.5px; }
+  .cat-filters { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .cat-btn { display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.2s ease; text-align: left; }
+  .cat-btn:hover { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.3); box-shadow: 0 0 8px rgba(255,255,255,0.05); color: #cbd5e1; }
+  .cat-btn.active { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); box-shadow: inset 0 0 10px rgba(255,255,255,0.02); }
   .cat-indicator { width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; }
 
   .val-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-  .val-btn { flex: 1; min-width: 60px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 6px 0; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.2s; text-align: center; }
-  .val-btn.active { background: var(--brand-blue); color: #0f172a; border-color: var(--brand-blue); }
+  .val-btn { flex: 1; min-width: 60px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted); padding: 6px 0; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600; transition: all 0.2s ease; text-align: center; }
+  .val-btn:hover { border-color: rgba(255,255,255,0.3); color: #cbd5e1; }
+  .val-btn.active { background: var(--brand-blue); color: #0f172a; border-color: var(--brand-blue); box-shadow: 0 0 8px rgba(56, 189, 248, 0.3); }
 
-  .list-header { padding: 20px 20px 12px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .list-header { padding: 12px 20px 8px; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .list-container { flex: 1; padding: 0; }
-  .list-item { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; }
-  .list-item:hover { background: rgba(255,255,255,0.02); border-left-color: rgba(255,255,255,0.2); }
-  .li-name { font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; }
-  .li-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 500; }
-  .li-val { font-weight: 700; color: #64748b; }
+  .list-item { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.02); cursor: pointer; transition: all 0.2s ease; border-left: 4px solid transparent; }
+  .list-item:hover { background: rgba(255,255,255,0.03); border-left-color: rgba(255,255,255,0.3); }
+  .li-name { font-size: 12px; font-weight: 700; color: #cbd5e1; margin-bottom: 4px; }
+  .li-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: 500; }
+  .li-val { font-weight: 700; color: #94a3b8; }
 
   .map-container { flex: 1; position: relative; height: 100%; background: #0b0f19; z-index: 1; }
   #map { width: 100%; height: 100%; }
   .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-  /* Modified map branding to look like a bug and have larger logo and updated text */
   .map-branding {
-    position: absolute; top: 12px; left: 12px; z-index: 3001;
-    background: rgba(11, 15, 25, 0.90); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(56, 189, 248, 0.4); padding: 8px 16px; border-radius: 8px; /* More compact */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 1px rgba(56, 189, 248, 0.2); 
+    position: absolute; top: 24px; left: 50%; transform: translateX(-50%); z-index: 3001;
+    background: rgba(11, 15, 25, 0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 16px; border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
     pointer-events: auto; text-decoration: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .map-branding:hover { transform: translateY(-2px); }
-  .map-branding img { width: auto; height: auto; max-height: 120px; /* Doubled logo max-height */ object-fit: contain; margin-bottom: 4px; /* Reduced space */ } 
-  .map-branding .brand-tagline { 
-    font-size: 13px; font-weight: 800; color: var(--brand-blue); text-transform: uppercase; 
-    letter-spacing: 1.5px; text-shadow: var(--urgent-glow);
-    animation: live-pulse 2s infinite ease-in-out; text-align: center; width: 100%;
-  }
-
-  @keyframes live-pulse {
-    0%, 100% { opacity: 1; text-shadow: var(--urgent-glow); }
-    50% { opacity: 0.8; text-shadow: 0 0 3px rgba(56, 189, 248, 0.3); }
-  }
-
-  /* Deleted map-cue CSS */
-
-  .filters-cta {
-    position: absolute; bottom: 32px; right: 32px; z-index: 1000;
-    text-decoration: none; display: flex; align-items: center; gap: 8px;
-    background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--brand-blue); color: var(--text-main);
-    padding: 16px 26px; border-radius: 8px; font-size: 14px; font-weight: 800; letter-spacing: 1px;
-    text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px rgba(56, 189, 248, 0.2);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .filters-cta:hover { background: var(--brand-blue); color: #000000; transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.5); }
+  .map-branding:hover { 
+    background: rgba(11, 15, 25, 0.85);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+  .map-branding img { height: 32px; width: auto; object-fit: contain; margin-bottom: 4px; display: block; opacity: 0.9; } 
+  .map-branding .brand-tagline { 
+    font-size: 10px; font-weight: 700; color: var(--brand-blue); text-transform: uppercase; 
+    letter-spacing: 1px; text-shadow: 0 0 5px rgba(56, 189, 248, 0.3); white-space: nowrap;
+    text-align: center; width: 100%; opacity: 0.9;
+  }
+
+  .filters-cta {
+    position: absolute; bottom: 24px; right: 24px; z-index: 1000;
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+    background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(56, 189, 248, 0.4); color: var(--text-main);
+    padding: 12px 20px; border-radius: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.4), 0 0 10px rgba(56, 189, 248, 0.1);
+    transition: all 0.2s ease;
+  }
+  .filters-cta:hover { background: var(--brand-blue); color: #000000; border-color: var(--brand-blue); box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 15px rgba(56, 189, 248, 0.25); transform: translateY(-2px); }
 
   .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
-  .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 2px 6px rgba(0,0,0,0.8), inset 0 1px 3px rgba(0,0,0,0.3); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .custom-marker:hover .marker-core, .marker-core.hover-active { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
 
   .leaflet-popup-content-wrapper { background: var(--bg-panel); color: var(--text-main); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.6); padding: 0; overflow: hidden; }
@@ -140,11 +137,11 @@
     
     .leaflet-tile-pane { filter: brightness(2.0) contrast(1.1) saturate(1.2); } 
 
-    .map-branding { top: 8px; left: 8px; padding: 4px 12px; } /* Even smaller and closer for mobile bug */
-    .map-branding img { max-height: 80px; /* Scaling doubled logo for mobile */ margin-bottom: 2px; } 
-    .map-branding .brand-tagline { font-size: 11px; }
+    .map-branding { top: 12px; left: 50%; transform: translateX(-50%); padding: 6px 12px; } 
+    .map-branding img { height: 24px; margin-bottom: 2px;} 
+    .map-branding .brand-tagline { font-size: 9px; }
 
-    .filters-cta { bottom: 85px; right: 16px; padding: 12px 18px; font-size: 11px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+    .filters-cta { bottom: 80px; right: 12px; padding: 10px 16px; font-size: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
 
     .sidebar { 
       position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
@@ -162,9 +159,9 @@
     .handle-bar { width: 36px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; margin-bottom: 6px; }
     .handle-lbl { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 0.3px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
 
-    .cat-btn { padding: 12px 16px; font-size: 13px; }
-    .val-btn { padding: 12px 0; font-size: 12px; }
-    .search-box { padding: 14px; font-size: 16px; }
+    .cat-btn { padding: 10px 14px; font-size: 12px; }
+    .val-btn { padding: 10px 0; font-size: 11px; }
+    .search-box { padding: 12px; font-size: 14px; }
 
     .leaflet-popup-content { width: 320px !important; max-width: 85vw !important; }
     .pop-body { max-height: 40dvh; } 
@@ -203,7 +200,7 @@
 
 <div class="layout">
   <a href="#" id="preview-overlay" class="preview-overlay" target="_top" style="display: none;">
-    <div class="cta-button">Explore Live Signals</div>
+    <div class="cta-button">RETURN TO FLORIDA SIGNAL</div>
   </a>
 
   <aside class="sidebar" id="sidebar">
@@ -213,15 +210,15 @@
     </div>
 
     <div class="header">
-      <div class="logo">The Florida Signal</div>
+      <img src="logo-compact.png" alt="The Florida Signal" style="height: 28px; width: auto; object-fit: contain; display: block; margin-bottom: 6px;">
       <div class="sub-logo">Broward County Intelligence Map</div>
       
       <div class="stats-main">
         <div class="stat-val-main"><span id="stat-count">0</span> ACTIVE SIGNALS</div>
         <div class="stat-lbl-main">Tracked across Broward County</div>
         <div class="stat-divider"></div>
-        <div class="stat-val-main" id="stat-val" style="font-size: 18px;">$0</div>
-        <div class="stat-lbl-main" style="color: var(--text-muted);">Total Tracked Value</div>
+        <div class="stat-val-main" id="stat-val">$0</div>
+        <div class="stat-lbl-main">Total Tracked Value</div>
       </div>
     </div>
 
@@ -230,7 +227,7 @@
         <input type="text" id="search-box" class="search-box" placeholder="Search projects, developers, or addresses...">
         <span class="filter-lbl">Category Selection</span>
         <div class="cat-filters" id="cat-filters"></div>
-        <span class="filter-lbl" style="margin-top:16px;">Minimum Value</span>
+        <span class="filter-lbl" style="margin-top:12px;">Minimum Value</span>
         <div class="val-filters">
           <button class="val-btn active" data-val="0">All</button>
           <button class="val-btn" data-val="10000000">$10M+</button>
@@ -244,12 +241,12 @@
   </aside>
   
   <div class="map-container">
-    <a href="https://thefloridasignalbrief.ghost.io/" target="_blank" class="map-branding">
+    <a href="https://www.thefloridasignal.com" target="_blank" class="map-branding">
       <img src="logo-compact.png" alt="The Florida Signal" onerror="this.style.display='none'">
       <div class="brand-tagline">LIVE SIGNALS</div>
     </a>
     
-    <a href="https://thefloridasignalbrief.ghost.io/" target="_blank" class="filters-cta" id="global-cta">Explore Live Signals &rarr;</a>
+    <a href="https://www.thefloridasignal.com" target="_blank" class="filters-cta" id="global-cta">RETURN TO FLORIDA SIGNAL &rarr;</a>
     <div id="map"></div>
   </div>
 </div>
@@ -506,8 +503,6 @@ function getEffectiveValue(signal) {
 }
 
 function initMap() {
-  /* Deleted map-cue logic */
-
   buildCategoryFilters();
   setupValueFilters();
   
@@ -584,7 +579,6 @@ function initMap() {
 
       mk.on('click', () => {
         triggerPinView(s, mk);
-        /* Deleted hideCue logic */
       });
     }
     markers[s.id] = { data: s, layer: mk };
