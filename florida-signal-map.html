@@ -288,10 +288,6 @@
 </div>
 
 <script>
-// ====== CONFIG — single source of truth, the homepage reads these ======
-const MAP_BUILD_TIMESTAMP = new Date().toISOString();
-// =====================================================================
-
 const CAT_COLORS = {
   "Land in Play": "#A855F7",
   "In Approvals": "#F59E0B",
@@ -469,60 +465,6 @@ signals.forEach(s => {
 });
 
 setTimeout(() => map.invalidateSize(), 200);
-
-// ====== STATS AGGREGATION — broadcast to homepage via postMessage ======
-// Parse a value_label like "$218K", "$2.0M", "Est. $71M+", "$31.9M", "Undisclosed"
-function parseValue(label){
-  if(!label) return 0;
-  const m = String(label).replace(/,/g,'').match(/\$?\s*([0-9]+(?:\.[0-9]+)?)\s*([KMB])?/i);
-  if(!m) return 0;
-  const n = parseFloat(m[1]);
-  const unit = (m[2]||'').toUpperCase();
-  const mult = unit === 'B' ? 1e9 : unit === 'M' ? 1e6 : unit === 'K' ? 1e3 : 1;
-  return n * mult;
-}
-function formatValue(total){
-  if(total >= 1e9) return '$' + (total/1e9).toFixed(1) + 'B';
-  if(total >= 1e6) return '$' + (total/1e6).toFixed(1) + 'M';
-  if(total >= 1e3) return '$' + (total/1e3).toFixed(1) + 'K';
-  return '$' + total;
-}
-const trackedValue = signals.reduce((sum, s) => sum + parseValue(s.value_label), 0);
-const stats = {
-  type: 'signalStats',
-  activeSignals: signals.length,
-  trackedValue: trackedValue,
-  trackedValueLabel: formatValue(trackedValue),
-  lastUpdated: MAP_BUILD_TIMESTAMP,
-  categories: Object.keys(CAT_COLORS).reduce((acc, cat) => {
-    acc[cat] = signals.filter(s => s.category === cat).length;
-    return acc;
-  }, {})
-};
-
-// Expose for parent-window polling fallback
-window.__FS_STATS__ = stats;
-
-// Broadcast to parent homepage. The homepage registers a 'message' listener
-// and updates its stat cards. Works cross-origin (map on ftl-signal.github.io,
-// homepage on thefloridasignal.com).
-function broadcastStats(){
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage(stats, '*');
-    }
-  } catch(e) { /* sandboxed — fine */ }
-}
-broadcastStats();
-// Re-broadcast periodically so a late-loading parent listener still gets it
-setInterval(broadcastStats, 5000);
-// And reply to explicit handshake requests
-window.addEventListener('message', (e) => {
-  if (e.data && e.data.type === 'requestSignalStats') broadcastStats();
-});
-
-// Console summary for your own debugging
-console.log('[Florida Signal] stats', stats);
 </script>
 </body>
 </html>
