@@ -564,6 +564,11 @@
   body.is-preview .filters-cta,
   body.is-preview .leaflet-control-container { display: none !important; }
   body.is-preview .leaflet-tile-pane { filter: saturate(1.2) contrast(1.04) !important; }
+  @media (min-width: 900px) {
+    .map-branding { padding: 12px 22px 12px 20px !important; gap: 14px !important; top: 18px !important; }
+    .map-branding img { height: 30px !important; width: 44px !important; }
+    .map-branding .brand-tagline { font-size: 13px !important; letter-spacing: 3px !important; }
+  }
 </style>
 </head>
 <body>
@@ -825,18 +830,7 @@ mobileToggle.addEventListener('click', () => {
     if(map.boxZoom) map.boxZoom.disable();
     if(map.keyboard) map.keyboard.disable();
   } else {
-    // ── Broadcast live stats so parent pages (embed) can render a live counter
-      try {
-        if (window.parent && window.parent !== window) {
-          window.parent.postMessage({
-            source: 'ftl-signal-map',
-            type: 'stats',
-            activeCount: activeCount,
-            totalValue: totalValue,
-            totalValueFormatted: formatMoney(totalValue)
-          }, '*');
-        }
-      } catch (e) {}
+    
       updateMobileHandleLabel();
     if(!isEmbedded) {
       map.dragging.enable(); map.scrollWheelZoom.enable();
@@ -1056,6 +1050,19 @@ function applyFilters() {
   const statValEl = document.getElementById('stat-val');
   if (statValEl) statValEl.innerText = formatMoney(totalValue);
   updateMobileHandleLabel();
+  // Broadcast live stats (+ signals catalog) to parent window for embed pages
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        source: "ftl-signal-map",
+        type: "stats",
+        activeCount: activeCount,
+        totalValue: totalValue,
+        totalValueFormatted: formatMoney(totalValue),
+        signals: (typeof signals !== "undefined" ? signals : [])
+      }, "*");
+    }
+  } catch(e){}
 }
 setTimeout(() => { map.invalidateSize(); initMap(); }, 200);
 </script>
