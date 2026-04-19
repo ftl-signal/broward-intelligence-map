@@ -1,573 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Florida Signal | Static Map Embed</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+  body, html { height: 100%; width: 100%; overflow: hidden; background-color: #0f172a; }
+  
+  #map { width: 100vw; height: 100vh; background: #0b0f19; }
+  .leaflet-tile-pane { filter: brightness(1.8) contrast(1.1) saturate(1.2); } 
 
-<!-- ============================================================
-     FLORIDA SIGNAL — HOMEPAGE
-     What to edit each week (search for "WEEKLY UPDATE"):
-       1. HERO SIGNALS              — top 3 signal cards in the hero panel
-       2. PIPELINE WATCH DESKTOP    — 5 flip-ticker events (desktop)
-       2b. PIPELINE WATCH MOBILE    — same 5 events, stacked list (mobile)
-       3. LIVE SIGNAL TILES         — 5 signal names next to the map
-       4. COUNTS                    — "47 active signals" + "$361.0M" totals
-       5. LIVE CAM (desktop only)   — YouTube live ID for the Pompano Beach cam
-       6. DISPATCHES                — 4 latest briefs (thumbnail + date + title + blurb)
-     Keep pipeline-watch desktop and mobile copies in sync.
-     Don't touch anything outside the WEEKLY UPDATE markers.
-     ============================================================ -->
+  /* Map Markers */
+  .custom-marker { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background: transparent; cursor: pointer; }
+  .marker-core { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5); transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .custom-marker:hover .marker-core { transform: scale(1.6); border-color: #fff; box-shadow: 0 0 12px #fff, 0 0 4px rgba(0,0,0,0.8); }
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  /* Popups */
+  .leaflet-popup-content-wrapper { background: #1e293b; color: #f8fafc; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.6); padding: 0; overflow: hidden; }
+  .leaflet-popup-tip { background: #1e293b; }
+  .leaflet-popup-content { margin: 0; width: 300px !important; }
+  
+  .pop-header { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .pop-title { font-size: 15px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 10px; }
+  .pop-badge { display: inline-block; padding: 3px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; color: #000; letter-spacing: 0.5px;}
+  
+  .pop-body { padding: 16px; font-size: 12px; max-height: 400px; overflow-y: auto; }
+  .pop-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .pop-lbl { color: #94a3b8; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; width: 30%;}
+  .pop-val { font-weight: 700; text-align: right; width: 70%; color: #f8fafc; }
+  .pop-val.highlight { color: #10B981; }
+  
+  .pop-summary { margin-top: 12px; color: #cbd5e1; line-height: 1.5; font-size: 12px; }
+</style>
+</head>
+<body>
 
-<!-- ===== SEO ===== -->
-<title>Florida Signal — Broward County Development Intelligence</title>
-<meta name="description" content="Live dashboard of development signals across Fort Lauderdale and all 31 Broward County municipalities. Permits, assemblages, entitlements, and capital movement — tracked daily." />
-<meta name="keywords" content="Fort Lauderdale development, Broward County permits, real estate intelligence, Broward assemblages, Fort Lauderdale entitlements, Broward construction, Florida Signal" />
-<meta name="author" content="Florida Signal" />
-<meta name="robots" content="index, follow, max-image-preview:large" />
-<link rel="canonical" href="https://thefloridasignal.com/" />
-<meta name="theme-color" content="#06b6d4" />
-
-<!-- ===== Open Graph / Facebook / LinkedIn ===== -->
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="Florida Signal" />
-<meta property="og:title" content="Florida Signal — Broward County Development Intelligence" />
-<meta property="og:description" content="Live dashboard of development signals across Fort Lauderdale and all 31 Broward municipalities. Permits, assemblages, entitlements, and capital movement." />
-<meta property="og:url" content="https://thefloridasignal.com/" />
-<meta property="og:image" content="https://thefloridasignal.com/og-image.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Florida Signal — Broward County Development Intelligence" />
-<meta property="og:locale" content="en_US" />
-
-<!-- ===== Twitter / X card ===== -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Florida Signal — Broward County Development Intelligence" />
-<meta name="twitter:description" content="Live dashboard of development signals across Fort Lauderdale and all 31 Broward municipalities." />
-<meta name="twitter:image" content="https://thefloridasignal.com/og-image.jpg" />
-<meta name="twitter:image:alt" content="Florida Signal — Broward County Development Intelligence" />
-
-<!-- ===== Favicon ===== -->
-<link rel="icon" type="image/png" href="logo.png" />
-<link rel="apple-touch-icon" href="logo.png" />
-
-<!-- ===== JSON-LD structured data (helps Google) ===== -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "NewsMediaOrganization",
-  "name": "Florida Signal",
-  "alternateName": "The Florida Signal",
-  "url": "https://thefloridasignal.com/",
-  "logo": "https://thefloridasignal.com/logo.png",
-  "description": "Broward County development intelligence. Daily permit tracking and signal detection for Fort Lauderdale and all 31 Broward municipalities.",
-  "areaServed": { "@type": "AdministrativeArea", "name": "Broward County, Florida" },
-  "email": "signals@fortlauderdalesignal.com",
-  "sameAs": []
-}
-</script>
-
-<!-- ===== Styling: Tailwind (CDN) + fonts ===== -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<div id="map"></div>
 
 <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          display: ['Archivo', 'system-ui', 'sans-serif'],
-          body: ['Instrument Sans', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-        },
-        colors: {
-          ink: {
-            950: '#05070d',
-            900: '#0a0f1c',
-            800: '#0f1628',
-            700: '#141c33',
-          },
-          signal: {
-            400: '#22d3ee',
-            500: '#06b6d4',
-            600: '#0891b2',
-          },
-        },
-        boxShadow: {
-          glow: '0 0 40px -8px rgba(34, 211, 238, 0.35)',
-        },
-      },
-    },
-  };
+const CAT_COLORS = {
+  "Land in Play": "#A855F7",
+  "In Approvals": "#F59E0B",
+  "Pre-Construction": "#3B82F6",
+  "Under Construction": "#10B981",
+  "Capital Repositioning": "#F43F5E"
+};
+
+// STATIC MAP OPTIONS - Completely locked down for landing page
+const mapOptions = {
+  zoomControl: false, 
+  attributionControl: false,
+  dragging: false,
+  scrollWheelZoom: false,
+  doubleClickZoom: false,
+  boxZoom: false,
+  touchZoom: false,
+  keyboard: false
+};
+
+const map = L.map('map', mapOptions).setView([26.15, -80.14], 11);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  maxZoom: 19
+}).addTo(map);
+
+const signals = [
+  {
+    "id": "sig_lasolas_01",
+    "project_name": "401 Las Olas 14th Floor Buildout",
+    "address": "401 E Las Olas Blvd",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1195,
+    "longitude": -80.1390,
+    "category": "Under Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "Interior Fit-Out",
+    "value_label": "$218K",
+    "permit_number": "ELE-GEN-26030330",
+    "owner": "LSREF7 401 Propco LLC",
+    "summary": "Five electrical permits and related fire permits filed for a coordinated 14th-floor interior-upgrade package."
+  },
+  {
+    "id": "sig_vicpark_01",
+    "project_name": "Victoria Park 8-Unit Townhouse Project",
+    "address": "842-844 NE 19 Way",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1260,
+    "longitude": -80.1300,
+    "category": "Under Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "Active Build / Unit-Level",
+    "value_label": "$240K",
+    "permit_number": "BLD-GEN-26020522",
+    "owner": "Duke at 837 NE 20th Avenue LLC",
+    "summary": "Master structural permit BLD-GEN-26020522 and multiple unit-level trade permits are now active for an 8-townhouse infill development."
+  },
+  {
+    "id": "sig_ne42_01",
+    "project_name": "3080 NE 42 St Waterfront Rebuild",
+    "address": "3080 NE 42 St",
+    "city": "Fort Lauderdale",
+    "latitude": 26.1750,
+    "longitude": -80.1050,
+    "category": "Under Construction",
+    "status_label": "Advance",
+    "signal_strength": "High",
+    "signal_type": "New Construction",
+    "value_label": "$957K",
+    "permit_number": "BLD-GEN-26030157",
+    "owner": "Visionary Residence LLC",
+    "summary": "Demolition and marine permits issued, with a master permit filed for a new 3-story luxury single-family residence."
+  },
+  { id: "sig_01", project_name: "Gore Building Redevelopment", address: "201 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1215, longitude: -80.1472, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", value_label: "$2.0M", permit_number: "BLD-GEN-26030461", summary: "Demolition efforts for the 92,000 SF county administrative facility have moved into active building department review." },
+  { id: "sig_02", project_name: "1400 Progresso Storage", address: "1400 Progresso Dr", city: "Fort Lauderdale", latitude: 26.1360, longitude: -80.1450, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", value_label: "$6.5M", permit_number: "PL-26-0045", summary: "A 147k SF self-storage development has cleared a six-permit execution hurdle in the Progresso district." },
+  { id: "sig_10", project_name: "RISE Tower", address: "1101 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1385, longitude: -80.1215, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$45.0M", summary: "25-story vertical construction officially mobilized." },
+  { id: "sig_04", project_name: "Hollywood Beach Hotel Site", address: "101 N Ocean Dr", city: "Hollywood", latitude: 26.0112, longitude: -80.1158, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "City presentation for major beachfront hospitality redevelopment." },
+  { id: "sig_05", project_name: "Modera Pompano", address: "855 S Federal Hwy", city: "Pompano Beach", latitude: 26.2230, longitude: -80.0900, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Est. $71M+", summary: "Site plan review for dense multifamily pipeline in Pompano core." },
+  { id: "sig_03", project_name: "Barry's / 401 Las Olas", address: "401 E Las Olas Blvd", city: "Fort Lauderdale", latitude: 26.1195, longitude: -80.1390, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$1.2M", permit_number: "ELE-GEN-26030216", summary: "Fitness brand confirmed for build-out at Bank of America Plaza alongside second active scope." },
+  { id: "sig_06", project_name: "El Car Wash Assemblage", address: "2690 W Sample Rd", city: "Pompano Beach", latitude: 26.2730, longitude: -80.1600, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Commercial retail expansion navigating zoning on assembled land." },
+  { id: "sig_07", project_name: "Stranahan House Renovation", address: "335 SE 6 Ave", city: "Fort Lauderdale", latitude: 26.1180, longitude: -80.1400, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", value_label: "$290K", permit_number: "BLD-GEN-26030335", summary: "A new museum-related structural project file is live." },
+  { id: "sig_08", project_name: "Next Health Flagship", address: "1902 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1450, longitude: -80.1150, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "Undisclosed", permit_number: "ELE-GEN-26030194", summary: "Near-term opening for high-traffic wellness tenant." },
+  { id: "sig_09", project_name: "110 EAST Office Fitout", address: "110 E Broward Blvd", city: "Fort Lauderdale", latitude: 26.1220, longitude: -80.1430, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "Undisclosed", permit_number: "BLD-GEN-26030326", summary: "Continuous Class-A office absorption and fit-out activity." },
+  { id: "sig_11", project_name: "The Adderley Phase II", address: "501 NW 7th Ave", city: "Fort Lauderdale", latitude: 26.1288, longitude: -80.1510, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$12.5M", summary: "Groundbreaking initiated for urban workforce housing expansion." },
+  { id: "sig_12", project_name: "Pier 66 South Parcel", address: "2301 SE 17 St", city: "Fort Lauderdale", latitude: 26.1010, longitude: -80.1150, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", permit_number: "ENG-LD-26030002", owner: "P66 Hotel LLC", summary: "First infrastructure permit recorded establishes sewer manhole easement." },
+  { id: "sig_13", project_name: "Le Croissant Plaza 100", address: "100 NE 3 Ave", city: "Fort Lauderdale", latitude: 26.1230, longitude: -80.1400, category: "Under Construction", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", permit_number: "BLD-WIN-25090453.R001", summary: "Le Croissant Bakery named as incoming tenant for Suite 120." },
+  { id: "sig_14", project_name: "One Financial Plaza Demo", address: "100 SE 3 Ave", city: "Fort Lauderdale", latitude: 26.1205, longitude: -80.1410, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", permit_number: "BLD-COC-26030085", summary: "13 permits filed including interior demolition. listing scope as TBD and changing contractors." },
+  { id: "sig_15", project_name: "Compass Isle Assemblage", address: "20 Compass Isle", city: "Fort Lauderdale", latitude: 26.1265, longitude: -80.1110, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "$31.9M", summary: "Five canal-front properties sold for combined $31.9M." },
+  { id: "sig_16", project_name: "Aria Flagler Village", address: "501 NE 3rd Ave", city: "Fort Lauderdale", latitude: 26.1275, longitude: -80.1395, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", value_label: "$20.0M", summary: "Vertical construction master permit submitted for Flagler site." },
+  { id: "sig_17", project_name: "Calvary Chapel Expansion", address: "2401 W Cypress Creek Rd", city: "Fort Lauderdale", latitude: 26.2080, longitude: -80.1700, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", value_label: "$30.0M", summary: "Structural commercial permit filed tied previously approved redevelopment." },
+  { id: "sig_18", project_name: "Lohmeyer Resiliency", address: "1765 SE 18 St", city: "Fort Lauderdale", latitude: 26.1000, longitude: -80.1250, category: "Capital Repositioning", status_label: "Advance", signal_strength: "High", value_label: "$8.4M", summary: "Critical municipal mechanical and wastewater resiliency spend." },
+  { id: "sig_19", project_name: "Sanctuary Development", address: "1400 N Federal Hwy", city: "Fort Lauderdale", latitude: 26.1365, longitude: -80.1200, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", value_label: "Est. $87M+", summary: "348-unit multifamily with ground-floor commercial and new church building." },
+  { id: "sig_20", project_name: "Shipyard Pompano District", address: "125 NE 5th Ave", city: "Pompano Beach", latitude: 26.2345, longitude: -80.1190, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Major mixed-use district site plan progressing through city review." },
+  { id: "sig_21", project_name: "Bridge Point Logistics", address: "2101 W McNab Rd", city: "Pompano Beach", latitude: 26.2110, longitude: -80.1550, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$14.2M", summary: "Industrial shell nearing completion for logistics demand." },
+  { id: "sig_22", project_name: "Broward Health Expansion", address: "1611 S Andrews Ave", city: "Fort Lauderdale", latitude: 26.1050, longitude: -80.1440, category: "Pre-Construction", status_label: "Watch", signal_strength: "Moderate", value_label: "Undisclosed", permit_number: "ROW-SITE-26030004", summary: "Permit issued for campus activity mobilizing on South Andrews corridor." },
+  { id: "sig_23", project_name: "Galt Mile Capital Upgrades", address: "3500 Galt Ocean Dr", city: "Fort Lauderdale", latitude: 26.1650, longitude: -80.0980, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", value_label: "$1.5M", permit_number: "BLD-GEN-26030374", summary: "Structural re-roof permit at Playa del Sol tower." },
+  { id: "sig_24", project_name: "SW 16th St Infill", address: "330 SW 16 St", city: "Fort Lauderdale", latitude: 26.1050, longitude: -80.1500, category: "In Approvals", status_label: "Advance", signal_strength: "Developing", value_label: "Undisclosed", permit_number: "LND-TREE-26030099", summary: "Parallel batch permit strategy across adjacent lots." },
+  { id: "sig_25", project_name: "New River Resiliency", address: "Riverfront Corridor", city: "Fort Lauderdale", latitude: 26.1150, longitude: -80.1300, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Long-term municipal resiliency and seawall planning indicator." },
+  { id: "sig_26", project_name: "Six31 Residences", address: "631 NE 2nd Ave", city: "Fort Lauderdale", latitude: 26.1290, longitude: -80.1385, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "10-story residential project in a core growth neighborhood." },
+  { id: "sig_27", project_name: "Pompano Marine Center", address: "701 S Federal Hwy", city: "Pompano Beach", latitude: 26.2250, longitude: -80.0910, category: "In Approvals", status_label: "Advance", signal_strength: "Developing", value_label: "Undisclosed", summary: "Major Site Plan moves forward within the M-1 Marine Business district." },
+  { id: "sig_28", project_name: "Hollywood Civic Land", address: "600 Knights Rd", city: "Hollywood", latitude: 26.0200, longitude: -80.1700, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "$5.25 million property purchase proposed on Hollywood Commission agenda." },
+  { id: "sig_29", project_name: "NW 15th St Mobility", address: "NW 15th St", city: "Pompano Beach", latitude: 26.2500, longitude: -80.1400, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Major streetscape, mobility, and accessibility upgrades." },
+  { id: "sig_30", project_name: "SW 27th Ave Logistics", address: "SW 27th Ave", city: "Pompano Beach", latitude: 26.2250, longitude: -80.1650, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Industrial rezoning interest in key western logistics corridor." },
+  { id: "sig_31", project_name: "Oakland Park Culinary Core", address: "3400 NE 12th Ave", city: "Oakland Park", latitude: 26.1705, longitude: -80.1325, category: "Capital Repositioning", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Infrastructure execution for the city's new Main Street culinary vision." },
+  { id: "sig_32", project_name: "Hidden Harbour Marina", address: "2315 NE 15th St", city: "Pompano Beach", latitude: 26.2515, longitude: -80.0910, category: "Pre-Construction", status_label: "Advance", signal_strength: "High", value_label: "$18.5M", summary: "Significant waterfront and seawall infrastructure investment." },
+  { id: "sig_33", project_name: "Riverbend Marketplace", address: "2401 W Broward Blvd", city: "Fort Lauderdale", latitude: 26.1210, longitude: -80.1750, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", permit_number: "BLD-RENEWAL-26030069", summary: "Outparcel commercial movement near high-traffic I-95 interchange." },
+  { id: "sig_34", project_name: "FATVillage Streetscape", address: "N Andrews Ave", city: "Fort Lauderdale", latitude: 26.1280, longitude: -80.1440, category: "Capital Repositioning", status_label: "Advance", signal_strength: "High", value_label: "Undisclosed", permit_number: "ENG-WAT-23030001.R002", summary: "Deep utility upgrades to support incoming multi-tower corridor." },
+  { id: "sig_35", project_name: "CRA NE 4th Ave", address: "NE 4th Ave", city: "Fort Lauderdale", latitude: 26.1250, longitude: -80.1380, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Public works funding trigger to prepare for private redevelopment." },
+  { id: "sig_36", project_name: "A1A Pompano Upgrades", address: "A1A & Atlantic Blvd", city: "Pompano Beach", latitude: 26.2350, longitude: -80.0880, category: "Pre-Construction", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Imminent accessibility and streetscape execution on beachfront." },
+  { id: "sig_37", project_name: "Jackson Street Land Use", address: "Jackson St & 19th Ave", city: "Hollywood", latitude: 26.0120, longitude: -80.1500, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Administrative rezoning watch indicating future land use changes." },
+  { id: "sig_38", project_name: "Hollywood Beach Framework", address: "A1A & Johnson St", city: "Hollywood", latitude: 26.0150, longitude: -80.1150, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Lead indicator for overarching beachfront redevelopment feasibility." },
+  { id: "sig_39", project_name: "Atlantic Blvd Transit-Core", address: "2400 E Atlantic Blvd", city: "Pompano Beach", latitude: 26.2320, longitude: -80.0950, category: "In Approvals", status_label: "Advance", signal_strength: "Moderate", value_label: "Undisclosed", summary: "Transit-oriented mixed-use development advancing in municipal review." },
+  { id: "sig_42", project_name: "Broward Health Electrical", address: "1600 S Andrews Ave", city: "Fort Lauderdale", latitude: 26.1055, longitude: -80.1430, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$391K", permit_number: "ELE-GEN-26030228", summary: "Heavy electrical permit progress for hospital expansion." },
+  { id: "sig_43", project_name: "Fort Lauderdale Terminal", address: "200 NW 1st Ave", city: "Fort Lauderdale", latitude: 26.1245, longitude: -80.1445, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Civic infrastructure and transit planning movement." },
+  { id: "sig_44", project_name: "Downtown Transit Study", address: "SW 1st Ave", city: "Fort Lauderdale", latitude: 26.1185, longitude: -80.1440, category: "Land in Play", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "High-density transit corridor study phase activation." },
+  { id: "sig_45", project_name: "Pompano Marina Redesign", address: "2501 N Ocean Blvd", city: "Pompano Beach", latitude: 26.2625, longitude: -80.0885, category: "In Approvals", status_label: "Watch", signal_strength: "Developing", value_label: "Undisclosed", summary: "Luxury marine facility entering municipal design review." },
+  { id: "sig_46", project_name: "Sample Road Logistics", address: "Sample Rd & I-95", city: "Pompano Beach", latitude: 26.2735, longitude: -80.1350, category: "Under Construction", status_label: "Advance", signal_strength: "High", value_label: "$8.9M", summary: "Logistics shell permit execution confirms active last-mile demand." }
+];
+
+const coordMap = new Set();
+signals.forEach(s => {
+  let coordKey = `${s.latitude},${s.longitude}`;
+  while (coordMap.has(coordKey)) {
+    s.latitude += (Math.random() - 0.5) * 0.001;
+    s.longitude += (Math.random() - 0.5) * 0.001;
+    coordKey = `${s.latitude},${s.longitude}`;
+  }
+  coordMap.add(coordKey);
+});
+
+signals.forEach(s => {
+  const color = CAT_COLORS[s.category] || "#94a3b8";
+  const icon = L.divIcon({
+    className: 'custom-marker',
+    html: `<div class="marker-core" style="background-color: ${color}; border-color: ${color};"></div>`,
+    iconSize: [44, 44], 
+    iconAnchor: [22, 22]
+  });
+
+  const mk = L.marker([s.latitude, s.longitude], { icon: icon }).addTo(map);
+  
+  let bodyHtml = '';
+  if(s.address || s.city) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Address</span><span class="pop-val">${s.address || ''}, ${s.city || ''}</span></div>`;
+  if(s.permit_number) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Permit #</span><span class="pop-val" style="font-family:var(--mono); font-size:10px">${s.permit_number}</span></div>`;
+  if(s.value_label) bodyHtml += `<div class="pop-row"><span class="pop-lbl">Value</span><span class="pop-val highlight">${s.value_label}</span></div>`;
+  if(s.summary) bodyHtml += `<div class="pop-summary"><strong>Summary:</strong> ${s.summary}</div>`;
+
+  mk.bindPopup(`
+    <div class="pop-header" style="border-top: 4px solid ${color}">
+      <div class="pop-title">${s.project_name}</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <div class="pop-badge" style="background-color: ${color}33; color: ${color}; border: 1px solid ${color}66;">${s.category}</div>
+      </div>
+    </div>
+    <div class="pop-body">${bodyHtml}</div>
+  `, { autoPan: false });
+});
+
+setTimeout(() => map.invalidateSize(), 200);
 </script>
-
-<style>
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Instrument Sans', system-ui, sans-serif; background: #05070d; color: #e2e8f0; }
-  .font-display { font-family: 'Archivo', system-ui, sans-serif; letter-spacing: -0.02em; }
-  .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.02em; }
-
-  /* subtle grid background */
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
-  /* animated pulse dot */
-  @keyframes pulse-ring {
-    0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.6); }
-    70% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
-  }
-  .pulse-dot { animation: pulse-ring 2s infinite; }
-
-  /* flip ticker — one item at a time, vertical flip-in/flip-out */
-  @keyframes flip-in-out{0%{opacity:0;transform:translateY(100%)}3%{opacity:1;transform:translateY(0)}17%{opacity:1;transform:translateY(0)}20%{opacity:0;transform:translateY(-100%)}100%{opacity:0;transform:translateY(-100%)}}
-    8%, 92%   { opacity: 1; transform: translateY(0); }
-    100%      { opacity: 0; transform: translateY(-100%); }
-  }
-  .flip-stage { position: relative; height: 1.5rem; overflow: hidden; }
-  .flip-item  {
-    position: absolute; inset: 0;
-    display: flex; align-items: center;
-    opacity: 0;
-    animation: flip-in-out 25s linear infinite;
-  }
-  /* 5 items, each showing for 1/5 of the cycle, staggered */
-  .flip-item:nth-child(1) { animation-delay: 0s; }
-  .flip-item:nth-child(2) { animation-delay: 5s; }
-  .flip-item:nth-child(3) { animation-delay: 10s; }
-  .flip-item:nth-child(4) { animation-delay: 15s; }
-  .flip-item:nth-child(5) { animation-delay: 20s; }
-  .flip-wrap:hover .flip-item { animation-play-state: paused; }
-
-  /* category chips */
-  .chip { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.1875rem 0.5rem; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em; border-radius: 0.25rem; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
-  .chip-assemblage  { color: #c4b5fd; border-color: rgba(196,181,253,0.35); background: rgba(139,92,246,0.12); }
-  .chip-entitlement { color: #fbbf24; border-color: rgba(251,191,36,0.35); background: rgba(245,158,11,0.12); }
-  .chip-execution   { color: #4ade80; border-color: rgba(74,222,128,0.35); background: rgba(34,197,94,0.12); }
-  .chip-reinvest    { color: #22d3ee; border-color: rgba(34,211,238,0.35); background: rgba(6,182,212,0.12); }
-
-  /* smooth links */
-  a { transition: color .15s ease, opacity .15s ease; }
-</style>
-
-</head>
-<body class="font-body antialiased bg-ink-950 text-slate-200 selection:bg-signal-500/40">
-
-<!-- ============================================================
-     HEADER / NAV
-     ============================================================ -->
-<header class="fixed top-0 inset-x-0 z-40 backdrop-blur bg-ink-950/80 border-b border-slate-800/60">
-  <div class="max-w-[1400px] mx-auto px-5 lg:px-10 h-16 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-3" aria-label="Florida Signal home">
-      <img src="florida%20sig%20trans%20for%20black%20background.png" alt="Florida Signal" class="h-16 lg:h-20 w-auto" />
-      <span class="hidden sm:inline text-[10px] lg:text-[11px] font-mono tracking-[0.2em] text-slate-400 border-l border-slate-700 pl-3">
-        BROWARD DEVELOPMENT INTELLIGENCE
-      </span>
-    </a>
-    <nav class="flex items-center gap-4 lg:gap-6 text-[11px] lg:text-xs font-mono tracking-widest">
-      <a href="https://brief.thefloridasignal.com/archive/" class="hidden sm:inline text-slate-300 hover:text-white">VIEW ALL BRIEFS</a>
-      <a href="https://floridasignal.memberful.com/sign_in" class="hidden sm:inline text-slate-400 hover:text-white">SIGN IN</a>
-      <a href="https://floridasignal.memberful.com/register" class="inline-flex items-center justify-center px-3 lg:px-4 py-2 rounded bg-signal-500 text-ink-950 font-bold hover:bg-signal-400">SUBSCRIBE</a>
-    </nav>
-  </div>
-</header>
-
-<!-- ============================================================
-     HERO
-     ============================================================ -->
-<section class="relative pt-28 pb-14 lg:pt-36 lg:pb-20 overflow-hidden bg-grid">
-  <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-ink-950/0 via-ink-950/0 to-ink-950"></div>
-  <div class="relative max-w-[1400px] mx-auto px-5 lg:px-10 grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
-
-    <!-- LEFT: copy + CTA -->
-    <div class="lg:col-span-3">
-      <h1 class="font-display font-black text-white leading-[0.95] text-5xl sm:text-6xl lg:text-7xl">
-        The signals behind<br />
-        Broward's next<br />
-        <span class="text-signal-400">billion dollars.</span>
-      </h1>
-
-      <!-- WEEKLY UPDATE: HERO INTRO (keep to ~1 short sentence) -->
-      <p class="mt-6 text-lg lg:text-xl text-slate-300 max-w-2xl">
-        Permits, assemblages, entitlements, and capital movement — tracked daily across all 31 Broward municipalities.
-      </p>
-
-      <!-- CTA: email signup (points to your brief subscribe page) -->
-      <form action="https://brief.thefloridasignal.com/subscribe" method="get" class="mt-8 flex flex-col sm:flex-row gap-2 max-w-lg">
-        <input type="email" name="email" required placeholder="you@firm.com"
-               class="flex-1 px-4 py-3 rounded bg-ink-900 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-signal-500" />
-        <button type="submit"
-                class="px-5 py-3 rounded bg-signal-500 text-ink-950 font-bold hover:bg-signal-400 font-mono text-xs tracking-[0.15em]">
-          GET THE FREE WEEKLY BRIEF →
-        </button>
-      </form>
-    </div>
-
-    <!-- RIGHT: live signal feed -->
-    <aside class="lg:col-span-2">
-      <div class="rounded-xl border border-slate-800 bg-ink-900/70 overflow-hidden">
-        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800 text-[11px] font-mono tracking-[0.18em] text-slate-400">
-          <span class="text-signal-400">● LIVE SIGNAL FEED</span>
-          <span class="text-slate-500">REFRESHING</span>
-        </div>
-
-        <!-- WEEKLY UPDATE: HERO SIGNALS (3 cards — newest on top) -->
-        <ul class="divide-y divide-slate-800">
-
-          <li class="px-4 py-4 hover:bg-ink-800/50">
-            <div class="flex items-center justify-between mb-1">
-              <span class="chip chip-assemblage">● ASSEMBLAGE</span>
-              <span class="text-[11px] font-mono text-slate-500">2m ago</span>
-            </div>
-            <div class="text-slate-100 font-semibold">Hollywood Beach Hotel Site</div>
-            <div class="text-xs text-slate-500 font-mono">3 parcels · coordinated acquisition</div>
-          </li>
-
-          <li class="px-4 py-4 hover:bg-ink-800/50">
-            <div class="flex items-center justify-between mb-1">
-              <span class="chip chip-entitlement">● ENTITLEMENT</span>
-              <span class="text-[11px] font-mono text-slate-500">14m ago</span>
-            </div>
-            <div class="text-slate-100 font-semibold">Modera Pompano — 348 units</div>
-            <div class="text-xs text-slate-500 font-mono">Federal Hwy corridor · approval stage</div>
-          </li>
-
-          <li class="px-4 py-4 hover:bg-ink-800/50">
-            <div class="flex items-center justify-between mb-1">
-              <span class="chip chip-execution">● EXECUTION</span>
-              <span class="text-[11px] font-mono text-slate-500">1h ago</span>
-            </div>
-            <div class="text-slate-100 font-semibold">RISE Tower</div>
-            <div class="text-xs text-slate-500 font-mono">$45.0M · structural permit issued</div>
-          </li>
-
-        </ul>
-        <!-- / END WEEKLY UPDATE: HERO SIGNALS -->
-
-        <div class="flex items-center justify-between px-4 py-3 border-t border-slate-800 text-[11px] font-mono tracking-[0.15em]">
-          <span class="text-slate-500">showing 3 of <span id="signal-count-inline">47</span></span>
-          <span class="text-signal-400">REFRESHING</span>
-        </div>
-      </div>
-    </aside>
-  </div>
-</section>
-
-<!-- ============================================================
-     PIPELINE WATCH
-       Desktop (md+): single-line flip ticker that rotates through events
-       Mobile (<md):   compact stacked list of the same 5 events
-     ============================================================ -->
-<section id="pipeline-watch" class="relative border-y border-slate-800/60 bg-ink-900/40 overflow-hidden">
-
-  <!-- ===== Desktop: flip ticker ===== -->
-  <div class="hidden md:flex max-w-[1400px] mx-auto items-stretch">
-    <div class="shrink-0 flex items-center px-5 lg:px-8 py-3 bg-ink-800/80 border-r border-slate-800">
-      <span class="font-mono text-[11px] tracking-[0.2em] text-signal-400">● PIPELINE WATCH</span>
-    </div>
-
-    <!-- WEEKLY UPDATE: PIPELINE WATCH DESKTOP (same 5 events as mobile block below — keep both in sync) -->
-    <div class="flip-wrap flex-1 overflow-hidden relative px-5 lg:px-10">
-      <div class="flip-stage font-mono text-xs text-slate-400">
-
-        <div class="flip-item"><span class="text-slate-200 font-semibold mr-3">APR 20 · MON · 10:30 AM</span> SFRPC Council Meeting &nbsp;·&nbsp; demographics · FPL transmission · comp plans</div>
-        <div class="flip-item"><span class="text-slate-200 font-semibold mr-3">APR 23 · THU · 10:00 AM</span> Broward County Planning Council &nbsp;·&nbsp; plats · land use · recertifications</div>
-        <div class="flip-item"><span class="text-slate-200 font-semibold mr-3">APR 23 · THU</span> FHBA Florida Building Code Webinar &nbsp;·&nbsp; code revisions · permitting · materials</div>
-        <div class="flip-item"><span class="text-slate-200 font-semibold mr-3">APR 28 · TUE · 10:00 AM</span> Broward County Commission &nbsp;·&nbsp; approvals · easements · port/aviation</div>
-        <div class="flip-item"><span class="text-slate-200 font-semibold mr-3">APR 29 · WED · 7:30 AM</span> CASF Breakfast — Stiles Construction &nbsp;·&nbsp; pipeline projects · networking</div>
-
-      </div>
-    </div>
-    <!-- / END WEEKLY UPDATE: PIPELINE WATCH DESKTOP -->
-  </div>
-
-  <!-- ===== Mobile: stacked list (shown below md) ===== -->
-  <div class="md:hidden max-w-[1400px] mx-auto px-5 py-4">
-    <div class="font-mono text-[11px] tracking-[0.2em] text-signal-400 mb-3">● PIPELINE WATCH</div>
-
-    <!-- WEEKLY UPDATE: PIPELINE WATCH MOBILE (keep same 5 events as the desktop block above) -->
-    <ul class="divide-y divide-slate-800/60 text-xs">
-      <li class="py-2"><div class="font-mono text-slate-200 font-semibold">APR 20 · MON · 10:30 AM</div><div class="text-slate-400">SFRPC Council Meeting</div></li>
-      <li class="py-2"><div class="font-mono text-slate-200 font-semibold">APR 23 · THU · 10:00 AM</div><div class="text-slate-400">Broward County Planning Council</div></li>
-      <li class="py-2"><div class="font-mono text-slate-200 font-semibold">APR 23 · THU</div><div class="text-slate-400">FHBA Florida Building Code Webinar</div></li>
-      <li class="py-2"><div class="font-mono text-slate-200 font-semibold">APR 28 · TUE · 10:00 AM</div><div class="text-slate-400">Broward County Commission</div></li>
-      <li class="py-2"><div class="font-mono text-slate-200 font-semibold">APR 29 · WED · 7:30 AM</div><div class="text-slate-400">CASF Breakfast — Stiles Construction</div></li>
-    </ul>
-    <!-- / END WEEKLY UPDATE: PIPELINE WATCH MOBILE -->
-  </div>
-
-</section>
-
-<!-- ============================================================
-     INTELLIGENCE MAP + LIVE CAM (desktop only)
-     ============================================================ -->
-<section class="relative py-20 lg:py-28 border-t border-slate-800/60">
-  <div class="max-w-[1400px] mx-auto px-5 lg:px-10">
-
-    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-10">
-      <div>
-        <p class="font-mono text-[11px] tracking-[0.2em] text-signal-400 mb-3">● INTELLIGENCE MAP</p>
-        <h2 class="font-display font-black text-white text-3xl lg:text-5xl leading-tight">Signals mapped across Broward County.</h2>
-      </div>
-
-      <!-- WEEKLY UPDATE: COUNTS -->
-      <div class="flex gap-6 lg:gap-10 font-mono text-xs text-slate-400">
-        <div>
-          <div class="text-2xl lg:text-3xl text-white font-black"><span id="active-signals">47</span></div>
-          <div class="tracking-widest">ACTIVE SIGNALS</div>
-        </div>
-        <div>
-          <div class="text-2xl lg:text-3xl text-signal-400 font-black">$361.0M</div>
-          <div class="tracking-widest">TRACKED VALUE</div>
-        </div>
-      </div>
-      <!-- / END WEEKLY UPDATE: COUNTS -->
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-6">
-
-      <!-- MAP PREVIEW (live iframe of the intelligence map, non-interactive on homepage — paywall later) -->
-      <a href="https://ftl-signal.github.io/broward-intelligence-map/"
-         class="group lg:col-span-2 rounded-xl overflow-hidden ring-1 ring-slate-800 block relative">
-        <div class="relative w-full h-[420px] lg:h-[560px] bg-ink-900 overflow-hidden">
-          <iframe src="https://ftl-signal.github.io/broward-intelligence-map/?embed=1"
-                  class="absolute inset-0 w-full h-full border-0 pointer-events-none"
-                  loading="lazy"
-                  title="Broward Intelligence Map preview"></iframe>
-          <div class="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-ink-950/20 pointer-events-none"></div>
-          <div class="absolute inset-0 ring-1 ring-inset ring-slate-800 pointer-events-none"></div>
-          <div class="absolute top-4 left-4 font-mono text-[10px] tracking-widest text-signal-400 bg-ink-950/70 px-2 py-1 rounded">● LIVE MAP BASE</div>
-          <div class="absolute bottom-4 right-4 font-mono text-xs tracking-widest text-signal-400 bg-ink-950/80 px-3 py-2 rounded group-hover:bg-signal-500 group-hover:text-ink-950 transition">OPEN INTERACTIVE MAP →</div>
-        </div>
-      </a>
-
-      <!-- RIGHT RAIL: live signal list + live cam (cam is desktop-only) -->
-      <div class="space-y-6">
-
-        <div class="rounded-xl border border-slate-800 bg-ink-900/60 overflow-hidden">
-          <div class="px-4 py-3 border-b border-slate-800 font-mono text-[11px] tracking-[0.18em] text-signal-400">● LIVE SIGNALS</div>
-
-          <!-- WEEKLY UPDATE: LIVE SIGNAL TILES (5 items) -->
-          <ul class="divide-y divide-slate-800 text-sm">
-            <li class="px-4 py-3"><div class="text-[10px] font-mono tracking-widest text-slate-500">FORT LAUDERDALE</div><div class="text-slate-100">New River Resiliency</div></li>
-            <li class="px-4 py-3"><div class="text-[10px] font-mono tracking-widest text-slate-500">POMPANO BEACH</div><div class="text-slate-100">NW 15th St Mobility</div></li>
-            <li class="px-4 py-3"><div class="text-[10px] font-mono tracking-widest text-slate-500">FORT LAUDERDALE</div><div class="text-slate-100">1400 Progresso Storage</div></li>
-            <li class="px-4 py-3"><div class="text-[10px] font-mono tracking-widest text-slate-500">FORT LAUDERDALE</div><div class="text-slate-100">Fort Lauderdale Terminal</div></li>
-            <li class="px-4 py-3"><div class="text-[10px] font-mono tracking-widest text-slate-500">POMPANO BEACH</div><div class="text-slate-100">Modera Pompano</div></li>
-          </ul>
-          <!-- / END WEEKLY UPDATE: LIVE SIGNAL TILES -->
-        </div>
-
-        <!-- LIVE CAM — desktop only (hidden below lg breakpoint / mobile + tablet) -->
-        <div id="sea-cam" class="hidden lg:block rounded-xl overflow-hidden ring-1 ring-slate-800 bg-ink-900/60">
-          <div class="px-4 py-3 border-b border-slate-800">
-            <span class="font-mono text-[11px] tracking-[0.18em] text-signal-400">● LIVE: POMPANO BEACH</span>
-          </div>
-          <div class="relative aspect-video bg-black">
-            <!-- WEEKLY UPDATE: live cam embed URL (YouTube live video ID) -->
-            <iframe
-              title="Live: Pompano Beach"
-              src="https://www.youtube.com/embed/mV8zVsX_o_0?autoplay=1&mute=1&loop=1&playlist=mV8zVsX_o_0"
-              class="absolute inset-0 w-full h-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              loading="lazy">
-            </iframe>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     DISPATCHES — latest briefs
-     ============================================================ -->
-<section id="briefs" class="relative py-20 lg:py-28 border-t border-slate-800/60 bg-ink-900/30">
-  <div class="max-w-[1400px] mx-auto px-5 lg:px-10">
-    <div class="flex items-end justify-between mb-10">
-      <div>
-        <p class="font-mono text-[11px] tracking-[0.2em] text-signal-400 mb-3">● DISPATCHES</p>
-        <h2 class="font-display font-black text-white text-3xl lg:text-5xl">Latest briefs.</h2>
-      </div>
-      <a href="https://brief.thefloridasignal.com/archive/" class="hidden sm:inline font-mono text-xs tracking-[0.2em] text-slate-300 hover:text-signal-400">ALL BRIEFS →</a>
-    </div>
-
-    <!-- WEEKLY UPDATE: DISPATCHES (4 latest — each card: thumbnail image + date + title + blurb + link)
-         THUMBNAIL IMAGES: upload 1200x630 jpg/png files to /thumbnails/ in the repo root
-         (e.g., https://storage.ghost.io/c/85/a8/85a8c974-6eb5-4f40-8491-218a446a56e0/content/images/size/w1200/2026/04/Screenshot-2026-04-16-at-10.23.37---PM.png). If a thumbnail is missing the placeholder block will show. -->
-    <div class="grid md:grid-cols-2 gap-5">
-
-      <a href="https://brief.thefloridasignal.com/execution-tightens-across-las-olas-victoria-park-and-coral-ridge/"
-         class="group block rounded-xl border border-slate-800 bg-ink-900/60 hover:border-signal-500/60 hover:bg-ink-800/60 overflow-hidden">
-        <div class="aspect-[1200/630] bg-ink-800 bg-grid overflow-hidden">
-          <img src="https://storage.ghost.io/c/85/a8/85a8c974-6eb5-4f40-8491-218a446a56e0/content/images/size/w1200/2026/04/Screenshot-2026-04-16-at-10.23.37---PM.png" alt="Execution tightens across Las Olas, Victoria Park, and Coral Ridge"
-               class="w-full h-full object-cover" loading="lazy"
-               onerror="this.style.display='none'" />
-        </div>
-        <div class="p-6">
-          <div class="font-mono text-[10px] tracking-widest text-slate-500 mb-3">APR 6, 2026</div>
-          <h3 class="font-display text-xl lg:text-2xl text-white leading-tight group-hover:text-signal-400">Execution tightens across Las Olas, Victoria Park, and Coral Ridge.</h3>
-          <p class="mt-3 text-sm text-slate-400 line-clamp-3">Coordinated interior work at 401 Las Olas, united permit activity across multiple property types, and a tightening execution phase Broward-wide.</p>
-          <div class="mt-4 font-mono text-xs tracking-widest text-signal-400">READ BRIEF →</div>
-        </div>
-      </a>
-
-      <a href="https://brief.thefloridasignal.com/gore-building-demolition-advances-as-las-olas-leasing-and-progresso-move-into-execution/"
-         class="group block rounded-xl border border-slate-800 bg-ink-900/60 hover:border-signal-500/60 hover:bg-ink-800/60 overflow-hidden">
-        <div class="aspect-[1200/630] bg-ink-800 bg-grid overflow-hidden">
-          <img src="https://storage.ghost.io/c/85/a8/85a8c974-6eb5-4f40-8491-218a446a56e0/content/images/size/w1200/2026/04/Screenshot-2026-04-16-at-10.17.50---PM.png" alt="Gore Building demolition advances"
-               class="w-full h-full object-cover" loading="lazy"
-               onerror="this.style.display='none'" />
-        </div>
-        <div class="p-6">
-          <div class="font-mono text-[10px] tracking-widest text-slate-500 mb-3">MAR 23, 2026</div>
-          <h3 class="font-display text-xl lg:text-2xl text-white leading-tight group-hover:text-signal-400">Gore Building demolition advances as Las Olas leasing and Progresso move into execution.</h3>
-          <p class="mt-3 text-sm text-slate-400 line-clamp-3">A major civic signal: demolition permitting now active at the Gore Building in downtown Fort Lauderdale, plus leasing and execution momentum.</p>
-          <div class="mt-4 font-mono text-xs tracking-widest text-signal-400">READ BRIEF →</div>
-        </div>
-      </a>
-
-      <a href="https://brief.thefloridasignal.com/pier-66-infrastructure-signal-emerges-as-leasing-and-infill-activity-accelerate/"
-         class="group block rounded-xl border border-slate-800 bg-ink-900/60 hover:border-signal-500/60 hover:bg-ink-800/60 overflow-hidden">
-        <div class="aspect-[1200/630] bg-ink-800 bg-grid overflow-hidden">
-          <img src="https://storage.ghost.io/c/85/a8/85a8c974-6eb5-4f40-8491-218a446a56e0/content/images/size/w1200/2026/04/Screenshot-2026-04-16-at-10.22.48---PM.png" alt="Pier 66 infrastructure signal emerges"
-               class="w-full h-full object-cover" loading="lazy"
-               onerror="this.style.display='none'" />
-        </div>
-        <div class="p-6">
-          <div class="font-mono text-[10px] tracking-widest text-slate-500 mb-3">MAR 16, 2026</div>
-          <h3 class="font-display text-xl lg:text-2xl text-white leading-tight group-hover:text-signal-400">Pier 66 infrastructure signal emerges as leasing and infill activity accelerate.</h3>
-          <p class="mt-3 text-sm text-slate-400 line-clamp-3">A first infrastructure filing on the long-quiet south portion of Pier 66 points from planning into early execution.</p>
-          <div class="mt-4 font-mono text-xs tracking-widest text-signal-400">READ BRIEF →</div>
-        </div>
-      </a>
-
-      <a href="https://brief.thefloridasignal.com/bay-colony-assemblage-accelerates-as-federal-highway-density-expands/"
-         class="group block rounded-xl border border-slate-800 bg-ink-900/60 hover:border-signal-500/60 hover:bg-ink-800/60 overflow-hidden">
-        <div class="aspect-[1200/630] bg-ink-800 bg-grid overflow-hidden">
-          <img src="https://storage.ghost.io/c/85/a8/85a8c974-6eb5-4f40-8491-218a446a56e0/content/images/size/w1200/2026/04/Screenshot-2026-04-16-at-9.39.52---PM.png" alt="Bay Colony assemblage accelerates"
-               class="w-full h-full object-cover" loading="lazy"
-               onerror="this.style.display='none'" />
-        </div>
-        <div class="p-6">
-          <div class="font-mono text-[10px] tracking-widest text-slate-500 mb-3">MAR 9, 2026</div>
-          <h3 class="font-display text-xl lg:text-2xl text-white leading-tight group-hover:text-signal-400">Bay Colony assemblage accelerates as Federal Highway density expands.</h3>
-          <p class="mt-3 text-sm text-slate-400 line-clamp-3">Parcel-level coordination around Bay Colony, with Federal Highway density filings stacking up — a clear entitlement push in Broward's corridor.</p>
-          <div class="mt-4 font-mono text-xs tracking-widest text-signal-400">READ BRIEF →</div>
-        </div>
-      </a>
-
-    </div>
-    <!-- / END WEEKLY UPDATE: DISPATCHES -->
-
-    <div class="mt-8 text-center sm:hidden">
-      <a href="https://brief.thefloridasignal.com/archive/" class="font-mono text-xs tracking-[0.2em] text-signal-400">ALL BRIEFS →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     METHODOLOGY
-     ============================================================ -->
-<section class="relative py-20 lg:py-28 border-t border-slate-800/60 bg-ink-900/30">
-  <div class="max-w-[1400px] mx-auto px-5 lg:px-10">
-    <div class="max-w-3xl mb-12">
-      <p class="font-mono text-[11px] tracking-[0.2em] text-signal-400 mb-3">● METHODOLOGY</p>
-      <h2 class="font-display font-black text-white text-3xl lg:text-5xl leading-tight">Three inputs. One signal.</h2>
-      <p class="mt-4 text-slate-400 text-lg">Every brief is built from three intersecting data streams, cross-referenced against public records.</p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-5">
-      <div class="p-6 rounded-xl border border-slate-800 bg-ink-900/60">
-        <div class="font-mono text-[11px] tracking-widest text-signal-400">01</div>
-        <h3 class="mt-2 font-display text-2xl font-bold text-white">Permits</h3>
-        <p class="mt-3 text-sm text-slate-400">Building, demolition, tenant build-out, and infrastructure filings pulled daily from LauderBuild, BCPA, and municipal systems across Broward.</p>
-        <div class="mt-4 font-mono text-[10px] tracking-widest text-slate-500">NEARLY 200,000 RECORDS · DAILY REFRESH</div>
-      </div>
-      <div class="p-6 rounded-xl border border-slate-800 bg-ink-900/60">
-        <div class="font-mono text-[11px] tracking-widest text-signal-400">02</div>
-        <h3 class="mt-2 font-display text-2xl font-bold text-white">Land</h3>
-        <p class="mt-3 text-sm text-slate-400">Parcel ownership, assemblage patterns, rezoning filings, and entitlement motion — cross-referenced against the permit feed to find coordinated activity.</p>
-        <div class="mt-4 font-mono text-[10px] tracking-widest text-slate-500">BCPA · ZONING · PLAT RECORDS</div>
-      </div>
-      <div class="p-6 rounded-xl border border-slate-800 bg-ink-900/60">
-        <div class="font-mono text-[11px] tracking-widest text-signal-400">03</div>
-        <h3 class="mt-2 font-display text-2xl font-bold text-white">Capital</h3>
-        <p class="mt-3 text-sm text-slate-400">Permit valuations, contractor filings, and project sequencing — used to estimate tracked value and identify which signals are backed by real capital commitment.</p>
-        <div class="mt-4 font-mono text-[10px] tracking-widest text-slate-500">$361M · VERIFIED &amp; CATEGORIZED</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     WEEKLY BRIEF / CTA
-     ============================================================ -->
-<section class="relative py-20 lg:py-28 border-t border-slate-800/60 overflow-hidden">
-  <div class="max-w-3xl mx-auto px-5 lg:px-10 text-center">
-    <p class="font-mono text-[11px] tracking-[0.2em] text-signal-400 mb-4">● WEEKLY BRIEF · EVERY FRIDAY MORNING</p>
-    <h2 class="font-display font-black text-white text-4xl lg:text-6xl leading-[0.95]">Read Broward<br /><span class="text-signal-400">before it's news.</span></h2>
-    <p class="mt-6 text-slate-300 text-lg">Join builders, brokers, and capital allocators who use Florida Signal for permit-level intelligence the day it matters.</p>
-
-    <form action="https://brief.thefloridasignal.com/subscribe" method="get" class="mt-8 flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
-      <input type="email" name="email" required placeholder="you@firm.com"
-             class="flex-1 px-4 py-3 rounded bg-ink-900 border border-slate-700 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-signal-500" />
-      <button type="submit"
-              class="px-5 py-3 rounded bg-signal-500 text-ink-950 font-bold hover:bg-signal-400 font-mono text-xs tracking-[0.15em]">
-        GET THE FREE WEEKLY BRIEF →
-      </button>
-    </form>
-    <p class="mt-3 text-xs text-slate-500 font-mono tracking-wider">FREE DURING FOUNDING PERIOD · NO SPAM · UNSUBSCRIBE ANYTIME</p>
-  </div>
-</section>
-
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer class="border-t border-slate-800/60 bg-ink-950">
-  <div class="max-w-[1400px] mx-auto px-5 lg:px-10 py-12 grid md:grid-cols-4 gap-10">
-
-    <div class="md:col-span-2">
-      <img src="florida%20sig%20trans%20for%20black%20background.png" alt="Florida Signal" class="h-10 lg:h-12 w-auto mb-4" />
-      <p class="text-sm text-slate-400 max-w-sm">Broward County development intelligence. Permit-level tracking for Fort Lauderdale and all 31 municipalities.</p>
-      <p class="mt-4 font-mono text-[10px] tracking-widest text-signal-400">● LIVE FEED · LAST SYNC MOMENTS AGO</p>
-    </div>
-
-    <div>
-      <div class="font-mono text-[11px] tracking-[0.2em] text-slate-500 mb-3">PRODUCT</div>
-      <ul class="space-y-2 text-sm">
-        <li><a href="https://brief.thefloridasignal.com/archive/" class="text-slate-300 hover:text-signal-400">All briefs</a></li>
-        <li><a href="https://ftl-signal.github.io/broward-intelligence-map/" class="text-slate-300 hover:text-signal-400">Signal map</a></li>
-        <li><a href="https://floridasignal.memberful.com/register" class="text-slate-300 hover:text-signal-400">Subscribe</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="font-mono text-[11px] tracking-[0.2em] text-slate-500 mb-3">CONTACT &amp; TIPS</div>
-      <ul class="space-y-2 text-sm">
-        <li><a href="mailto:signals@fortlauderdalesignal.com" class="text-slate-300 hover:text-signal-400 break-all">signals@fortlauderdalesignal.com</a></li>
-        <li><a href="mailto:signals@fortlauderdalesignal.com?subject=Tip%20for%20Florida%20Signal" class="text-slate-300 hover:text-signal-400">Send a tip or lead</a></li>
-        <li><a href="mailto:signals@fortlauderdalesignal.com?subject=Editorial%20question" class="text-slate-300 hover:text-signal-400">Editorial standards</a></li>
-      </ul>
-    </div>
-
-  </div>
-
-  <div class="border-t border-slate-800/60">
-    <div class="max-w-[1400px] mx-auto px-5 lg:px-10 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] font-mono tracking-widest text-slate-500">
-      <span>© 2026 FLORIDA SIGNAL · THEFLORIDASIGNAL.COM</span>
-      <span>BUILT FROM PUBLIC RECORDS · VERIFIED BEFORE PUBLICATION</span>
-    </div>
-  </div>
-</footer>
-
 </body>
 </html>
